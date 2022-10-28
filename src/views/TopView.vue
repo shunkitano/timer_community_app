@@ -6,17 +6,18 @@
     </nav> -->
     <EnterComp v-if="!isMain"></EnterComp>
     <MainComp v-else></MainComp>
+    
   </div>
 </template>
 
 <script>
 import EnterComp from '@/components/EnterComp.vue';
-import MainComp from '@/components/MainComp.vue'
+import MainComp from '@/components/MainComp.vue';
 
 export default {
   components: {
     EnterComp,
-    MainComp,
+    MainComp
   },
   data() {
     return {

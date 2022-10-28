@@ -1,12 +1,19 @@
 <template>
-  <div class="timer" >
+  <div class="timer2">
     <div class="header">
       <button @click="toUserPage">{{ userName }}</button>
     </div>
+    <div class="watch__circle">
+      <div class="needle">
+        <p  :style="styleObject"></p>
+        <input type="button" value="needle" @click="change">
+      </div>
+      
+    </div>
     <div class="watch__wrapper">
-      <p class="text" :class="{count__now:isCount && m > 0}">{{ m }}</p>
-      <p class="text" :class="{count__now:isCount && (s > 0 || m > 0)}">{{ s }}</p>
-      <p class="text" :class="{count__now:isCount}">{{ ms }}</p>
+      <p class="text">{{ m }}</p>
+      <p class="text">{{ s }}</p>
+      <p class="text">{{ ms }}</p>
     </div>
     <div class="btn__circle">
       <button></button>
@@ -21,7 +28,6 @@
   </div><!--timer-->
   
 </template>
-
 <script>
 import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
 export default {
@@ -31,7 +37,7 @@ export default {
   data() {
     return {
       timerName: 'defalt',
-      userName: 'Who',
+      userName: 'Who2',
       time: '',
       outTime: '',
       isCount:false,
@@ -39,10 +45,14 @@ export default {
       isCountM: false,
       isReset: false,
       styleObject: {
-        'box-shadow': ''
+        'transform': ''
       },
-      isSetting: false
+      isSetting: false,
+      n: -91
     }
+  },
+  mounted() {
+    return this.change();
   },
   computed: {
     m() {
@@ -56,7 +66,7 @@ export default {
     ms() {
       let ms = this.count;
       return ("0" + ms).slice(-2);
-    }
+    },
   },
   methods: {
     toUserPage() {
@@ -64,7 +74,12 @@ export default {
     },
     toTimerSetting() {
       this.isSetting = !this.isSetting;
-    }
+    },
+    change() {
+      this.n++;
+      console.log(this.n);
+      this.styleObject['transform'] ='rotateZ('+`${this.n}`+'deg)'; /* transform: rotateZ(90deg); */
+    },
   }
 }
 </script>
@@ -94,7 +109,33 @@ export default {
   width: 20%;
   height: 50px;
   border-radius: 2rem 1rem 1rem 2rem /2rem 1rem 1rem 2rem;
-  background-color: rgba(252, 252, 232, 0.7);
+  background-color: rgba(252, 252, 232, 1);
+}
+.watch__circle {
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background-color: rgba(252, 252, 232, 0.5);
+  margin-top: 6rem;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.needle {
+  position: relative;
+}
+.needle p {
+  width: 390px;
+  height: 2px;
+  background-color: darkcyan;
+  /* transform: rotateZ(90deg); */
+}
+.needle p::after {
+  content: '';
+  position: absolute;
+  width: 185px;
+  height: 2px;
+  background-color: rgba(252, 252, 232, 1);
 }
 .watch__wrapper {
   
@@ -103,6 +144,7 @@ export default {
   align-items: center;
   height: 100vh;
   background-color: rgb(217, 217, 217);
+  overflow: hidden;
 }
 .watch__wrapper .text {
   display: block;
@@ -199,3 +241,4 @@ export default {
   background-color: rgb(255, 93, 93);
 }
 </style>
+
