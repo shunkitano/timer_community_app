@@ -23,7 +23,7 @@ export default {
     return {
       isMain: false,
       time:'',
-      count: 3,
+      count: 2,
     }
   },
   mounted() {
