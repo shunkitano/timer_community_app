@@ -4,7 +4,7 @@
       <TimerSettingComp  v-if="isSetting" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" :class="{isActive:isSetting}" v-else>
         <div class="header">
-          <button @touchstart="userPage"></button>
+          <ButtonComp1  @settingBtn="settingPage"></ButtonComp1>
         </div>
         <div class="watch__wrapper">
           <p class="text" :class="{count__now:isCount && m > 0}">{{ m }}</p>
@@ -65,10 +65,12 @@
 
 <script>
 import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
+import ButtonComp1 from '@/components/parts_comp/ButtonComp1.vue';
 
 export default {
   components: {
     TimerSettingComp,
+    ButtonComp1
   },
   data() {
     return {
@@ -106,17 +108,14 @@ export default {
     toUserPage() {
       this.$router.push('/user');
     },
-    userPage() {
+    settingPage(isTrue) {
       this.anim = "set"
-      this.isSetting = true;
+      this.isSetting = isTrue;
     },
     closeSetting(isfalse) {
       this.anim = "main";
-      this.isSetting = isfalse;
-      // console.log(text);
-      
+      this.isSetting = isfalse;   
     }
-
   }
 }
 </script>
@@ -182,60 +181,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding: 0.2rem;
-  align-items: center;
-  gap: 1rem;
-}
-.header button {
-  width: 50px;
-  height: 5px;
-  border: none;
-  margin-top: 15px;
-  background-color: rgba(0, 0, 0, 1);
-  transition: 1s;
-  border-radius: 2px;
-}
-.header button::before {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 0.2rem;
-  width: 50px;
-  height: 5px;
-  border: none;
-  background-color: rgba(0, 0, 0, 1);
-  transition: 1s;
-  border-radius: 2px;
-}
-.header button::after {
-  content: '';
-  position: absolute;
-  top: 30px;
-  right: 0.2rem;
-  width: 50px;
-  height: 5px;
-  border: none;
-  background-color: rgba(0, 0, 0, 1);
-  transition: 1s;
-  border-radius: 2px;
-}
-.header button:hover {
-  width: 50px;
-  height:50px;
-  margin-top: 0.2rem;
-  border-radius: 50%;
-  border: solid 1px rgba(0, 0, 0, 1);
-  background-color: rgba(0, 0, 0, 0);
-}
-.header button:hover::before {
-  content: '';
-  width: 30px;
-  transform: rotate(-45deg)translate(-16px, 15px);
-}
-.header button:hover::after {
-  content: '';
-  width: 20px;
-  transform: rotate(45deg)translate(-15px, 15px);
+  margin: 0.2rem;
 }
 .watch__wrapper { 
   display: flex;
