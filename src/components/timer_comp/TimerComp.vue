@@ -59,11 +59,11 @@
       </div>
     </div><!--timer-->
   </div>
-  
 </template>
 
 <script>
 import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
+
 export default {
   components: {
     TimerSettingComp,
@@ -130,17 +130,29 @@ export default {
   margin: auto;
   background-color: ghostwhite;
   z-index: 100;
-  animation: downIn 1.5s;
+  animation: downIn 2s;
 }
 @keyframes downIn {
   0% {
-    opacity: 0;
-    transform: translateY(100px);
-    scale: 0.7;
+    opacity: 0.5;
+    transform: translateY(-670px);
   }
   100% {
     opacity: 1;
-    transform: translateY(200px);
+    transform: translateY(0);
+  }
+}
+.isActive {
+  animation: downOut 2s;
+}
+@keyframes downOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateY(670px);
   }
 }
 .timer {
@@ -153,7 +165,7 @@ export default {
   background-color: rgba(0, 0, 0, 0);
 }
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -164,14 +176,57 @@ export default {
   gap: 1rem;
 }
 .footer button {
-  width: 80px;
-  height: 70px;
+  width: 50px;
+  height: 5px;
   border: none;
-  border-radius: 1rem 2rem 2rem 1rem /1rem 2rem 2rem 1rem;
-  background-color: rgba(252, 252, 232, 0.7);
+  margin-bottom: 15px;
+  /* border-radius: 1rem 2rem 2rem 1rem /1rem 2rem 2rem 1rem; */
+  background-color: rgba(0, 0, 0, 1);
+  transition: 1s;
+  border-radius: 2px;
 }
-.watch__wrapper {
-  
+.footer button::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0.2rem;
+  width: 50px;
+  height: 5px;
+  border: none;
+  background-color: rgba(0, 0, 0, 1);
+  transition: 1s;
+  border-radius: 2px;
+}
+.footer button::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 0.2rem;
+  width: 50px;
+  height: 5px;
+  border: none;
+  background-color: rgba(0, 0, 0, 1);
+  transition: 1s;
+  border-radius: 2px;
+}
+.footer button:hover {
+  width: 50px;
+  height:50px;
+  border-radius: 50%;
+  border: solid 1px rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0);
+}
+.footer button:hover::before {
+  content: '';
+  width: 30px;
+  transform: rotate(45deg)translate(30px, 30px);
+}
+.footer button:hover::after {
+  content: '';
+  width: 30px;
+  transform: rotate(-45deg)translate(0px, 25px);
+}
+.watch__wrapper { 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -242,7 +297,7 @@ export default {
   width: 30px;
   height: 30px;
 }
-button {
+.controller button {
   width: 40px;
   height: 40px;
   border: solid 1px grey;
