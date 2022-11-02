@@ -1,63 +1,65 @@
 <template>
   <div class="outer">
-    <TimerSettingComp v-show="isSetting" class="setting"></TimerSettingComp>
-    <div class="timer" :class="{isActive:isSetting}">
-      <div class="watch__wrapper">
-        <p class="text" :class="{count__now:isCount && m > 0}">{{ m }}</p>
-        <p class="text" :class="{count__now:isCount && (s > 0 || m > 0)}">{{ s }}</p>
-        <p class="text" :class="{count__now:isCount}">{{ ms }}</p>
-      </div>
-      <div class="controller">
-        <div class="pm">
-          <span>
-            <svg width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g filter="url(#filter0_i_60_49)">
-            <path d="M24.493 2.5C26.4175 -0.833332 31.2288 -0.833335 33.1533 2.5L56.969 43.75C58.8935 47.0833 56.4879 51.25 52.6389 51.25H5.00746C1.15846 51.25 -1.24717 47.0833 0.677332 43.75L24.493 2.5Z" fill="#EAEAEA" fill-opacity="0.5"/>
-            </g>
-            <defs>
-            <filter id="filter0_i_60_49" x="0" y="0" width="57.6465" height="51.25" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-            <feOffset/>
-            <feGaussianBlur stdDeviation="2.5"/>
-            <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-            <feBlend mode="normal" in2="shape" result="effect1_innerShadow_60_49"/>
-            </filter>
-            </defs>
-            </svg>
-          </span>
-          <span>
-            <svg width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g filter="url(#filter0_i_60_50)">
-            <path d="M33.1535 48.75C31.229 52.0833 26.4177 52.0833 24.4932 48.75L0.677502 7.50001C-1.247 4.16668 1.15862 4.93833e-06 5.00762 4.60184e-06L52.639 4.37766e-07C56.488 1.01276e-07 58.8936 4.16667 56.9691 7.5L33.1535 48.75Z" fill="#EAEAEA" fill-opacity="0.5"/>
-            </g>
-            <defs>
-            <filter id="filter0_i_60_50" x="0" y="0" width="57.6465" height="51.25" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-            <feOffset/>
-            <feGaussianBlur stdDeviation="2.5"/>
-            <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-            <feBlend mode="normal" in2="shape" result="effect1_innerShadow_60_50"/>
-            </filter>
-            </defs>
-            </svg>
-          </span>
+    <transition :name='anim' @close='anim = $event'>
+      <TimerSettingComp  v-if="isSetting" class="setting" @my-click='closeSetting'></TimerSettingComp>
+      <div class="timer" :class="{isActive:isSetting}" v-else>
+        <div class="header">
+          <button @touchstart="userPage"></button>
         </div>
-        <button class="pm__set"></button>
-        <div class="ssr">
-          <button></button>
-          <button></button>
+        <div class="watch__wrapper">
+          <p class="text" :class="{count__now:isCount && m > 0}">{{ m }}</p>
+          <p class="text" :class="{count__now:isCount && (s > 0 || m > 0)}">{{ s }}</p>
+          <p class="text" :class="{count__now:isCount}">{{ ms }}</p>
         </div>
-      </div>
-      <div class="footer">
-        <button @touchstart="userPage"></button>
-      </div>
-    </div><!--timer-->
+        <div class="controller">
+          <div class="pm">
+            <span>
+              <svg width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g filter="url(#filter0_i_60_49)">
+              <path d="M24.493 2.5C26.4175 -0.833332 31.2288 -0.833335 33.1533 2.5L56.969 43.75C58.8935 47.0833 56.4879 51.25 52.6389 51.25H5.00746C1.15846 51.25 -1.24717 47.0833 0.677332 43.75L24.493 2.5Z" fill="#EAEAEA" fill-opacity="0.5"/>
+              </g>
+              <defs>
+              <filter id="filter0_i_60_49" x="0" y="0" width="57.6465" height="51.25" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+              <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+              <feOffset/>
+              <feGaussianBlur stdDeviation="2.5"/>
+              <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+              <feBlend mode="normal" in2="shape" result="effect1_innerShadow_60_49"/>
+              </filter>
+              </defs>
+              </svg>
+            </span>
+            <span>
+              <svg width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g filter="url(#filter0_i_60_50)">
+              <path d="M33.1535 48.75C31.229 52.0833 26.4177 52.0833 24.4932 48.75L0.677502 7.50001C-1.247 4.16668 1.15862 4.93833e-06 5.00762 4.60184e-06L52.639 4.37766e-07C56.488 1.01276e-07 58.8936 4.16667 56.9691 7.5L33.1535 48.75Z" fill="#EAEAEA" fill-opacity="0.5"/>
+              </g>
+              <defs>
+              <filter id="filter0_i_60_50" x="0" y="0" width="57.6465" height="51.25" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+              <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+              <feOffset/>
+              <feGaussianBlur stdDeviation="2.5"/>
+              <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+              <feBlend mode="normal" in2="shape" result="effect1_innerShadow_60_50"/>
+              </filter>
+              </defs>
+              </svg>
+            </span>
+          </div>
+          <button class="pm__set"></button>
+          <div class="ssr">
+            <button></button>
+            <button></button>
+          </div>
+        </div>
+      </div><!--timer-->
+    </transition>
   </div>
 </template>
 
@@ -82,7 +84,8 @@ export default {
       styleObject: {
         'box-shadow': ''
       },
-      isSetting: false
+      isSetting: false,
+      anim: ''
     }
   },
   computed: {
@@ -103,13 +106,17 @@ export default {
     toUserPage() {
       this.$router.push('/user');
     },
-    toTimerSetting() {
-      this.isSetting = !this.isSetting;
-    },
     userPage() {
-      console.log("touch");
+      this.anim = "set"
       this.isSetting = true;
+    },
+    closeSetting(isfalse) {
+      this.anim = "main";
+      this.isSetting = isfalse;
+      // console.log(text);
+      
     }
+
   }
 }
 </script>
@@ -119,36 +126,40 @@ export default {
   position: relative;
 }
 .setting {
-  display: block;
-  width: 100%;
-  height: 100%;
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
-  right: 0;
-  margin: auto;
+  width: 100%;
+  height: 100%;
   background-color: ghostwhite;
   z-index: 100;
-  animation: downIn 2s;
+} 
+.set-enter-active {
+  animation: up 1.5s;
 }
-@keyframes downIn {
+.set-leave-active {
+  animation: down 1.5s;
+}
+.main-enter-active {
+  animation: down 1.5s reverse; 
+}
+.main-leave-active {
+  animation: up 1.5s reverse;
+}
+@keyframes up {
   0% {
     opacity: 0.5;
     transform: translateY(-670px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0px);
   }
 }
-.isActive {
-  animation: downOut 2s;
-}
-@keyframes downOut {
+@keyframes down {
   0% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0px);
   }
   100% {
     opacity: 0.5;
@@ -164,32 +175,31 @@ export default {
   justify-content: center;
   background-color: rgba(0, 0, 0, 0);
 }
-.footer {
+.header {
   position: fixed;
-  bottom: 0;
-  left: 0;
+  top: 0;
+  right: 0;
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   padding: 0.2rem;
   align-items: center;
   gap: 1rem;
 }
-.footer button {
+.header button {
   width: 50px;
   height: 5px;
   border: none;
-  margin-bottom: 15px;
-  /* border-radius: 1rem 2rem 2rem 1rem /1rem 2rem 2rem 1rem; */
+  margin-top: 15px;
   background-color: rgba(0, 0, 0, 1);
   transition: 1s;
   border-radius: 2px;
 }
-.footer button::before {
+.header button::before {
   content: '';
   position: absolute;
-  top: -10px;
-  left: 0.2rem;
+  top: 5px;
+  right: 0.2rem;
   width: 50px;
   height: 5px;
   border: none;
@@ -197,11 +207,11 @@ export default {
   transition: 1s;
   border-radius: 2px;
 }
-.footer button::after {
+.header button::after {
   content: '';
   position: absolute;
-  top: 15px;
-  left: 0.2rem;
+  top: 30px;
+  right: 0.2rem;
   width: 50px;
   height: 5px;
   border: none;
@@ -209,22 +219,23 @@ export default {
   transition: 1s;
   border-radius: 2px;
 }
-.footer button:hover {
+.header button:hover {
   width: 50px;
   height:50px;
+  margin-top: 0.2rem;
   border-radius: 50%;
   border: solid 1px rgba(0, 0, 0, 1);
   background-color: rgba(0, 0, 0, 0);
 }
-.footer button:hover::before {
+.header button:hover::before {
   content: '';
   width: 30px;
-  transform: rotate(45deg)translate(30px, 30px);
+  transform: rotate(-45deg)translate(-16px, 15px);
 }
-.footer button:hover::after {
+.header button:hover::after {
   content: '';
-  width: 30px;
-  transform: rotate(-45deg)translate(0px, 25px);
+  width: 20px;
+  transform: rotate(45deg)translate(-15px, 15px);
 }
 .watch__wrapper { 
   display: flex;

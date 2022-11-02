@@ -112,6 +112,7 @@ export default {
   padding: 2rem;
   gap: 0.5rem;
   backdrop-filter: blur(3px);
+  border-radius: 5px;
 }
 .isActive {
   animation: skew 1.2s;
@@ -176,6 +177,7 @@ h2 {
   cursor: pointer;
   background-color: rgba(250, 250, 250, 0);
   border: solid 1px ;
+  border-radius: 2px;
   margin-bottom: 1rem;
   padding: 0.5rem;
 }
