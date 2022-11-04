@@ -1,7 +1,6 @@
 <template>
   <div class="style">
-    <input type="button" :value="style" @touchstart="selectStyle">
-    <ul v-if="isStyle">
+    <ul>
       <li v-for="(style, index) in styles" :key="index" @touchstart="thisStyle(index)">
         {{ style.name }}
       </li>
@@ -28,21 +27,15 @@ export default {
           style: '#000'
         }
       ],
-      isStyle: false,
-      style: "style"
+      style: "style",
+      text: "style"
     }
   },
   methods: {
-    selectStyle() {
-      if(!this.isSelect) {
-        this.isStyle = true;
-        this.$emit("styleChange", this.isStyle);
-      } 
-    },
     thisStyle(index) {
-      this.isStyle = false;
-      this.$emit("styleChange", this.isStyle);
+      const reset = "";
       this.style = this.styles[index].name;
+      this.$emit("styleChange", reset, this.style);
     }
   }
 }
@@ -53,7 +46,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 2rem;
 }
 .style input {
   width: 60%;
@@ -70,16 +62,15 @@ export default {
   text-align: center;
 }
 .style li {
+  list-style: none;
   animation: look 1.5s;
 }
 @keyframes look {
   0% {
     opacity: 0;
-    transform: translateX(-100px);
   }
   100% {
     opacity: 1;
-    transform: translateX(0px);
   }
 }
 </style>

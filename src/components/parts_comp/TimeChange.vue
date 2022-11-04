@@ -1,7 +1,6 @@
 <template>
   <div class="time">
-    <input type="button" :value="time" @touchstart="selectTime">
-    <ul v-if="isTime">
+    <ul>
       <li v-for="(time, index) in times" :key="index" @touchstart="thisTime(index)">
         {{ time.name }}
       </li>
@@ -16,33 +15,27 @@ export default {
     return {
       times: [
         {
-          name: 'color',
-          time: '#FFF'
+          name: 'time1',
+          time: ''
         },
         {
-          name: 'red',
-          time: '#F00'
+          name: 'time2',
+          time: ''
         },
         {
-          name: 'black',
-          time: '#000'
+          name: 'time3',
+          time: ''
         }
       ],
-      isTime: false,
-      time: "time"
+      time: "time",
+      text: "time"
     }
   },
   methods: {
-    selectTime() {
-      if(!this.isSelect) {
-        this.isTime = true;
-        this.$emit("timeChange", this.isTime);
-      }
-    },
     thisTime(index) {
-      this.isTime = false;
-      this.$emit("timeChange", this.isTime);
+      const reset = "";
       this.time = this.times[index].name;
+      this.$emit("timeChange", reset, this.time);
     }
   }
 }
@@ -53,7 +46,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 2rem;
 }
 .time input {
   width: 60%;
@@ -70,16 +62,15 @@ export default {
   text-align: center;
 }
 .time li {
+  list-style: none;
   animation: look 1.5s;
 }
 @keyframes look {
   0% {
     opacity: 0;
-    transform: translateX(-100px);
   }
   100% {
     opacity: 1;
-    transform: translateX(0px);
   }
 }
 </style>

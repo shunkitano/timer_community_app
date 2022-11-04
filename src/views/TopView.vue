@@ -15,6 +15,12 @@ import EnterComp from '@/components/EnterComp.vue';
 import MainComp from '@/components/MainComp.vue';
 
 export default {
+  beforeRouteLeave (to, from, next) {
+    setTimeout(() => {
+      console.log('user:beforeRouteLeave');
+      next();
+    }, 2000);
+  },
   components: {
     EnterComp,
     MainComp

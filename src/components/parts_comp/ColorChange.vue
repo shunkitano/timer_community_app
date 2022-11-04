@@ -1,7 +1,6 @@
 <template>
   <div class="color">
-    <input type="button" :value="color" @touchstart="selectColor" :style="styleObject">
-    <ul v-if="isColor">
+    <ul>
       <li v-for="(color, index) in colors" :key="index" @touchstart="thisColor(index)">
         {{ color.name }}
       </li>
@@ -32,25 +31,18 @@ export default {
           color: '#999'
         }
       ],
-      isColor: false,
       color: "color",
+      text: "color",
       styleObject: {
         'background-color': ''
       }
     }
   },
   methods: {
-    selectColor() {
-      if(!this.isSelect) {
-        this.isColor = true;
-        this.$emit("colorChange", this.isColor);
-      }
-    },
     thisColor(index) {
-      this.isColor = false;
-      this.$emit("colorChange", this.isColor);
+      const reset = ""
       this.color = this.colors[index].name;
-      this.styleObject["background-color"] = this.colors[index].color;
+      this.$emit("colorChange", reset, this.color);
     }
   }
 }
@@ -61,7 +53,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 2rem;
 }
 .color input {
   width: 60%;
@@ -78,16 +69,15 @@ export default {
   text-align: center;
 }
 .color li {
+  list-style: none;
   animation: look 1.5s;
 }
 @keyframes look {
   0% {
     opacity: 0;
-    transform: translateX(-100px);
   }
   100% {
     opacity: 1;
-    transform: translateX(0px);
   }
 }
 </style>

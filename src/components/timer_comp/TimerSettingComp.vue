@@ -7,10 +7,14 @@
       <CommunityButton></CommunityButton>
     </div>
     <div class="setting">
-      <TimeChange @touchstart="style" :isSelect="selecting" @timeChange="changeHere"></TimeChange>
-      <ColorChange @touchstart="color" :isSelect="selecting" @colorChange="changeHere"></ColorChange>
-      <SoundChange @touchstart="sound" :isSelect="selecting" @soundChange="changeHere"></SoundChange>
-      <StyleChange @touchstart="style" :isSelect="selecting" @styleChange="changeHere"></StyleChange>
+      <input type="button" :value="selects[0].name" @touchstart="selectTime">
+      <TimeChange @timeChange="changeHere" v-show="isActive === '1'"></TimeChange>
+      <input type="button" :value="selects[1].name" @touchstart="selectColor">
+      <ColorChange @colorChange="changeHere" v-show="isActive === '2'"></ColorChange>
+      <input type="button" :value="selects[2].name" @touchstart="selectSound">
+      <SoundChange @soundChange="changeHere" v-show="isActive === '3'"></SoundChange>
+      <input type="button" :value="selects[3].name" @touchstart="selectStyle">
+      <StyleChange @styleChange="changeHere" v-show="isActive === '4'"></StyleChange>
     </div>
     <div class="footer">
       <ButtonComp2 @my-click="mainPage"></ButtonComp2>
@@ -40,26 +44,45 @@ export default {
   data() {
     return {
       isFalse: false,
-      selecting: false
+      isActive: '',
+      selects: [
+        {name: "Time"},
+        {name: "Color"},
+        {name: "Sound"},
+        {name: "Style"}
+      ]
+    }
+  },
+  computed: {
+    check() {
+      return this.checkNum();
     }
   },
   methods: {
-    mainPage(isFalse) {
+    checkNum() {
+      return this.isActive = this.text;
+    },
+    mainPage(isFalse) { //メインページへ飛ぶ
       this.isFalse = isFalse;
       this.$emit("my-click", this.isFalse);
     },
-    color() {
-      console.log("color");
+    selectTime() {
+      this.isActive = "1";
     },
-    sound() {
-
+    selectColor() {
+      this.isActive = "2";
     },
-    style() {
-
+    selectSound() {
+      this.isActive = "3";
     },
-    changeHere(select) {
-      this.selecting = select;
-      console.log(this.selecting);
+    selectStyle() {
+      this.isActive = "4";
+    },
+    changeHere(reset ,item) {
+      console.log(reset, item);
+      const i = this.isActive;
+      this.isActive = reset;
+      this.selects[i -1].name = item;
     }
   }
 }
@@ -74,7 +97,15 @@ export default {
   margin-top: 1rem;
 }
 .setting {
-  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  margin: 2rem auto 1rem;
+  width: 60%;
+}
+.setting input {
+  height: 40px;
+  margin-top: 2rem;
+  border-radius: 0.5rem;
 }
 .footer {
   position: fixed;

@@ -1,14 +1,16 @@
 <template>
-  <div class="user">
-    <div class="header">
-      <button @click="toUserSetting">設定</button>
-      <h2>{{ userName }}</h2>
-      <button @click="toCommunity">Community</button>
-    </div>
-    <div id="timer_room">
-      <button class="timer" @click="selectTimer()"></button>
-    </div><!--timer_room-->
-    <UserSettingComp v-show="isSetting" class="setting"></UserSettingComp>
+  <div>
+    <transition name="slide">
+      <div class="user">
+        <div class="header">
+          <h2>{{ userName }}</h2>
+        </div>
+        <div id="timer_room">
+          <button class="timer" @click="selectTimer()"></button>
+        </div><!--timer_room-->
+        <UserSettingComp v-show="isSetting" class="setting"></UserSettingComp>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -16,12 +18,13 @@
 import UserSettingComp from '@/components/user_comp/UserSettingComp.vue';
 
 export default {
+  
   components: {
     UserSettingComp,
   },
   data() {
     return {
-      userName: 'Who',
+      userName: 'User',
       isSetting: false,
     }
   },
@@ -40,6 +43,20 @@ export default {
 </script>
 
 <style scoped>
+.slide-enter-active {
+  animation: slideIn 2s;
+}
+.slide-leave-active {
+  animation: slideIn 2s reverse;
+}
+@keyframes slideIn {
+  0% {
+    transform: translateX(-380px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
 .user {
   position: relative;
   width: 100%;
@@ -55,29 +72,31 @@ export default {
   left: 0;
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  padding: 1rem;
+  justify-content: center;
+  padding-top: 1rem;
   align-items: center;
-  gap: 1rem;
-}
-.header button:first-child {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
 }
 .header h2 {
   font-size: 1.8rem;
-  height: 50px;
+  height: 60px;
   text-align: center;
-  width: 80%;
+  width: 60%;
   background-color: ghostwhite;
   border: solid 1px gray;
-  border-radius: 2rem;
-  padding-left: 2.5rem;
+  border-radius: 40px;
+  animation: slide 1s ease;
 }
+@keyframes slide {
+  0% {
+    border-right: none;
+    border-radius: 40px 0 0 40px;
+    margin-left: 40%;
+  }
+}
+
 .header button {
   width: 20%;
-  height: 50px;
+  height: 40px;
   border-radius: 2rem;
   border: solid 1px gray;
   background-color: ghostwhite;
