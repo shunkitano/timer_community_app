@@ -8,13 +8,14 @@
 export default {
   data() {
     return {
-      isTrue: true
+      isFalse:false
     }
   },
   methods: {
     settingPage() {
-      this.$emit("settingBtn", this.isTrue);
+      this.$emit("my-click", this.isFalse);
     }
+    
   }
 }
 
@@ -27,7 +28,6 @@ export default {
   justify-content: center;
   width: 50px;
   height: 50px;
-  text-align: center;
   text-align: center;
 }
 button {
@@ -70,18 +70,28 @@ button::after {
 button:hover {
   width: 50px;
   height:50px;
-  border-radius: 50%;
-  border: solid 2px rgba(0, 0, 0, 1);
-  background-color: rgba(0, 0, 0, 0);
+  border-radius: 50px 50px 0 0;
+  background-color: rgba(0, 0, 0, 1);
+  animation: frip 1.5s;
+}
+@keyframes frip {
+  0% {
+    scale: 1;
+  }
+  100% {
+    scale: 1.1;
+  }
 }
 button:hover::before {
   content: '';
   width: 30px;
   transform: rotate(45deg)translate(10px, -5px);
+  background-color: rgba(250, 250, 250, 1);
 }
 button:hover::after {
   content: '';
   width: 30px;
   transform: rotate(-45deg)translate(10px, -22px);
+  background-color: rgba(250, 250, 250, 1);
 }
 </style>

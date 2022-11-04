@@ -112,9 +112,9 @@ export default {
       this.anim = "set"
       this.isSetting = isTrue;
     },
-    closeSetting(isfalse) {
+    closeSetting(isFalse) {
       this.anim = "main";
-      this.isSetting = isfalse;   
+      this.isSetting = isFalse;   
     }
   }
 }
@@ -181,7 +181,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin: 0.2rem;
+  margin-right: 0.2rem;
 }
 .watch__wrapper { 
   display: flex;
