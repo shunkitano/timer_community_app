@@ -50,8 +50,8 @@ export default {
 }
 @keyframes leftIn {
   0% {
-    opacity: 0;
-    transform: translateX(-380px);
+    opacity: 1;
+    transform: translateX(-100vw);
   }
   100% {
     opacity: 1;
@@ -67,7 +67,7 @@ export default {
 @keyframes rightIn {
   0% {
     opacity: 0;
-    transform: translateX(380px);
+    transform: translateX(100vw);
   }
   100% {
     opacity: 1;

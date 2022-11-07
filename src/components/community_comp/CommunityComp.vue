@@ -1,12 +1,14 @@
 <template>
   <div class="community">
+    <UserButton class="userBtn"></UserButton>
     <div class="header">
-      <UserButton @click="toUserRoom"></UserButton>
       <h2>Community</h2>
     </div>
-    <div id="community_room">
-      <button class="timer" @click="selectTimer()"></button>
-    </div><!--timer_room-->
+    <ul id="community_room">
+      <li v-for="(timer, id) in timers" :key="id">
+        {{ timer.name }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -20,11 +22,12 @@ export default {
   data() {
     return {
       userName: 'Who',
+      timers: []
     }
   },
   methods: {
-    toUserRoom() {
-      this.$router.push('/user');
+    selectTimer() {
+
     }
   }
 }
@@ -38,6 +41,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: rgb(217, 217, 217);
 }
 /* header */
 .header {
@@ -46,39 +50,33 @@ export default {
   left: 0;
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  padding: 1rem;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
-}
-.header button {
-  width: 20%;
-  height: 50px;
-  border-radius: 2rem;
-  border: solid 1px gray;
-  background-color: ghostwhite;
 }
 .header h2 {
-  font-size: 1.8rem;
+  line-height: 60px;
+  font-size: 1rem;
   height: 60px;
   text-align: center;
-  width: 80%;
-  background-color: ghostwhite;
-  border: solid 1px gray;
-  border-radius: 2rem;
+  width: 160px;
+  color: rgba(250, 250, 250, 1);
+  background-color: rgba(0, 0, 0, 1);
+  border: solid 1px rgba(250, 250, 250, 1);
+  border-radius: 40px;
+}
+.community .userBtn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
 }
 /* CommunityRoom */
 #community_room {
   width: 100%;
+  height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin: 0 auto;
-}
-#community_room .timer {
-  width: 150px;
-  height: 150px;
-  margin: 1rem;
-  border-radius: 50%;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px;
 }
 </style>

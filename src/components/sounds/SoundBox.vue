@@ -16,8 +16,9 @@ export  default {
       synth.triggerAttackRelease("A4", "8n");
     },
     sound2() {
-      const synth = new Tone.Synth().toDestination();
-      synth.triggerAttackRelease("C5", "8n");
+      const synth = new Tone.PolySynth().toDestination();
+      synth.set({ detune: -1200 });
+      synth.triggerAttackRelease(["C5", "D5","G5"], 1);
     },
     sound3() {
       const synth = new Tone.Synth().toDestination();

@@ -7,7 +7,7 @@
           <transition name="slide" mode="out-in">
             <div v-if="isAtherPage" class="info">
               <UserButton></UserButton>
-              <button @touchend="settingPage">Setting</button>
+              <button @touchend="settingPage">Make</button>
               <CommunityButton></CommunityButton>
               <button @touchstart="mainPage"></button>
             </div>
@@ -15,8 +15,8 @@
           </transition>   
         </div>
         <div class="watch__wrapper">
-          <p class="text" :class="{count__now:isCount && m > 0}">{{ m }}</p>
-          <p class="text" :class="{count__now:isCount && (s > 0 || m > 0)}">{{ s }}</p>
+          <p class="text" :class="{light:!isActive, count__now:isCount && m > 0}">{{ m }}</p>
+          <p class="text" :class="{light:isActive, count__now:isCount && (s > 0 || m > 0)}">{{ s }}</p>
           <p class="text" :class="{count__now:isCount}">{{ ms }}</p>
         </div>
         <div class="controller">
@@ -60,9 +60,9 @@
               </svg>
             </span>
           </div>
-          <button class="pm__set"></button>
+          <button class="pm__set" @touchstart="plusMinus"></button>
           <div class="ssr">
-            <button></button>
+            <button @touchstart="playSound"></button>
             <button></button>
           </div>
         </div>
@@ -76,6 +76,7 @@ import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
 import ButtonComp1 from '@/components/parts_comp/ButtonComp1.vue';
 import UserButton from '@/components/parts_comp/UserButton.vue';
 import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
+import * as Tone from 'tone'; // ここで読み込む。
 
 export default {
   components: {
@@ -101,6 +102,8 @@ export default {
       isSetting: false,
       anim: '',
       isAtherPage: false,
+      isActive: true,
+      soundNum: ''
     }
   },
   computed: {
@@ -115,6 +118,9 @@ export default {
     ms() {
       let ms = this.count;
       return ("0" + ms).slice(-2);
+    },
+    sound() { //これを直接メソッドに突っ込む。x
+      return this.$store.state.currentSound; 
     }
   },
   methods: {
@@ -135,7 +141,31 @@ export default {
     },
     mainPage() {
       this.isAtherPage = !this.isAtherPage;
-    }
+    },
+    // タイマーの設定
+    plusMinus() {
+      this.isActive = !this.isActive;
+    },
+
+
+    playSound() {
+      // this.$store.commit('selectSound');
+      if(this.sound === "1") {
+        const synth = new Tone.Synth().toDestination();
+        synth.triggerAttackRelease("A4", "8n");
+      }
+      if(this.sound === "2") {
+        const synth2 = new Tone.PolySynth().toDestination();
+        synth2.set({ detune: -800 });
+        synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
+      }
+      if(this.sound === "3") {
+        const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
+        const synth3 = new Tone.PolySynth().connect(pingPong);
+        synth3.set({ detune: -800 });
+        synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
+      }
+    },
   }
 }
 </script>
@@ -150,7 +180,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: ghostwhite;
+  background-color: rgba(240, 240, 240, 1);
   z-index: 100;
 } 
 .set-enter-active {
@@ -168,7 +198,7 @@ export default {
 @keyframes up {
   0% {
     opacity: 0.5;
-    transform: translateY(-670px);
+    transform: translateY(-100vh);
   }
   100% {
     opacity: 1;
@@ -182,7 +212,7 @@ export default {
   }
   100% {
     opacity: 0.5;
-    transform: translateY(670px);
+    transform: translateY(100vh);
   }
 }
 .timer {
@@ -245,10 +275,10 @@ export default {
   z-index: 0;
 }
 .slide-enter-active {
-  animation: slideIn 1s reverse ease-in; 
+  animation: slideIn 0.5s reverse ease-in; 
 }
 .slide-leave-active {
-  animation: slideIn 0.8s ease-out;
+  animation: slideIn 0.5s ease-out;
 }
 @keyframes slideIn {
   0% {
@@ -280,10 +310,10 @@ export default {
   padding-top: 1rem;
   color: rgba(0, 255, 4, 0.9);
 }
-.watch__wrapper .text:nth-child(2) {
+.watch__wrapper .light {
   position: relative;
 }
-.watch__wrapper .text:nth-child(2)::after {
+.watch__wrapper .light::after {
   content: '';
   width: 60%;
   position: absolute;
@@ -297,39 +327,53 @@ export default {
 }
 .controller {
   position: fixed;
-  bottom: 0.2rem;
-  right: 0.2rem;
-  width: 200px;
-  height: 200px;
-  border-radius: 6rem 6rem 2rem 2rem /6rem 6rem 2rem 2rem;
-  background-color: rgba(252, 252, 232, 0.5);
+  bottom: 0;
+  right: 0;
   display: flex;
   justify-content: flex-end; 
   align-items: center; 
 }
 .pm {
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
+  margin-right: 0.5rem;
 }
 .pm__set {
-  margin-top: 2.5rem;
+  position: relative;
+  margin-right: 1rem;
+}
+.pm__set::after {
+  content: '';
+  width: 60%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  margin: auto;
+  border-width: 0 0 5px;
+  border-style: solid;
+  border-radius: 2px;
+  color: rgba(0, 255, 4, 0.9);
 }
 .ssr {
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: end;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+.ssr button:first-child {
+  width: 60px;
+  height: 60px;
 }
 .ssr button:last-child {
   background-color: red;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 }
 .controller button {
   width: 40px;
@@ -337,6 +381,4 @@ export default {
   border: solid 1px grey;
   border-radius: 50%;
 }
-
-
 </style>

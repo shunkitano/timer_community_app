@@ -5,6 +5,42 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    timers: [],
+    //timers: [
+      // {
+      //   id: 1,
+      //   name: "タイマー１",
+      //   time: '',
+      //   color: '',
+      //   sound: '',
+      //   style: ''
+      // },
+      // {
+      //   id: 2,
+      //   name: "タイマー２",
+      //   time: '',
+      //   color: '',
+      //   sound: '',
+      //   style: ''
+      // },
+      // {
+      //   id: 3,
+      //   name: "タイマー３",
+      //   time: '',
+      //   color: '',
+      //   sound: '',
+      //   style: ''
+      // },
+      // {
+      //   id: 4,
+      //   name: "タイマー４",
+      //   time: '',
+      //   color: '',
+      //   sound: '',
+      //   style: ''
+      // }
+    //],
+    nextTimerId: 1,
     times: [
       {
         name: 'time1',
@@ -39,18 +75,19 @@ const store = new Vuex.Store({
     ],
     sounds: [
       {
-        name: 'A',
-        sound: '#FFF'
+        name: 'sigle',
+        sound: '1'
       },
       {
-        name: 'B',
-        sound: '#F00'
+        name: 'poly',
+        sound: '2'
       },
       {
-        name: 'C',
-        sound: '#000'
+        name: 'delay',
+        sound: '3'
       }
     ],
+    currentSound:'1',
     styles: [
       {
         name: 'styleA',
@@ -65,5 +102,24 @@ const store = new Vuex.Store({
         style: '#000'
       }
     ]
+  },
+  mutations: {
+    selectSound(state, {i}) {
+      console.log(state.currentSound);
+      state.currentSound = i;
+    },
+    //新しいtimerを作る
+    makeTimer(state, {name, time, color, sound, style}) {
+      state.timers.push({
+        id: state.nextTimerId,
+        name,
+        time,
+        color,
+        sound,
+        style,
+      })
+    state.nextTimerId++
+    }
   }
 })
+export default store

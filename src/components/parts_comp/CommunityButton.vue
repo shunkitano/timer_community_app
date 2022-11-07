@@ -1,6 +1,6 @@
 <template>
   <div class="community">
-    <button  @touchend="communityRoom">Community</button>
+    <button  @touchend="communityRoom">Com</button>
   </div>
 </template>
 
@@ -25,10 +25,10 @@ export default {
 }
 .community button {
   font-size: 1.2rem;
-  width: 90%;
+  width: 80px;
   color: #FFF;
   border: solid 1px rgba(250, 250, 250, 1);
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 1);
   border-radius: 40px;
   transition: 1s ease;
 }

@@ -25,7 +25,7 @@ export default {
 }
 .user button {
   font-size: 1.2rem;
-  width: 90%;
+  width: 80px;
   background-color: rgba(240, 240, 240, 1);
   border: solid 1px rgba(0, 0, 0, 1);
   border-radius: 40px;

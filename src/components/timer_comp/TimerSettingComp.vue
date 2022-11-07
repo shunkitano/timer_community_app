@@ -1,19 +1,21 @@
 <template>
   <div class="outer">
     <div class="setting">
-      <input type="text">
-      <input type="button" :value="selects[0].name" @touchstart="selectTime">
-      <TimeChange @timeChange="changeHere" v-show="isActive === '1'"></TimeChange>
-      <input type="button" :value="selects[1].name" @touchstart="selectColor" :style="styleObject">
-      <ColorChange @colorChange="changeHere" v-show="isActive === '2'"></ColorChange>
-      <input type="button" :value="selects[2].name" @touchstart="selectSound">
-      <SoundChange @soundChange="changeHere" v-show="isActive === '3'"></SoundChange>
-      <input type="button" :value="selects[3].name" @touchstart="selectStyle">
-      <StyleChange @styleChange="changeHere" v-show="isActive === '4'"></StyleChange>
+      <input type="text" placeholder="Timer Name" v-model="text">
+      <div class="number">
+        <input type="number" placeholder="minutes" min="0" max="59">
+        <input type="number" placeholder="seconds" min="0" max="59" v-model="time">
+      </div>
+      <input type="button" :value="selects[0].name" @touchstart="selectColor" :style="styleObject">
+      <ColorChange @colorChange="changeHere" v-show="isActive === '1'"></ColorChange>
+      <input type="button" :value="selects[1].name" @touchstart="selectSound">
+      <SoundChange @soundChange="changeHere" v-show="isActive === '2'"></SoundChange>
+      <input type="button" :value="selects[2].name" @touchstart="selectStyle">
+      <StyleChange @styleChange="changeHere" v-show="isActive === '3'"></StyleChange>
     </div>
     <div class="new__timer">
-      <input type="button" @touchstart="setting" value="newTimer">
-      <input type="button" @touchstart="setting" value="clear">
+      <input type="button" @touchstart="makeTimer" value="Make!">
+      <input type="button" @touchstart="clear" value="Clear">
     </div>
     <div class="footer">
       <button @touchend="mainPage">Main</button>
@@ -25,21 +27,20 @@
 import ColorChange from '@/components/parts_comp/ColorChange.vue';
 import SoundChange from '@/components/parts_comp/SoundChange.vue';
 import StyleChange from '@/components/parts_comp/StyleChange.vue';
-import TimeChange from '@/components/parts_comp/TimeChange.vue';
 
 export default {
   components: {
     ColorChange,
     SoundChange,
-    StyleChange,
-    TimeChange
+    StyleChange
   },
   data() {
     return {
       isFalse: false,
       isActive: '',
+      text: '',
+      time: '',
       selects: [
-        {name: "Time"},
         {name: "Color"},
         {name: "Sound"},
         {name: "Style"}
@@ -62,37 +63,56 @@ export default {
       
       this.$emit("my-click", this.isFalse);
     },
-    selectTime() {
+    selectColor() {
       this.isActive = "1";
     },
-    selectColor() {
+    selectSound() {
       this.isActive = "2";
     },
-    selectSound() {
+    selectStyle() {
       this.isActive = "3";
     },
-    selectStyle() {
-      this.isActive = "4";
-    },
-    setting() {
-
-    },
     changeHere(reset ,item, style) {
-      if(this.isActive === "2") {
+      if(this.isActive === "1") {
         this.styleObject['background-color'] = style;
         console.log(style);
       }
-      console.log(reset, item);
+      if(this.isActive === "2") {
+        console.log(reset, item, style);
+        this.$store.commit('selectSound', {
+          i : style
+        });
+        console.log(this.$store.state.currentSound);
+      }
       const i = this.isActive;
       this.isActive = reset;
       this.selects[i -1].name = item;
+    },
+    makeTimer() {
+      this.$store.commit('makeTimer', {
+        name: this.text,
+        time: this.time,
+        color: this.selects[0].name,
+        sound: this.selects[1].name,
+        style: this.selects[2].name,
+      })
+    },
+    clear() {
+      this.text = '';
+      this.time = '';
+      this.selects[0].name = "Color";
+      this.selects[1].name = "Sound";
+      this.selects[2].name = "Style";
+      this.styleObject['background-color'] = '';
+      this.isActive = '';
     }
   }
 }
 </script>
 
 <style>
-input[type="text"] {
+/* inputのデフォルトcssを解除 */
+input[type="text"],[type="number"] { 
 	margin: 0;
 	padding: 0;
 	background: none;
@@ -103,6 +123,8 @@ input[type="text"] {
 	-moz-appearance: none;
 	appearance: none;
 }
+/* inputのデフォルトcssを解除 */
+
 .outer {
   position: relative;
   width: 100%;
@@ -126,7 +148,7 @@ input[type="text"] {
 .setting>input:first-child {
   text-align: center;
 }
-.setting input:focus:first-child {
+.setting input:focus {
   animation: neonline 1s ease;
 }
 @keyframes neonline {
@@ -151,10 +173,25 @@ input[type="text"] {
   margin: auto;
   display: flex;
   justify-content: center;
+  gap: 5%;
+}
+.new__timer input:first-child {
+  width: 35%;
+  background-color: rgb(240, 120, 100);
+}
+.new__timer input:last-child {
+  width: 20%;
+  background-color: rgb(220, 220, 220);
+}
+.number {
+  display: flex;
+  justify-content: center;
   gap: 10%;
 }
-.new__timer input {
-  width: 25%;
+.number input {
+  border: solid 1px rgba(0, 0, 0, 1);
+  text-align: center;
+  width: 45%;
 }
 .footer {
   width: 100%;

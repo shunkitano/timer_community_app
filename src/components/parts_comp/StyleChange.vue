@@ -15,15 +15,15 @@ export default {
     return {
       styles: [
         {
-          name: 'styleA',
+          name: 'Digital',
           style: '#FFF'
         },
         {
-          name: 'styleB',
+          name: 'Clasic',
           style: '#F00'
         },
         {
-          name: 'styleC',
+          name: 'Circle',
           style: '#000'
         }
       ],
@@ -57,13 +57,14 @@ export default {
 }
 .style ul {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   text-align: center;
+  gap: 1rem;
 }
 .style li {
   list-style: none;
   animation: look 1.5s;
+  margin-top: 0.5rem;
 }
 @keyframes look {
   0% {

@@ -1,43 +1,42 @@
 <template>
   <div>
-    <transition name="slide">
-      <div class="user">
-        <div class="header">
-          <h2>{{ userName }}</h2>
-          <CommunityButton></CommunityButton>
-        </div>
-        <div id="timer_room">
-          <button class="timer" @click="selectTimer()"></button>
-        </div><!--timer_room-->
-        <UserSettingComp v-show="isSetting" class="setting"></UserSettingComp>
+    <div class="user">
+      <input type="button" class="logout" value="Logout">
+      <CommunityButton class="comBtn"></CommunityButton>
+      <div class="header">
+        <h2>{{ userName }}</h2>
       </div>
-    </transition>
+      <ul id="user__room">
+        <li v-for="(timer, id) in timers" :key="id">
+          {{ timer.name }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
-import UserSettingComp from '@/components/user_comp/UserSettingComp.vue';
 
 export default {
   
   components: {
-    UserSettingComp,
     CommunityButton
   },
   data() {
     return {
+      timers: [],
       userName: 'User',
       isSetting: false,
       isTrue: true
     }
   },
+  mounted() {
+    return this.timers = this.$store.state.timers;
+  },
   methods: {
     toUserSetting() {
       this.isSetting = !this.isSetting;
-    },
-    toCommunity() {
-      this.$router.push('/community');
     },
     selectTimer() {
       this.$router.push('/top');
@@ -48,20 +47,6 @@ export default {
 </script>
 
 <style scoped>
-.slide-enter-active {
-  animation: slideIn 2s;
-}
-.slide-leave-active {
-  animation: slideIn 2s reverse;
-}
-@keyframes slideIn {
-  0% {
-    transform: translateX(-380px);
-  }
-  100% {
-    transform: translateX(0px);
-  }
-}
 .user {
   position: relative;
   width: 100%;
@@ -69,6 +54,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: rgb(217, 217, 217);
 }
 /* header */
 .header {
@@ -78,60 +64,48 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 1rem;
   align-items: center;
 }
 .header h2 {
-  font-size: 1.8rem;
+  font-size: 1rem;
   height: 60px;
+  line-height: 60px;
   text-align: center;
-  width: 60%;
-  background-color: ghostwhite;
-  border: solid 1px gray;
+  width: 160px;
+  background-color: rgba(240, 240, 240, 1);
+  border: solid 1px rgba(0, 0, 0, 1);
   border-radius: 40px;
-  animation: slide 1s ease;
 }
-@keyframes slide {
-  0% {
-    border-right: none;
-    border-radius: 40px 0 0 40px;
-    margin-left: 40%;
-  }
-}
-
-.header button {
-  width: 20%;
-  height: 40px;
-  border-radius: 2rem;
-  border: solid 1px gray;
-  background-color: ghostwhite;
-}
-/* TimerRoom */
-#timer_room {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin: 0 auto;
-}
-#timer_room .timer {
-  width: 150px;
-  height: 150px;
-  margin: 1rem;
-  border-radius: 50%;
-}
-
-/* UserSetting */
-.user .setting {
-  display: block;
-  width: 80%;
-  height: 80%;
+.user .comBtn {
   position: absolute;
   top: 0;
-  bottom: 0;
-  left: 0;
   right: 0;
-  margin: auto;
-  background-color: ghostwhite;
+  z-index: 100;
+}
+.user .logout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 60px;
+  border: solid 1px rgba(0, 0, 0, 1);
+  border-radius: 40px;
+  background-color: rgb(220, 220, 220);
+  margin-left: 1rem;
+  z-index: 100;
+}
+/* TimerRoom */
+#user__room {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 70px;
+}
+#user__room li {
+  text-align: center;
+  list-style: none;
+  margin: 0 auto;
 }
 </style>

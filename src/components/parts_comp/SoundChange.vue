@@ -225,44 +225,40 @@
 <script>
 import * as Tone from 'tone'; // ここで読み込む。
 
+
 export default {
   props: ["isSelect"],
   data() {
     return {
-      sounds: [
-        {
-          name: 'A4',
-          sound: '1'
-        },
-        {
-          name: 'C5',
-          sound: '2'
-        },
-        {
-          name: 'E4',
-          sound: '3'
-        }
-      ],
+      sounds: [],
       sound: "sound",
       text: "sound"
     }
+  },
+  mounted() {
+    return this.sounds = this.$store.state.sounds
   },
   methods: {
     thisSound(index) {
       const reset = "";
       this.sound = this.sounds[index].name;
-      this.$emit("soundChange", reset, this.sound);
+      this.$emit("soundChange", reset, this.sound,this.sounds[index].sound);
     },
     playSound(index) {
-      const synth = new Tone.Synth().toDestination();
       if(index === 0) {
+        const synth = new Tone.Synth().toDestination();
         synth.triggerAttackRelease("A4", "8n");
       }
       if(index === 1) {
-        synth.triggerAttackRelease("C5", "8n");
+        const synth2 = new Tone.PolySynth().toDestination();
+        synth2.set({ detune: -800 });
+        synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
       }
       if(index === 2) {
-        synth.triggerAttackRelease("E4", "8n");
+        const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
+        const synth3 = new Tone.PolySynth().connect(pingPong);
+        synth3.set({ detune: -800 });
+        synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
       }
     }
   }
@@ -287,7 +283,7 @@ export default {
   display: flex;
   justify-content: center;
   text-align: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 .sound li {
   display: flex;
@@ -304,5 +300,17 @@ export default {
   100% {
     opacity: 1;
   }
+}
+.sound p {
+  background-color: rgb(200, 200, 200);
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+}
+.sound svg {
+  transition: 0.3s;
+}
+.sound svg:active {
+  scale: 1.2;
 }
 </style>
