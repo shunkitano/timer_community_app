@@ -8,12 +8,13 @@
 export default {
   data() {
     return {
-      isTrue: true
+      isTouch: false
     }
   },
   methods: {
     settingPage() {
-      this.$emit("settingBtn", this.isTrue);
+      this.$emit("settingBtn");
+      this.isTouch = !this.isTouch;
     }
   }
 }
@@ -32,11 +33,10 @@ export default {
 }
 button {
   width: 50px;
-  height: 5px;
+  height: 7px;
   border: none;
   margin: auto;
   background-color: rgba(0, 0, 0, 1);
-  transition: 1.5s;
   border-radius: 2px;
 }
 button::before {
@@ -47,10 +47,9 @@ button::before {
   right: 0;
   margin: auto;
   width: 50px;
-  height: 5px;
+  height: 7px;
   border: none;
   background-color: rgba(0, 0, 0, 1);
-  transition: 1s;
   border-radius: 2px;
 }
 button::after {
@@ -61,38 +60,9 @@ button::after {
   right: 0;
   margin: auto;
   width: 50px;
-  height: 5px;
+  height: 7px;
   border: none;
   background-color: rgba(0, 0, 0, 1);
-  transition: 1s;
   border-radius: 2px;
-}
-button:hover {
-  width: 50px;
-  height:50px;
-  border-radius: 0 0 50px 50px;
-  border: solid 2px rgba(0, 0, 0, 1);
-  background-color: rgba(0, 0, 0, 1);
-  animation: frip 1.5s;
-}
-@keyframes frip {
-  0% {
-    scale: 1;
-  }
-  100% {
-    scale: 1.1;
-  }
-}
-button:hover::before {
-  content: '';
-  width: 30px;
-  transform: rotate(-45deg)translate(-10px, 20px);
-  background-color: rgba(250, 250, 250, 1);
-}
-button:hover::after {
-  content: '';
-  width: 30px;
-  transform: rotate(45deg)translate(-10px, 5px);
-  background-color: rgba(250, 250, 250, 1);
 }
 </style>

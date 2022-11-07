@@ -2,7 +2,7 @@
   <div class="color">
     <ul>
       <li v-for="(color, index) in colors" :key="index" @touchstart="thisColor(index)">
-        {{ color.name }}
+        <div :style="{'background-color': color.color}"></div>
       </li>
     </ul>
   </div>
@@ -40,9 +40,12 @@ export default {
   },
   methods: {
     thisColor(index) {
-      const reset = ""
+      const reset = "";
       this.color = this.colors[index].name;
-      this.$emit("colorChange", reset, this.color);
+      this.$emit("colorChange", reset, this.color, this.colors[index].color);
+      // console.log(this.colors[index].color);
+      this.styleObject['background-color'] = this.colors[index].color;
+      
     }
   }
 }
@@ -64,13 +67,19 @@ export default {
 }
 .color ul {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   text-align: center;
+  gap: 1rem;
 }
 .color li {
   list-style: none;
+  margin-top: 0.5rem;
   animation: look 1.5s;
+}
+.color li div {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 @keyframes look {
   0% {

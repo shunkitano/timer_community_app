@@ -1,7 +1,7 @@
 <template>
   <div class="community">
     <div class="header">
-      <button @click="toUserRoom">{{ userName }}</button>
+      <UserButton @click="toUserRoom"></UserButton>
       <h2>Community</h2>
     </div>
     <div id="community_room">
@@ -11,7 +11,12 @@
 </template>
 
 <script>
+import UserButton from '@/components/parts_comp/UserButton.vue'
+
 export default {
+  components: {
+    UserButton
+  },
   data() {
     return {
       userName: 'Who',
@@ -55,7 +60,7 @@ export default {
 }
 .header h2 {
   font-size: 1.8rem;
-  height: 50px;
+  height: 60px;
   text-align: center;
   width: 80%;
   background-color: ghostwhite;

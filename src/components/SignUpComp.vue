@@ -50,7 +50,7 @@ export default {
       } else if (this.count === 0){
         clearInterval(this.time);
       } 
-      this.$emit("my-click2", true);
+      this.$emit("my-click2", this.isClose);
     },
     dragIn() {
       if(!this.isDrag) {

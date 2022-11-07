@@ -4,6 +4,7 @@
       <div class="user">
         <div class="header">
           <h2>{{ userName }}</h2>
+          <CommunityButton></CommunityButton>
         </div>
         <div id="timer_room">
           <button class="timer" @click="selectTimer()"></button>
@@ -15,17 +16,20 @@
 </template>
 
 <script>
+import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
 import UserSettingComp from '@/components/user_comp/UserSettingComp.vue';
 
 export default {
   
   components: {
     UserSettingComp,
+    CommunityButton
   },
   data() {
     return {
       userName: 'User',
       isSetting: false,
+      isTrue: true
     }
   },
   methods: {
@@ -36,7 +40,8 @@ export default {
       this.$router.push('/community');
     },
     selectTimer() {
-      this.$router.push('/');
+      this.$router.push('/top');
+      this.$emit("my-click", this.isTrue)
     }
   }
 }

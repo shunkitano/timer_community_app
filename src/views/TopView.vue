@@ -1,50 +1,36 @@
 <template>
   <div class="top">
-    <!-- <nav v-show="isMain">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav> -->
-    <EnterComp v-if="!isMain"></EnterComp>
-    <MainComp v-else></MainComp>
-    
+    <transition name="top" mode="out-in">
+      <MainComp v-show="isShow"></MainComp>
+    </transition>
   </div>
 </template>
 
 <script>
-import EnterComp from '@/components/EnterComp.vue';
 import MainComp from '@/components/MainComp.vue';
 
 export default {
+  beforeRouteEnter (to, from, next) {
+    console.log('top:beforeRouteEnter');
+    next();
+  },
   beforeRouteLeave (to, from, next) {
+    this.isShow = false;
     setTimeout(() => {
-      console.log('user:beforeRouteLeave');
+      console.log('top:beforeRouteLeave');
       next();
-    }, 2000);
+    }, 1500);
   },
   components: {
-    EnterComp,
     MainComp
   },
   data() {
     return {
-      isMain: false,
-      time:'',
-      count: 3,
+      isShow: false
     }
   },
   mounted() {
-    this.time = setInterval(() => {this.enterPage()}, 1000);
-  },
-  methods: {
-    enterPage() {
-      if(this.count>0) {
-        this.count--;
-        console.log(this.count);
-      } else if(this.count === 0) {
-        clearInterval(this.time);
-        this.isMain = !this.isMain;
-      }
-    }
+    this.isShow = true;
   }
 }
 </script>
@@ -53,5 +39,19 @@ export default {
 .top nav {
   display: flex;
   justify-content: space-evenly;
+}
+.top-enter-active {
+  animation: comeIn 1s;
+}
+.top-leave-active {
+  animation: comeIn 1s reverse;
+}
+@keyframes comeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

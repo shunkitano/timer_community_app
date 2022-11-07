@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <button @touchstart="userRoom">User</button>
+    <button @touchend="userRoom">User</button>
   </div>
 </template>
 
@@ -19,18 +19,19 @@ export default {
   position: relative;
   display: flex;
   justify-content: center;
+  width: 30%;
   height: 60px;
   text-align: center;
 }
 .user button {
   font-size: 1.2rem;
-  width: 60%;
-  background-color: #FFF;
-  border: solid 1px #000;
+  width: 90%;
+  background-color: rgba(240, 240, 240, 1);
+  border: solid 1px rgba(0, 0, 0, 1);
   border-radius: 40px;
   transition: 1s ease;
 }
-.user button:hover {
+.user button:active {
   font-size: 1.6rem;
   margin-right: 200px;
   border-radius: 0 40px 40px 0;

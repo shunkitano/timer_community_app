@@ -4,7 +4,15 @@
       <TimerSettingComp  v-if="isSetting" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" :class="{isActive:isSetting}" v-else>
         <div class="header">
-          <ButtonComp1  @settingBtn="settingPage"></ButtonComp1>
+          <transition name="slide" mode="out-in">
+            <div v-if="isAtherPage" class="info">
+              <UserButton></UserButton>
+              <button @touchend="settingPage">Setting</button>
+              <CommunityButton></CommunityButton>
+              <button @touchstart="mainPage"></button>
+            </div>
+            <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1>
+          </transition>   
         </div>
         <div class="watch__wrapper">
           <p class="text" :class="{count__now:isCount && m > 0}">{{ m }}</p>
@@ -66,11 +74,15 @@
 <script>
 import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
 import ButtonComp1 from '@/components/parts_comp/ButtonComp1.vue';
+import UserButton from '@/components/parts_comp/UserButton.vue';
+import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
 
 export default {
   components: {
     TimerSettingComp,
-    ButtonComp1
+    ButtonComp1,
+    UserButton,
+    CommunityButton
   },
   data() {
     return {
@@ -87,7 +99,8 @@ export default {
         'box-shadow': ''
       },
       isSetting: false,
-      anim: ''
+      anim: '',
+      isAtherPage: false,
     }
   },
   computed: {
@@ -111,10 +124,17 @@ export default {
     settingPage(isTrue) {
       this.anim = "set"
       this.isSetting = isTrue;
+      this.isAtherPage = !this.isAtherPage;
     },
     closeSetting(isFalse) {
       this.anim = "main";
       this.isSetting = isFalse;   
+    },
+    atherPage() {
+      this.isAtherPage = !this.isAtherPage;
+    },
+    mainPage() {
+      this.isAtherPage = !this.isAtherPage;
     }
   }
 }
@@ -181,7 +201,64 @@ export default {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-right: 0.2rem;
+}
+.info {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100vh;
+  /* background-color: rgba(0, 0, 0, 0.7); */
+}
+.info button {
+  width: 30%;
+  border-radius: 40px;
+  height: 60px;
+  transition: 1s ease;
+  font-size: 1.2rem;
+  color: rgba(250, 250, 250, 1);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: solid 1px rgba(250, 250, 250, 1);
+}
+.info button:active {
+  width: 40%;
+  height: 30px;
+  border-radius: 0 0 40px 40px;
+}
+.info UserButton {
+  z-index: 100;
+}
+.info CommunityButton {
+  z-index: 100;
+}
+.info button:nth-child(2) {
+  z-index: 100;
+}
+.info button:last-child {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: 90vh;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 0;
+}
+.slide-enter-active {
+  animation: slideIn 1s reverse ease-in; 
+}
+.slide-leave-active {
+  animation: slideIn 0.8s ease-out;
+}
+@keyframes slideIn {
+  0% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateY(-100px);
+  }
 }
 .watch__wrapper { 
   display: flex;
@@ -227,7 +304,7 @@ export default {
   border-radius: 6rem 6rem 2rem 2rem /6rem 6rem 2rem 2rem;
   background-color: rgba(252, 252, 232, 0.5);
   display: flex;
-  justify-content: space-evenly; 
+  justify-content: flex-end; 
   align-items: center; 
 }
 .pm {
