@@ -1,6 +1,6 @@
 <template>
   <div class="btn">
-    <button @touchstart="settingPage"></button>
+    <button @touchend="settingPage"></button>
   </div>
 </template>
 
@@ -33,11 +33,12 @@ export default {
 }
 button {
   width: 50px;
-  height: 7px;
+  height: 8px;
   border: none;
   margin: auto;
-  background-color: rgba(0, 0, 0, 1);
-  border-radius: 2px;
+  background-color: rgba(100, 100, 100, 0.8);
+  border-radius: 5px;
+  animation: jump 0.8s ease;
 }
 button::before {
   content: '';
@@ -47,10 +48,10 @@ button::before {
   right: 0;
   margin: auto;
   width: 50px;
-  height: 7px;
+  height: 8px;
   border: none;
-  background-color: rgba(0, 0, 0, 1);
-  border-radius: 2px;
+  background-color: rgba(100, 100, 100, 0.8);
+  border-radius: 5px;
 }
 button::after {
   content: '';
@@ -60,9 +61,33 @@ button::after {
   right: 0;
   margin: auto;
   width: 50px;
-  height: 7px;
+  height: 8px;
   border: none;
-  background-color: rgba(0, 0, 0, 1);
-  border-radius: 2px;
+  background-color: rgba(100, 100, 100, 0.8);
+  border-radius: 5px;
+}
+button:active {
+  animation: jump 1s;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(30px);
+  }
+  25% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  75% {
+    transform: translateY(0px);
+  }
+  90% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 </style>

@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     sound() { //これを直接メソッドに突っ込む。x
-      return this.$store.state.currentSound; 
+      return this.$store.state.currentSoundId; 
     }
   },
   methods: {

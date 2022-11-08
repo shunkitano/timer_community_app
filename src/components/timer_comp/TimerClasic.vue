@@ -9,10 +9,21 @@
 export default {
   data() {
     return {
+      selectColor:''
     }
   },
-  computed: {
-  },
+  // mounted() {
+  //   this.selectColor = this.color;
+  //   console.log(this.selectColor);
+  // },
+  // computed: {
+  //   colorId() {
+  //     return this.$store.state.currentColor;
+  //   },
+  //   color() {
+  //     return this.$store.state.colors[this.colorId].color;
+  //   }
+  // },
   methods: {
   }
 }

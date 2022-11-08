@@ -8,25 +8,27 @@ const store = new Vuex.Store({
     timers: [], //ここに作成したタイマーが入る
     nextTimerId: 1,
     colors: [
-      {name: 'skeleton',color: 'rgba(200, 200, 200, 0.3)', id: 1},
-      {name: 'green',color: '#0F0', id: 2},
-      {name: 'blue',color: '#00F', id: 3},
-      {name: 'red',color: '#F00', id: 4},
-      {name: 'dark',color: '#000', id: 5}
+      {id: 1, name: 'skeleton',color: 'rgba(200, 200, 200, 0.3)'},
+      {id: 2, name: 'green',color: '#0F0'},
+      {id: 3, name: 'blue',color: '#00F'},
+      {id: 4, name: 'red',color: '#F00'},
+      {id: 5, name: 'dark',color: '#000'}
     ],
     sounds: [
-      {name: 'single', id: 1},
-      {name: 'poly', id: 2},
-      {name: 'delay', id: 3}
+      {id: 1, name: 'single'},
+      {id: 2, name: 'poly'},
+      {id: 3, name: 'delay'}
     ],
     styles: [
-      {name: 'Clasic', id: 1},
-      {name: 'Digital', id: 2},
-      {name: 'Circle', id: 3}
+      {id: 1, name: 'Clasic'},
+      {id: 2, name: 'Digital'},
+      {id: 3, name: 'Circle'}
     ],
-    currentColor: 1,
-    currentSound: 1,
-    currentStyle: 1
+    currentColorId: 1,
+    currentSoundId: 1,
+    currentStyleId: 3
+
+
   },
   mutations: {
     selectSound(state, {i}) {

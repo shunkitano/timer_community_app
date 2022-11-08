@@ -3,13 +3,10 @@
     <transition :name='anim' @close='anim = $event'>
       <TimerSettingComp  v-if="isMakeTimer" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" v-else>
-        <!--ここにヘッダー-->
         <TimerHeader @makeTimer="makeTimer"></TimerHeader>
-        <!--ここにタイマー×３-->
-        <TimerClasic v-if="isClasic"></TimerClasic>
-        <TimerDigital v-if="isDigital"></TimerDigital>
-        <TimerCircle v-if="isCircle"></TimerCircle>
-        <!--ここにコントローラー-->
+        <TimerClasic v-if="style === 1"></TimerClasic>
+        <TimerDigital v-if="style === 2"></TimerDigital>
+        <TimerCircle v-if="style === 3"></TimerCircle>
         <TimerController class="controller"></TimerController>
       </div><!--timer-->
     </transition>
@@ -46,9 +43,12 @@ export default {
     
   },
   computed: {
-    style() { //これを直接メソッドに突っ込む。x
-      return  this.$store.state.currentStyle; 
+    style() {
+      return  this.$store.state.currentStyleId; 
     },
+    color() {
+      return this.$store.state.currentColorId;
+    }
   },
   methods: {
     makeTimer(anim, isMakeTimer) {
