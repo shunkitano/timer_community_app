@@ -30,19 +30,39 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/LoginComp.vue')
   },
   {
+    path: '/timer',
+    name: 'timer',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerCompSub.vue')
+  },
+  {
     path: '/signup',
     name: 'signup',
     component: () => import(/* webpackChunkName: "about" */ '../components/SignUpComp.vue')
   },
   {
-    path: '/timer',
-    name: 'timer',
-    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerComp2.vue')
+    path: '/clasic',
+    name: 'clasic',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerClasic.vue')
   },
   {
-    path: '/timer3',
-    name: 'timer3',
-    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerComp3.vue')
+    path: '/digital',
+    name: 'digital',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerDigital.vue')
+  },
+  {
+    path: '/circle',
+    name: 'circle',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerCircle.vue')
+  },
+  {
+    path: '/controller',
+    name: 'controller',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerController.vue')
+  },
+  {
+    path: '/header',
+    name: 'header',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerHeader.vue')
   },
   {
     path: '/user',

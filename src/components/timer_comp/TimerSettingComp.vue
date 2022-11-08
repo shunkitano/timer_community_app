@@ -2,16 +2,17 @@
   <div class="outer">
     <div class="setting">
       <input type="text" placeholder="Timer Name" v-model="text">
+      <input type="button" :value="selects[0].name" @touchstart="selectStyle">
+      <StyleChange @styleChange="changeHere" v-show="isActive === '1'"></StyleChange>
+      <input type="button" :value="selects[1].name" @touchstart="selectColor" :style="styleObject">
+      <ColorChange @colorChange="changeHere" v-show="isActive === '2'"></ColorChange>
+      <input type="button" :value="selects[2].name" @touchstart="selectSound">
+      <SoundChange @soundChange="changeHere" v-show="isActive === '3'"></SoundChange>
       <div class="number">
-        <input type="number" placeholder="minutes" min="0" max="59">
-        <input type="number" placeholder="seconds" min="0" max="59" v-model="time">
+        <p>{{ mm }}:{{ ss }}</p>
+        <input type="number" min="0" max="59" v-model="m">
+        <input type="number" min="0" max="59" v-model="s">
       </div>
-      <input type="button" :value="selects[0].name" @touchstart="selectColor" :style="styleObject">
-      <ColorChange @colorChange="changeHere" v-show="isActive === '1'"></ColorChange>
-      <input type="button" :value="selects[1].name" @touchstart="selectSound">
-      <SoundChange @soundChange="changeHere" v-show="isActive === '2'"></SoundChange>
-      <input type="button" :value="selects[2].name" @touchstart="selectStyle">
-      <StyleChange @styleChange="changeHere" v-show="isActive === '3'"></StyleChange>
     </div>
     <div class="new__timer">
       <input type="button" @touchstart="makeTimer" value="Make!">
@@ -39,11 +40,13 @@ export default {
       isFalse: false,
       isActive: '',
       text: '',
-      time: '',
+      m: 0,
+      s: 0,
+      // number: '',
       selects: [
+        {name: "Style"},
         {name: "Color"},
-        {name: "Sound"},
-        {name: "Style"}
+        {name: "Sound"}
       ],
       styleObject: {
         'background-color': ''
@@ -53,6 +56,12 @@ export default {
   computed: {
     check() {
       return this.checkNum();
+    },
+    mm() {
+      return ("0" + this.m).slice(-2);
+    },
+    ss() {
+      return ("0" + this.s).slice(-2);
     }
   },
   methods: {
@@ -60,24 +69,23 @@ export default {
       return this.isActive = this.text;
     },
     mainPage() { //メインページへ飛ぶ
-      
       this.$emit("my-click", this.isFalse);
     },
-    selectColor() {
+    selectStyle() {
       this.isActive = "1";
     },
-    selectSound() {
+    selectColor() {
       this.isActive = "2";
     },
-    selectStyle() {
+    selectSound() {
       this.isActive = "3";
     },
     changeHere(reset ,item, style) {
-      if(this.isActive === "1") {
+      if(this.isActive === "2") {
         this.styleObject['background-color'] = style;
         console.log(style);
       }
-      if(this.isActive === "2") {
+      if(this.isActive === "3") {
         console.log(reset, item, style);
         this.$store.commit('selectSound', {
           i : style
@@ -96,14 +104,17 @@ export default {
         sound: this.selects[1].name,
         style: this.selects[2].name,
       })
+      this.clear();
     },
     clear() {
       this.text = '';
       this.time = '';
-      this.selects[0].name = "Color";
-      this.selects[1].name = "Sound";
-      this.selects[2].name = "Style";
+      this.selects[0].name = "Style";
+      this.selects[1].name = "Color";
+      this.selects[2].name = "Sound";
       this.styleObject['background-color'] = '';
+      this.m = 0;
+      this.s = 0;
       this.isActive = '';
     }
   }
@@ -186,12 +197,29 @@ input[type="text"],[type="number"] {
 .number {
   display: flex;
   justify-content: center;
-  gap: 10%;
+  gap: 5%;
+}
+.number p {
+  width: 30%;
+  height: 50px;
+  margin-top: 2rem;
+  border-radius: 40px;
+  color: rgba(250, 250, 250, 1);
+  background-color: rgba(0, 0, 0, 0.7);
+  border: solid 1px rgba(0, 0, 0, 1);
+  text-align: center;
+  line-height: 50px;
 }
 .number input {
   border: solid 1px rgba(0, 0, 0, 1);
   text-align: center;
-  width: 45%;
+  width: 30%;
+}
+.number input:nth-child(2) {
+  border-radius: 40px  0 0 40px;
+}
+.number input:last-child {
+  border-radius: 0 40px 40px 0;
 }
 .footer {
   width: 100%;

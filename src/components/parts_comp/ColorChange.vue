@@ -13,30 +13,16 @@ export default {
   props: ["isSelect"],
   data() {
     return {
-      colors: [
-        {
-          name: 'skeleton',
-          color: 'rgba(0, 0, 0, 0.3)'
-        },
-        {
-          name: 'red',
-          color: '#F00'
-        },
-        {
-          name: 'dark',
-          color: '#000'
-        },
-        {
-          name: 'grey',
-          color: '#999'
-        }
-      ],
+      colors: [],
       color: "color",
       text: "color",
       styleObject: {
         'background-color': ''
       }
     }
+  },
+  mounted() {
+    return this.colors = this.$store.state.colors;
   },
   methods: {
     thisColor(index) {
@@ -45,7 +31,6 @@ export default {
       this.$emit("colorChange", reset, this.color, this.colors[index].color);
       // console.log(this.colors[index].color);
       this.styleObject['background-color'] = this.colors[index].color;
-      
     }
   }
 }
@@ -58,22 +43,23 @@ export default {
   justify-content: center;
 }
 .color input {
-  width: 60%;
+  width: 100%;
   height: 40px;
-  margin: 0 auto;
+  
   border-radius: 5px;
   color: #FFF;
   text-shadow: 1px 1px 2px #000;
 }
 .color ul {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   text-align: center;
   gap: 1rem;
+  overflow: auto;
 }
 .color li {
   list-style: none;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   animation: look 1.5s;
 }
 .color li div {

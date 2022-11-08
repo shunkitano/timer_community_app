@@ -5,103 +5,28 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    timers: [],
-    //timers: [
-      // {
-      //   id: 1,
-      //   name: "タイマー１",
-      //   time: '',
-      //   color: '',
-      //   sound: '',
-      //   style: ''
-      // },
-      // {
-      //   id: 2,
-      //   name: "タイマー２",
-      //   time: '',
-      //   color: '',
-      //   sound: '',
-      //   style: ''
-      // },
-      // {
-      //   id: 3,
-      //   name: "タイマー３",
-      //   time: '',
-      //   color: '',
-      //   sound: '',
-      //   style: ''
-      // },
-      // {
-      //   id: 4,
-      //   name: "タイマー４",
-      //   time: '',
-      //   color: '',
-      //   sound: '',
-      //   style: ''
-      // }
-    //],
+    timers: [], //ここに作成したタイマーが入る
     nextTimerId: 1,
-    times: [
-      {
-        name: 'time1',
-        time: ''
-      },
-      {
-        name: 'time2',
-        time: ''
-      },
-      {
-        name: 'time3',
-        time: ''
-      }
-    ],
     colors: [
-      {
-        name: 'skeleton',
-        color: 'rgba(0, 0, 0, 0.3)'
-      },
-      {
-        name: 'red',
-        color: '#F00'
-      },
-      {
-        name: 'dark',
-        color: '#000'
-      },
-      {
-        name: 'grey',
-        color: '#999'
-      }
+      {name: 'skeleton',color: 'rgba(200, 200, 200, 0.3)', id: 1},
+      {name: 'green',color: '#0F0', id: 2},
+      {name: 'blue',color: '#00F', id: 3},
+      {name: 'red',color: '#F00', id: 4},
+      {name: 'dark',color: '#000', id: 5}
     ],
     sounds: [
-      {
-        name: 'sigle',
-        sound: '1'
-      },
-      {
-        name: 'poly',
-        sound: '2'
-      },
-      {
-        name: 'delay',
-        sound: '3'
-      }
+      {name: 'single', id: 1},
+      {name: 'poly', id: 2},
+      {name: 'delay', id: 3}
     ],
-    currentSound:'1',
     styles: [
-      {
-        name: 'styleA',
-        style: '#FFF'
-      },
-      {
-        name: 'styleB',
-        style: '#F00'
-      },
-      {
-        name: 'styleC',
-        style: '#000'
-      }
-    ]
+      {name: 'Clasic', id: 1},
+      {name: 'Digital', id: 2},
+      {name: 'Circle', id: 3}
+    ],
+    currentColor: 1,
+    currentSound: 1,
+    currentStyle: 1
   },
   mutations: {
     selectSound(state, {i}) {

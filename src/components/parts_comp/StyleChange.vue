@@ -13,23 +13,13 @@ export default {
   props: ["isSelect"],
   data() {
     return {
-      styles: [
-        {
-          name: 'Digital',
-          style: '#FFF'
-        },
-        {
-          name: 'Clasic',
-          style: '#F00'
-        },
-        {
-          name: 'Circle',
-          style: '#000'
-        }
-      ],
+      styles: [],
       style: "style",
       text: "style"
     }
+  },
+  mounted() {
+    return this.styles = this.$store.state.styles;
   },
   methods: {
     thisStyle(index) {

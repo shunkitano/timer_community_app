@@ -9,15 +9,16 @@
               <UserButton></UserButton>
               <button @touchend="settingPage">Make</button>
               <CommunityButton></CommunityButton>
-              <button @touchstart="mainPage"></button><!--headerを閉じる-->
+              <button @touchstart="mainPage"></button>
             </div>
-            <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1><!--headerを開ける-->
+            <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1>
           </transition>   
-        </div><!--header-->
-        <div class="circle">
-          <div class="needle" :style="styleObject"></div> 
-          <div class="circle__top"></div>      
-        </div><!--circle-->
+        </div>
+        <div class="watch__wrapper">
+          <p class="text" :class="{light:!isActive, count__now:isCount && m > 0}">{{ m }}</p>
+          <p class="text" :class="{light:isActive, count__now:isCount && (s > 0 || m > 0)}">{{ s }}</p>
+          <p class="text" :class="{count__now:isCount}">{{ ms }}</p>
+        </div>
         <div class="controller">
           <div class="pm">
             <span>
@@ -61,13 +62,13 @@
           </div>
           <button class="pm__set" @touchstart="plusMinus"></button>
           <div class="ssr">
-            <button @touchstart="start"></button>
+            <button @touchstart="playSound"></button>
             <button></button>
           </div>
-        </div><!--controller-->
+        </div>
       </div><!--timer-->
     </transition>
-  </div><!--outer-->
+  </div>
 </template>
 
 <script>
@@ -75,7 +76,7 @@ import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
 import ButtonComp1 from '@/components/parts_comp/ButtonComp1.vue';
 import UserButton from '@/components/parts_comp/UserButton.vue';
 import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
-import * as Tone from 'tone';
+import * as Tone from 'tone'; // ここで読み込む。
 
 export default {
   components: {
@@ -95,23 +96,14 @@ export default {
       isCountS: false,
       isCountM: false,
       isReset: false,
+      styleObject: {
+        'box-shadow': ''
+      },
       isSetting: false,
       anim: '',
       isAtherPage: false,
       isActive: true,
-      soundNum: '',
-      styleObjectL: {
-        'background': ''
-      },
-      styleObjectM: {
-        'background': ''
-      },
-      styleObjectS: {
-        'background': ''
-      },
-      time2: '',
-      count2: 60,
-      n:1800,
+      soundNum: ''
     }
   },
   computed: {
@@ -158,44 +150,22 @@ export default {
 
     playSound() {
       // this.$store.commit('selectSound');
-      if(this.sound === "1") {
+      if(this.sound === 1) {
         const synth = new Tone.Synth().toDestination();
         synth.triggerAttackRelease("A4", "8n");
       }
-      if(this.sound === "2") {
+      if(this.sound === 2) {
         const synth2 = new Tone.PolySynth().toDestination();
         synth2.set({ detune: -800 });
         synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
       }
-      if(this.sound === "3") {
+      if(this.sound === 3) {
         const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
         const synth3 = new Tone.PolySynth().connect(pingPong);
         synth3.set({ detune: -800 });
         synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
       }
     },
-    start() {
-      this.time2 = setInterval(() => {
-        this.countDown3(),this.change()
-      }, 1000);
-    },
-    countDown3() {
-      if(this.count2 > 0) {
-        this.count2--;
-        
-        console.log(this.count2);
-      } else if(this.count2===0) {
-        clearInterval(this.time2);
-      }
-    },
-    change() {
-      this.n--;
-      this.styleObjectL['background'] = "conic-gradient( rgba(100, 105, 200, 0.9) 0deg "+ 1/10*`${this.n%3600}`+ "deg, rgba(100, 105, 150, 0.8) " + 1/10*`${this.n%3600}` + "deg 0deg)";
-      //10分
-      this.styleObjectM['background'] = "conic-gradient( rgba(0, 255, 4, 0.9) 0deg "+ 6*`${this.n%60}`+ "deg, rgba(200, 255, 150, 0.9) " + 6*`${this.n%60}` + "deg 0deg)";
-      //60秒 
-      this.styleObjectS['background'] = "conic-gradient( rgba(0, 0, 0, 0.7) 0deg "+ 6/10*`${this.n%600}`+ "deg, rgba(100, 100, 100, 0.7) "+ 6/10*`${this.n%600}` + "deg 0deg)";
-    }
   }
 }
 </script>
@@ -210,6 +180,8 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  background-color: rgba(240, 240, 240, 1);
+  z-index: 100;
 } 
 .set-enter-active {
   animation: up 1.5s;
@@ -318,6 +290,41 @@ export default {
     transform: translateY(-100px);
   }
 }
+.watch__wrapper { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(217, 217, 217);
+}
+.watch__wrapper .text {
+  display: block;
+  font-size: 4rem;
+  width: 33%;
+  margin: 0 auto;
+  text-align: center;
+  height: 8rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 1rem;
+  margin: 1rem;
+  padding-top: 1rem;
+  color: rgba(0, 255, 4, 0.9);
+}
+.watch__wrapper .light {
+  position: relative;
+}
+.watch__wrapper .light::after {
+  content: '';
+  width: 60%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  margin: auto;
+  border-width: 0 0 5px;
+  border-style: solid;
+  border-radius: 2px;
+}
 .controller {
   position: fixed;
   bottom: 0;
@@ -374,37 +381,4 @@ export default {
   border: solid 1px grey;
   border-radius: 50%;
 }
-.circle {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.3);
-  transform: rotateZ(45deg);
-  margin: 0 auto;
-  overflow: hidden;
-}
-.needle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 3px;
-  height: 125px;
-  background: rgb(250, 50, 50);
-}
-.circle__top {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(250, 50, 50, 0.5);
-}
 </style>
-
