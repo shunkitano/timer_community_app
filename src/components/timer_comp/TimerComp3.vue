@@ -9,22 +9,15 @@
               <UserButton></UserButton>
               <button @touchend="settingPage">Make</button>
               <CommunityButton></CommunityButton>
-              <button @touchstart="mainPage"></button>
+              <button @touchstart="mainPage"></button><!--headerを閉じる-->
             </div>
-            <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1>
+            <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1><!--headerを開ける-->
           </transition>   
-        </div>
-        <div class="cercle__wrapper">
-          <div class="circleM">
-            <div :style="styleObjectM"></div>
-          </div>
-          <div class="circleS">
-            <div :style="styleObjectS"></div>
-          </div>
-          <div class="circleL">
-            <div :style="styleObjectL"></div>
-          </div>
-        </div>
+        </div><!--header-->
+        <div class="circle">
+          <div class="needle" :style="styleObject"></div> 
+          <div class="circle__top"></div>      
+        </div><!--circle-->
         <div class="controller">
           <div class="pm">
             <span>
@@ -71,10 +64,10 @@
             <button @touchstart="start"></button>
             <button></button>
           </div>
-        </div>
+        </div><!--controller-->
       </div><!--timer-->
     </transition>
-  </div>
+  </div><!--outer-->
 </template>
 
 <script>
@@ -381,46 +374,37 @@ export default {
   border: solid 1px grey;
   border-radius: 50%;
 }
-.circle__wrapper {
-  top: 0;
-  left: 0;
-}
-.circleL div {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: rgba(100, 105, 150, 0.8);
-}
-.circleM div {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: rgba(200, 255, 150, 0.9);
-}
-.circleS div {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
+.circle {
+  position: relative;
   width: 250px;
   height: 250px;
   border-radius: 50%;
-  background: grey;
+  background-color: rgba(0, 0, 0, 0.3);
+  transform: rotateZ(45deg);
+  margin: 0 auto;
+  overflow: hidden;
 }
-
+.needle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 3px;
+  height: 125px;
+  background: rgb(250, 50, 50);
+}
+.circle__top {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(250, 50, 50, 0.5);
+}
 </style>
 

@@ -35,6 +35,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/SignUpComp.vue')
   },
   {
+    path: '/timer',
+    name: 'timer',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerComp2.vue')
+  },
+  {
+    path: '/timer3',
+    name: 'timer3',
+    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerComp3.vue')
+  },
+  {
     path: '/user',
     name: 'user',
     // route level code-splitting
