@@ -65,14 +65,31 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 10%;
   margin: auto;
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: rgba(100, 105, 150, 0.8);
+  background: rgba(250, 100, 50, 0.5);
+  backdrop-filter: blur(2px);
+  /* box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset 0px -2px 4px; */
 }
 .circleM div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 10%;
+  margin: auto;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(250, 100, 50, 0.5);
+  backdrop-filter: blur(2px);
+  /* box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset 0px -2px 4px; */
+}
+.circleM div::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -82,19 +99,23 @@ export default {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: rgba(200, 255, 150, 0.9);
+  box-shadow: 0px 30px 90px, rgba(240, 240, 240, 0.8) 0px -30px 90px;
+  /* mix-blend-mode: multiply; */
 }
 .circleS div {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 10%;
   margin: auto;
   width: 250px;
   height: 250px;
   border-radius: 50%;
-  background: grey;
+  background: rgba(250, 100, 50, 0.5);
+  backdrop-filter: blur(2px);
+  /* mix-blend-mode: multiply; */
+  /* box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset 0px -2px 4px; */
 }
 
 </style>

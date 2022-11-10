@@ -8,7 +8,7 @@
         <button @touchstart="closeHeader"></button>
       </div>
       <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1>
-    </transition>   
+    </transition>         
   </div>
 </template>
 
@@ -25,8 +25,8 @@ export default {
   },
   data() {
     return {
+      anim: '', //アニメーション切り替えのためにバインドしている
       isMakeTimer: false,
-      anim: '',
       isAtherPage: false
     }
   },
@@ -64,8 +64,8 @@ export default {
   width: 100%;
   height: 100vh;
 }
-.page__info button {
-  width: 30%;
+.page__info button:nth-child(2) {
+  width: 40%;
   border-radius: 40px;
   height: 60px;
   transition: 1s ease;
@@ -73,9 +73,10 @@ export default {
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.5);
   border: solid 1px rgba(250, 250, 250, 1);
+  box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .page__info button:active {
-  width: 40%;
+  width: 50%;
   height: 30px;
   border-radius: 0 0 40px 40px;
 }
@@ -99,19 +100,23 @@ export default {
   z-index: 100;
 }
 .slide-enter-active {
-  animation: slideIn 0.5s reverse ease-in; 
+  animation: slideIn 1s reverse ease-in;
 }
 .slide-leave-active {
-  animation: slideIn 0.5s ease-out;
+  animation: slideIn 0.7s ease-out;
 }
 @keyframes slideIn {
   0% {
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateX(0px);
+  }
+  50% {
+    opacity: 0.8;
+    width: 80%;
   }
   100% {
-    opacity: 0.5;
-    transform: translateY(-100px);
+    opacity: 0;
+    transform: translateX(100vw);
   }
 }
 </style>

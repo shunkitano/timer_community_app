@@ -42,17 +42,28 @@ export default {
 <style scoped>
 
 .watch__wrapper { 
+  width: 100%;
+  height: 45vh;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(217, 217, 217);
+  border-radius: 120px/ 30px;
+  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 4px 8px, inset rgba(0, 0, 0, 0.7) 0px -4px 8px;
+}
+.watch__wrapper::before { 
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
+  height: 45vh;
   margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* height: 100vh;  */
-  /* background-color: rgb(217, 217, 217); */
+  border-radius: 120px/ 30px;
+  box-shadow: 0px 30px 90px, rgba(240, 240, 240, 0.8) 0px -30px 90px;
 }
 .watch__wrapper .text {
   display: block;
@@ -63,14 +74,15 @@ export default {
   height: 8rem;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 1rem;
-  margin: 1rem;
+  margin: 0.5rem;
   padding-top: 1rem;
   color: rgba(0, 255, 4, 0.9);
+  box-shadow: inset rgba(0, 0, 0, 0.7) 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
-.watch__wrapper .light {
+/* .watch__wrapper .light {
   position: relative;
-}
-.watch__wrapper .light::after {
+} */
+/* .watch__wrapper .light::after {
   content: '';
   width: 60%;
   position: absolute;
@@ -81,5 +93,5 @@ export default {
   border-width: 0 0 5px;
   border-style: solid;
   border-radius: 2px;
-}
+} */
 </style>

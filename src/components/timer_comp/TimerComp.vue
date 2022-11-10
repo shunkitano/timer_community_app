@@ -115,7 +115,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .controller {
   position: fixed;

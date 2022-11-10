@@ -10,8 +10,8 @@
       <SoundChange @soundChange="changeHere" v-show="isActive === '3'"></SoundChange>
       <div class="number">
         <p>{{ mm }}:{{ ss }}</p>
-        <input type="number" min="0" max="59" v-model="m">
-        <input type="number" min="0" max="59" v-model="s">
+        <input type="number" min="0" max="59" v-model="m" @touchstart="startCalcM" @touchmove="moveCalcM">
+        <input type="number" min="0" max="59" v-model="s" @touchstart="startCalcS" @touchmove="moveCalcS">
       </div>
     </div>
     <div class="new__timer">
@@ -42,6 +42,8 @@ export default {
       text: '',
       m: 0,
       s: 0,
+      x: 0,
+      y: 0,
       // number: '',
       selects: [
         {name: "Style"},
@@ -58,10 +60,10 @@ export default {
       return this.checkNum();
     },
     mm() {
-      return ("0" + this.m).slice(-2);
+      return ("0" + this.m).slice(-2)%60;
     },
     ss() {
-      return ("0" + this.s).slice(-2);
+      return ("0" + this.s).slice(-2)%60;
     }
   },
   methods: {
@@ -116,6 +118,42 @@ export default {
       this.m = 0;
       this.s = 0;
       this.isActive = '';
+    },
+    startCalcM(e) {
+      this.y = e.changedTouches[0].clientY;
+    },
+    moveCalcM(e) {
+      let yy = e.changedTouches[0].clientY;
+      if(this.m >= 0 && this.m <= 60) {
+        if(this.y > yy) {
+          this.m++;
+        } else if(this.y < yy) {
+          this.m--;
+        }
+      } else if(this.m === 61) {
+        this.m = 0;
+      }else if(this.m === -1) {
+        this.m = 60;
+      }
+      this.y = yy;
+    },
+    startCalcS(e) {
+      this.y = e.changedTouches[0].clientY;
+    },
+    moveCalcS(e) {
+      let yy = e.changedTouches[0].clientY;
+      if(this.s >= 0 && this.s <= 60) {
+        if(this.y > yy) {
+          this.s++;
+        } else if(this.y < yy) {
+          this.s--;
+        }
+      } else if(this.s === 61) {
+        this.s = 0;
+      }else if(this.s === -1) {
+        this.s = 60;
+      }
+      this.y = yy;
     }
   }
 }
@@ -178,7 +216,7 @@ input[type="text"],[type="number"] {
 }
 .new__timer {
   position: absolute;
-  bottom: 6rem;
+  bottom: 8rem;
   left: 0;
   right: 0;
   margin: auto;
@@ -229,7 +267,7 @@ input[type="text"],[type="number"] {
   bottom: 0;
 }
 .footer button {
-  width: 30%;
+  width: 40%;
   border-radius: 40px;
   height: 60px;
   transition: 1s ease;
@@ -237,9 +275,10 @@ input[type="text"],[type="number"] {
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.5);
   border: solid 1px rgba(250, 250, 250, 1);
+  box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .footer button:hover {
-  width: 40%;
+  width: 50%;
   height: 30px;
   border-radius: 40px 40px 0 0;
 }

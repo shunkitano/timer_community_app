@@ -26,14 +26,14 @@ const store = new Vuex.Store({
     ],
     currentColorId: 1,
     currentSoundId: 1,
-    currentStyleId: 3
+    currentStyleId: 2
 
 
   },
   mutations: {
     selectSound(state, {i}) {
-      console.log(state.currentSound);
-      state.currentSound = i;
+      console.log(state.currentSoundId);
+      state.currentSoundId = i;
     },
     //新しいtimerを作る
     makeTimer(state, {name, time, color, sound, style}) {
