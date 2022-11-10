@@ -26,7 +26,7 @@ const store = new Vuex.Store({
     ],
     currentColorId: 1,
     currentSoundId: 1,
-    currentStyleId: 2
+    currentStyleId: 3
 
 
   },
