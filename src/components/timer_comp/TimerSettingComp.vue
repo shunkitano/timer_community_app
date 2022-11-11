@@ -9,9 +9,12 @@
       <input type="button" :value="selects[2].name" @touchstart="selectSound">
       <SoundChange @soundChange="changeHere" v-show="isActive === '3'"></SoundChange>
       <div class="number">
-        <p>{{ mm }}:{{ ss }}</p>
-        <input type="number" min="0" max="59" v-model="m" @touchstart="startCalcM" @touchmove="moveCalcM">
-        <input type="number" min="0" max="59" v-model="s" @touchstart="startCalcS" @touchmove="moveCalcS">
+        <p>{{ tt }}:{{ mm }}:{{ ss }}</p>
+        <div class="calc">
+          <input type="number" min="0" max="59" v-model="t" @touchstart="startCalcT" @touchmove="moveCalcT">
+          <input type="number" min="0" max="59" v-model="m" @touchstart="startCalcM" @touchmove="moveCalcM">
+          <input type="number" min="0" max="59" v-model="s" @touchstart="startCalcS" @touchmove="moveCalcS">
+        </div>
       </div>
     </div>
     <div class="new__timer">
@@ -40,6 +43,7 @@ export default {
       isFalse: false,
       isActive: '',
       text: '',
+      t: 0,
       m: 0,
       s: 0,
       x: 0,
@@ -59,6 +63,9 @@ export default {
     check() {
       return this.checkNum();
     },
+    tt() {
+      return ("0" + this.t).slice(-2)%60;
+    },    
     mm() {
       return ("0" + this.m).slice(-2)%60;
     },
@@ -115,9 +122,28 @@ export default {
       this.selects[1].name = "Color";
       this.selects[2].name = "Sound";
       this.styleObject['background-color'] = '';
+      this.t = 0;
       this.m = 0;
       this.s = 0;
       this.isActive = '';
+    },
+    startCalcT(e) {
+      this.y = e.changedTouches[0].clientY;
+    },
+    moveCalcT(e) {
+      let yy = e.changedTouches[0].clientY;
+      if(this.t >= 0 && this.t <= 60) {
+        if(this.y > yy) {
+          this.t++;
+        } else if(this.y < yy) {
+          this.t--;
+        }
+      } else if(this.t === 61) {
+        this.t = 0;
+      }else if(this.t === -1) {
+        this.t = 60;
+      }
+      this.y = yy;
     },
     startCalcM(e) {
       this.y = e.changedTouches[0].clientY;
@@ -139,11 +165,13 @@ export default {
     },
     startCalcS(e) {
       this.y = e.changedTouches[0].clientY;
+      console.log(e)
+
     },
     moveCalcS(e) {
       let yy = e.changedTouches[0].clientY;
       if(this.s >= 0 && this.s <= 60) {
-        if(this.y > yy) {
+        if(this.y > yy +2) {
           this.s++;
         } else if(this.y < yy) {
           this.s--;
@@ -234,30 +262,38 @@ input[type="text"],[type="number"] {
 }
 .number {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 5%;
 }
 .number p {
-  width: 30%;
-  height: 50px;
+  width: 100%;
+  height: 30px;
   margin-top: 2rem;
-  border-radius: 40px;
+  border-radius: 40px 40px 0 0;
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.7);
   border: solid 1px rgba(0, 0, 0, 1);
   text-align: center;
-  line-height: 50px;
+  line-height: 30px;
 }
-.number input {
+.calc {
+  width: 100%;
+}
+.calc input {
   border: solid 1px rgba(0, 0, 0, 1);
   text-align: center;
   width: 30%;
 }
-.number input:nth-child(2) {
-  border-radius: 40px  0 0 40px;
+.calc input:first-child {
+  border-radius: 0 0 0 40px;
+  margin-right: 5%;
 }
-.number input:last-child {
-  border-radius: 0 40px 40px 0;
+.calc input:nth-child(2) {
+  border-radius: 0;
+}
+.calc input:last-child {
+  border-radius: 0 0 40px 0;
+  margin-left: 5%;
 }
 .footer {
   width: 100%;
