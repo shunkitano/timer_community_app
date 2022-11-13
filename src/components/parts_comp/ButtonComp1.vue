@@ -27,15 +27,15 @@ export default {
   display: flex;
   justify-content: center;
   width: 100px;
-  height: 60px;
+  height: 50px;
   text-align: center;
   text-align: center;
 }
 button {
   /* position: absolute; */
   margin: auto;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border: solid 1px rgba(240, 240, 240, 1);
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 40px;
@@ -45,8 +45,8 @@ button::before {
   position: absolute;
   top: 0;
   left: 0;
-  width: 80px;
-  height: 60px;
+  width: 75px;
+  height: 50px;
   border: solid 1px rgba(0, 0, 0, 1);
   background-color: rgba(240, 240, 240, 1);
   border-radius: 40px;
@@ -59,7 +59,7 @@ button::after {
   top: 0;
   right: 0;
   width: 100px;
-  height: 60px;
+  height: 50px;
   border: solid 1px rgba(240, 240, 240, 1);
   background-color: rgba(0, 0, 0, 1);
   border-radius: 40px;
@@ -68,17 +68,17 @@ button::after {
 }
 button:active {
   width: 30px;
-  height: 70px;
+  height: 60px;
   transition: 0.3s ease;
 }
 button:active::after {
   width: 30px;
-  height: 70px;
+  height: 60px;
   transition: 0.8s ease;
 }
 button:active::before {
   width: 30px;
-  height: 70px;
+  height: 60px;
   transition: 0.5s ease;
 }
 @keyframes jump {

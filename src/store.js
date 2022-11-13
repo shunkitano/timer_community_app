@@ -20,13 +20,13 @@ const store = new Vuex.Store({
       {id: 3, name: 'delay'}
     ],
     styles: [
-      {id: 1, name: 'Clasic'},
-      {id: 2, name: 'Digital'},
+      {id: 1, name: 'Digital'},
+      {id: 2, name: 'Clasic'},
       {id: 3, name: 'Circle'}
     ],
     currentColorId: 1,
     currentSoundId: 1,
-    currentStyleId: 3
+    currentStyleId: 1
 
 
   },

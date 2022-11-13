@@ -10,13 +10,13 @@
 import CommunityComp from '@/components/community_comp/CommunityComp.vue'
 
 export default {
-  beforeRouteLeave (to, from, next) {
-    this.isShow = false;
-    setTimeout(() => {
-      console.log('community:beforeRouteLeave');
-      next();
-    }, 1000);
-  },
+  // beforeRouteLeave (to, from, next) {
+    // this.isShow = false;
+    // setTimeout(() => {
+    //   console.log('community:beforeRouteLeave');
+    //   next();
+    // }, 1000);
+  // },
   components: {
     CommunityComp,
   },

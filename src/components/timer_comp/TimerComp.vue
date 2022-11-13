@@ -4,10 +4,10 @@
       <TimerSettingComp  v-if="isMakeTimer" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" v-else>
         <TimerHeader @makeTimer="makeTimer"></TimerHeader>
-        <TimerClasic v-if="style === 1"></TimerClasic>
-        <TimerDigital v-if="style === 2"></TimerDigital>
+        <TimerDigital v-if="style === 1" :isTms="isTms"></TimerDigital>
+        <TimerClasic v-if="style === 2"></TimerClasic>
         <TimerCircle v-if="style === 3"></TimerCircle>
-        <TimerController class="controller"></TimerController>
+        <TimerController class="controller" @select-tms="selectTms"></TimerController>
       </div><!--timer-->
     </transition>
   </div>
@@ -37,6 +37,7 @@ export default {
       isCircle: false,
       isMakeTimer: false,
       anim: '',
+      isTms: '2'
     }
   },
   mounted() {
@@ -59,6 +60,10 @@ export default {
       this.anim = "main";
       this.isMakeTimer = isFalse;   
     },
+    // コントローラーからtmsを受け取る //
+    selectTms(tms) {
+      this.isTms = tms;
+    }
   }
 }
 </script>
@@ -77,16 +82,16 @@ export default {
   z-index: 100;
 } 
 .set-enter-active {
-  animation: up 1.5s;
+  animation: up 1s;
 }
 .set-leave-active {
-  animation: down 1.5s;
+  animation: down 1s;
 }
 .main-enter-active {
-  animation: down 1.5s reverse; 
+  animation: down 1s reverse; 
 }
 .main-leave-active {
-  animation: up 1.5s reverse;
+  animation: up 1s reverse;
 }
 @keyframes up {
   0% {

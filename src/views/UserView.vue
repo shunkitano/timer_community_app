@@ -15,17 +15,17 @@ export default {
   //     console.log(vm);
   //   });
   // },
-  beforeRouteLeave (to, from, next) {
+  // beforeRouteLeave (to, from, next) {
     // if(to.name === 'community') {
     //   this.slide = "right";
     //   console.log("right");
     // }
-    this.isShow = false;
-    setTimeout(() => {
-      console.log('user:beforeRouteLeave');
-      next();
-    }, 1000);
-  },
+    // this.isShow = false;
+    // setTimeout(() => {
+    //   console.log('user:beforeRouteLeave');
+    //   next();
+    // }, 1000);
+  // },
   components: {
     UserRoomComp,
   },

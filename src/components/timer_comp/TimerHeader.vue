@@ -5,7 +5,7 @@
         <UserButton></UserButton>
         <button @touchend="makeTimer">Make</button>
         <CommunityButton></CommunityButton>
-        <button @touchstart="closeHeader"></button>
+        <button @touchend="closeHeader"></button>
       </div>
       <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1>
     </transition>         
@@ -68,7 +68,7 @@ export default {
   width: 40%;
   border-radius: 40px;
   height: 60px;
-  transition: 1s ease;
+  transition: 0.5s ease;
   font-size: 1.2rem;
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.5);
@@ -100,12 +100,12 @@ export default {
   z-index: 100;
 }
 .slide-enter-active {
-  animation: slideIn 1s reverse ease-in;
+  animation: slideOut 0.7s reverse ease-in;
 }
 .slide-leave-active {
-  animation: slideIn 0.7s ease-out;
+  animation: slideOut 0.5s ease-out;
 }
-@keyframes slideIn {
+@keyframes slideOut {
   0% {
     opacity: 1;
     transform: translateX(0px);

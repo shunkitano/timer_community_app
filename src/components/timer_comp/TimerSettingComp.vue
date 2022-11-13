@@ -8,9 +8,9 @@
       <ColorChange @colorChange="changeHere" v-show="isActive === '2'"></ColorChange>
       <input type="button" :value="selects[2].name" @touchstart="selectSound">
       <SoundChange @soundChange="changeHere" v-show="isActive === '3'"></SoundChange>
-      <div class="number">
+      <div class="number" :class="{active:isActive === '4'}" @touchstart="selectCalc">
         <p>{{ tt }}:{{ mm }}:{{ ss }}</p>
-        <div class="calc">
+        <div class="calc" v-show="isActive === '4'">
           <input type="number" min="0" max="59" v-model="t" @touchstart="startCalcT" @touchmove="moveCalcT">
           <input type="number" min="0" max="59" v-model="m" @touchstart="startCalcM" @touchmove="moveCalcM">
           <input type="number" min="0" max="59" v-model="s" @touchstart="startCalcS" @touchmove="moveCalcS">
@@ -19,7 +19,7 @@
     </div>
     <div class="new__timer">
       <input type="button" @touchstart="makeTimer" value="Make!">
-      <input type="button" @touchstart="clear" value="Clear">
+      <input type="button" @touchstart="clear" value="Clear?">
     </div>
     <div class="footer">
       <button @touchend="mainPage">Main</button>
@@ -42,6 +42,7 @@ export default {
     return {
       isFalse: false,
       isActive: '',
+      isCalc: false,
       text: '',
       t: 0,
       m: 0,
@@ -64,13 +65,13 @@ export default {
       return this.checkNum();
     },
     tt() {
-      return ("0" + this.t).slice(-2)%60;
+      return ("0" + (this.t %60)).slice(-2);
     },    
     mm() {
-      return ("0" + this.m).slice(-2)%60;
+      return ("0" + (this.m %60)).slice(-2);
     },
     ss() {
-      return ("0" + this.s).slice(-2)%60;
+      return ("0" + (this.s %60)).slice(-2);
     }
   },
   methods: {
@@ -89,6 +90,9 @@ export default {
     selectSound() {
       this.isActive = "3";
     },
+    selectCalc() {
+      this.isActive = "4";
+    },
     changeHere(reset ,item, style) {
       if(this.isActive === "2") {
         this.styleObject['background-color'] = style;
@@ -104,28 +108,6 @@ export default {
       const i = this.isActive;
       this.isActive = reset;
       this.selects[i -1].name = item;
-    },
-    makeTimer() {
-      this.$store.commit('makeTimer', {
-        name: this.text,
-        time: this.time,
-        color: this.selects[0].name,
-        sound: this.selects[1].name,
-        style: this.selects[2].name,
-      })
-      this.clear();
-    },
-    clear() {
-      this.text = '';
-      this.time = '';
-      this.selects[0].name = "Style";
-      this.selects[1].name = "Color";
-      this.selects[2].name = "Sound";
-      this.styleObject['background-color'] = '';
-      this.t = 0;
-      this.m = 0;
-      this.s = 0;
-      this.isActive = '';
     },
     startCalcT(e) {
       this.y = e.changedTouches[0].clientY;
@@ -165,8 +147,6 @@ export default {
     },
     startCalcS(e) {
       this.y = e.changedTouches[0].clientY;
-      console.log(e)
-
     },
     moveCalcS(e) {
       let yy = e.changedTouches[0].clientY;
@@ -182,7 +162,30 @@ export default {
         this.s = 60;
       }
       this.y = yy;
-    }
+    },
+    makeTimer() {
+      this.$store.commit('makeTimer', {
+        name: this.text,
+        time: this.time,
+        color: this.selects[0].name,
+        sound: this.selects[1].name,
+        style: this.selects[2].name,
+      })
+      this.clear();
+    },
+    clear() {
+      this.text = '';
+      this.time = '';
+      this.selects[0].name = "Style";
+      this.selects[1].name = "Color";
+      this.selects[2].name = "Sound";
+      this.styleObject['background-color'] = '';
+      this.t = 0;
+      this.m = 0;
+      this.s = 0;
+      this.isActive = '';
+      this.isCalc = false;
+    },
   }
 }
 </script>
@@ -214,8 +217,9 @@ input[type="text"],[type="number"] {
   width: 60%;
 }
 .setting input {
+  font-size: 1.2rem;
   height: 50px;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   border-radius: 40px;
   color: rgba(0, 0, 0, 1);
   text-shadow: 1px 0px 2px white;
@@ -254,46 +258,66 @@ input[type="text"],[type="number"] {
 }
 .new__timer input:first-child {
   width: 35%;
+  color: rgba(250, 250, 250, 1);
+  text-shadow: 1px 0px 2px rgba(0, 0, 0, 1);
   background-color: rgb(240, 120, 100);
 }
 .new__timer input:last-child {
   width: 20%;
   background-color: rgb(220, 220, 220);
 }
+/* Number */
 .number {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 .number p {
+  font-size: 1.2rem;
   width: 100%;
-  height: 30px;
+  height: 50px;
   margin-top: 2rem;
-  border-radius: 40px 40px 0 0;
+  border-radius: 40px;
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.7);
   border: solid 1px rgba(0, 0, 0, 1);
   text-align: center;
+  line-height: 50px;
+}
+.active p {
+  height: 30px;
+  border-radius: 40px 40px 0 0;
   line-height: 30px;
 }
 .calc {
   width: 100%;
+  animation: look 1.5s;
+}
+@keyframes look {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 .calc input {
   border: solid 1px rgba(0, 0, 0, 1);
   text-align: center;
-  width: 30%;
+  margin-top: 5px;
+  width: 32%;
+  height: 60px;
 }
 .calc input:first-child {
-  border-radius: 0 0 0 40px;
-  margin-right: 5%;
+  border-radius: 0 0 0 20px;
+  margin-right: 2%;
 }
 .calc input:nth-child(2) {
   border-radius: 0;
 }
 .calc input:last-child {
-  border-radius: 0 0 40px 0;
-  margin-left: 5%;
+  border-radius: 0 0 20px 0;
+  margin-left: 2%;
 }
 .footer {
   width: 100%;
@@ -306,7 +330,7 @@ input[type="text"],[type="number"] {
   width: 40%;
   border-radius: 40px;
   height: 60px;
-  transition: 1s ease;
+  transition: 0.5s ease;
   font-size: 1.2rem;
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.5);
