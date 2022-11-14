@@ -41,7 +41,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgb(217, 217, 217);
+  /* background-color: rgb(217, 217, 217); */
 }
 /* header */
 .header {

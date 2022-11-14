@@ -5,14 +5,24 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    timers: [], //ここに作成したタイマーが入る
+    timers: [ //ここに作成したタイマーが入る
+      {
+        color: 'rgba(20, 20, 20, 0.8)',
+        id: 0,
+        name: "Sample timer",
+        sound: 'delay',
+        style: 'Digital',
+        time: 3600
+      }
+    ], 
     nextTimerId: 1,
     colors: [
-      {id: 1, name: 'skeleton',color: 'rgba(200, 200, 200, 0.3)'},
-      {id: 2, name: 'green',color: '#0F0'},
-      {id: 3, name: 'blue',color: '#00F'},
-      {id: 4, name: 'red',color: '#F00'},
-      {id: 5, name: 'dark',color: '#000'}
+      {id: 1, name: 'grey',color: 'rgba(200, 200, 200, 0.3)'},
+      {id: 2, name: 'green',color: 'rgba(50, 180, 100, 0.8)'},
+      {id: 3, name: 'blue',color: 'rgba(50, 70, 200, 0.8)'},
+      {id: 4, name: 'red',color: 'rgba(240, 10, 10, 0.8)'},
+      {id: 5, name: 'dark',color
+      : 'rgba(20, 20, 20, 0.8)'}
     ],
     sounds: [
       {id: 1, name: 'single'},
@@ -24,16 +34,11 @@ const store = new Vuex.Store({
       {id: 2, name: 'Clasic'},
       {id: 3, name: 'Circle'}
     ],
-    currentColorId: 1,
-    currentSoundId: 1,
-    currentStyleId: 1
-
-
+    currentTimerId: 0, //TimerComp.vueに表示されるタイマーのIDが入る
   },
   mutations: {
-    selectSound(state, {i}) {
-      console.log(state.currentSoundId);
-      state.currentSoundId = i;
+    selectTimer(state, {id}) {
+      state.currentTimerId = id;
     },
     //新しいtimerを作る
     makeTimer(state, {name, time, color, sound, style}) {

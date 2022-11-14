@@ -1,7 +1,7 @@
 <template>
   <div class="outer">
     <div class="setting">
-      <input type="text" placeholder="Timer Name" v-model="text">
+      <input type="text" placeholder="Timer Name" v-model="text" @touchstart="selectName">
       <input type="button" :value="selects[0].name" @touchstart="selectStyle">
       <StyleChange @styleChange="changeHere" v-show="isActive === '1'"></StyleChange>
       <input type="button" :value="selects[1].name" @touchstart="selectColor" :style="styleObject">
@@ -80,6 +80,9 @@ export default {
     },
     mainPage() { //メインページへ飛ぶ
       this.$emit("my-click", this.isFalse);
+    },
+    selectName() {
+      this.isActive = "";
     },
     selectStyle() {
       this.isActive = "1";
@@ -166,12 +169,13 @@ export default {
     makeTimer() {
       this.$store.commit('makeTimer', {
         name: this.text,
-        time: this.time,
-        color: this.selects[0].name,
-        sound: this.selects[1].name,
-        style: this.selects[2].name,
+        time: this.t*3600 + this.m*60 + this.s,
+        style: this.selects[0].name,
+        color: this.selects[1].name,
+        sound: this.selects[2].name,
       })
       this.clear();
+      this.$router.push('/user');
     },
     clear() {
       this.text = '';
@@ -337,8 +341,8 @@ input[type="text"],[type="number"] {
   border: solid 1px rgba(250, 250, 250, 1);
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
-.footer button:hover {
-  width: 50%;
+.footer button:active {
+  width: 20%;
   height: 30px;
   border-radius: 40px 40px 0 0;
 }

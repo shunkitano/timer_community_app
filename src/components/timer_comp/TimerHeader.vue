@@ -76,7 +76,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .page__info button:active {
-  width: 50%;
+  width: 20%;
   height: 30px;
   border-radius: 0 0 40px 40px;
 }
@@ -99,7 +99,7 @@ export default {
   background-color: rgba(0, 0, 0, 0);
   z-index: 100;
 }
-.slide-enter-active {
+/* .slide-enter-active {
   animation: slideOut 0.7s reverse ease-in;
 }
 .slide-leave-active {
@@ -118,5 +118,5 @@ export default {
     opacity: 0;
     transform: translateX(100vw);
   }
-}
+} */
 </style>

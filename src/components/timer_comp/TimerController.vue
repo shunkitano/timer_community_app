@@ -71,8 +71,11 @@ export default {
     }
   },
   computed: {
+    id() {
+      return this.$store.state.currentTimerId;
+    },
     sound() { //これを直接メソッドに突っ込む
-      return this.$store.state.currentSoundId; 
+      return this.$store.state.timers[this.id].sound; 
     }
   },
   methods: {
@@ -105,16 +108,16 @@ export default {
     playSound() {
       console.log("!");
       // this.$store.commit('selectSound');
-      if(this.sound === 1) {
+      if(this.sound === "single") {
         const synth = new Tone.Synth().toDestination();
         synth.triggerAttackRelease("A4", "8n");
       }
-      if(this.sound === 2) {
+      if(this.sound === "poly") {
         const synth2 = new Tone.PolySynth().toDestination();
         synth2.set({ detune: -800 });
         synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
       }
-      if(this.sound === 3) {
+      if(this.sound === 'delay') {
         const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
         const synth3 = new Tone.PolySynth().connect(pingPong);
         synth3.set({ detune: -800 });

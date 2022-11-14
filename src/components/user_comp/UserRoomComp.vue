@@ -7,8 +7,9 @@
         <h2>{{ userName }}</h2>
       </div>
       <ul id="user__room">
-        <li v-for="(timer, id) in timers" :key="id">
-          {{ timer.name }}
+        <li v-for="timer in timers" :key="timer.id" @touchstart="selectTimer(timer.id)">
+          <p :style="{'background-color': timer.color}">{{ timer.time }}</p>
+          <p>{{ timer.name }}</p>
         </li>
       </ul>
     </div>
@@ -38,10 +39,12 @@ export default {
     toUserSetting() {
       this.isSetting = !this.isSetting;
     },
-    selectTimer() {
+    selectTimer(id) {
+      console.log(id);
+      this.$store.commit('selectTimer',{id});
       this.$router.push('/top');
-      this.$emit("my-click", this.isTrue)
-    }
+    },
+    
   }
 }
 </script>
@@ -54,7 +57,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgb(217, 217, 217);
+  /* background-color: rgb(217, 217, 217); */
 }
 /* header */
 .header {
@@ -104,8 +107,17 @@ export default {
   margin-top: 70px;
 }
 #user__room li {
+  display: flex;
+  align-items: center;
   text-align: center;
   list-style: none;
   margin: 0 auto;
+}
+li p:first-child {
+  line-height: 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
 }
 </style>

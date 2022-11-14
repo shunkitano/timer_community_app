@@ -1,6 +1,8 @@
 <template>
   <div>
-    <CommunityComp></CommunityComp>
+    <transition name="anim">
+      <CommunityComp v-show="isShow"></CommunityComp>
+    </transition>
   </div>
 </template>
 
@@ -10,37 +12,39 @@ import CommunityComp from '@/components/community_comp/CommunityComp.vue'
 export default {
   beforeRouteLeave (to, from, next) {
     setTimeout(() => {
+      this.isShow = false;
       console.log('community:beforeRouteLeave');
       next();
-    }, 1000);
+    }, );
   },
   components: {
     CommunityComp,
   },
   data() {
     return {
-      
+      isShow: false
     }
   },
+  mounted() {
+    this.isShow = true;
+  }
   
 }
 </script>
 
 <style scoped>
-/* .right-enter-active {
-  animation: rightIn 1s;
+.anim-enter-active {
+  animation: slideIn .4s ease-in;
 }
-.right-leave-active {
-  animation: rightIn 1s reverse;
+.anim-leave-active {
+  animation: slideIn .4s ease-out reverse;
 }
-@keyframes rightIn {
+@keyframes slideIn {
   0% {
-    opacity: 0;
-    transform: translateX(380px);
+    transform: translateX(100%);
   }
   100% {
-    opacity: 1;
-    transform: translateX(0px);
+    transform: translateX(0);
   }
-} */
+}
 </style>

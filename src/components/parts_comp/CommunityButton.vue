@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     communityRoom() {
-      // this.$router.push('/community');
+      this.$router.push('/community');
     }
   }
 }
@@ -35,13 +35,13 @@ export default {
   border: solid 1px rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 1);
   border-radius: 40px;
-  transition: 1s ease;
+  /* transition: 1s ease; */
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
-.community button:active {
+/* .community button:active {
   font-size: 1.6rem;
   margin-left: 200px;
   border-radius: 40px 0 0 40px;
   border-right: none;
-}
+} */
 </style>

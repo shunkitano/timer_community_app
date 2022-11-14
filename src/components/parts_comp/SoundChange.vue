@@ -236,7 +236,7 @@ export default {
     }
   },
   mounted() {
-    return this.sounds = this.$store.state.sounds
+    return this.sounds = this.$store.state.sounds;
   },
   methods: {
     thisSound(index) {

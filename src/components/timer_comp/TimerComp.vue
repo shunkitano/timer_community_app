@@ -4,9 +4,9 @@
       <TimerSettingComp  v-if="isMakeTimer" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" v-else>
         <TimerHeader @makeTimer="makeTimer"></TimerHeader>
-        <TimerDigital v-if="style === 1" :isTms="isTms"></TimerDigital>
-        <TimerClasic v-if="style === 2"></TimerClasic>
-        <TimerCircle v-if="style === 3"></TimerCircle>
+        <TimerDigital v-if="style === 'Digital'" :isTms="isTms"></TimerDigital>
+        <TimerClasic v-if="style === 'Clasic'"></TimerClasic>
+        <TimerCircle v-if="style === 'Circle'"></TimerCircle>
         <TimerController class="controller" @select-tms="selectTms"></TimerController>
       </div><!--timer-->
     </transition>
@@ -32,23 +32,17 @@ export default {
   },
   data() {
     return {
-      isClasic: true,
-      isDigital: false,
-      isCircle: false,
-      isMakeTimer: false,
+      isMakeTimer: false, //タイマー作成ページに飛ぶ
       anim: '',
       isTms: '2'
     }
   },
-  mounted() {
-    
-  },
   computed: {
-    style() {
-      return  this.$store.state.currentStyleId; 
+    id() {
+      return this.$store.state.currentTimerId;
     },
-    color() {
-      return this.$store.state.currentColorId;
+    style() {
+      return this.$store.state.timers[this.id].style; 
     }
   },
   methods: {
@@ -78,7 +72,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(240, 240, 240, 1);
+  /* background-color: rgb(217, 217, 217); */
   z-index: 100;
 } 
 .set-enter-active {
@@ -120,7 +114,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.1);
 }
 .controller {
   position: fixed;

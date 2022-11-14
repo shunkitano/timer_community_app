@@ -1,10 +1,10 @@
 <template>
-  <div class="digital">
-    <p>Digital</p>
+  <div class="digital" :style="{'background-color': color}">
+    <p>{{name}}</p>
     <div class="watch">
-      <p class="text" :class="{light:isTms === '1', count__now:isCount && m > 0}">{{ m }}</p>
-      <p class="text" :class="{light:isTms === '2', count__now:isCount && (s > 0 || m > 0)}">{{ s }}</p>
-      <p class="text" :class="{light:isTms === '3', count__now:isCount}">{{ ms }}</p>
+      <p class="text" :class="{light:isTms === '1', count__now:isCount && t > 0}">{{ t }}</p>
+      <p class="text" :class="{light:isTms === '2', count__now:isCount && (m > 0 || m > 0)}">{{ m }}</p>
+      <p class="text" :class="{light:isTms === '3', count__now:isCount}">{{ s }}</p>
     </div>
     <p>{{ message }}</p>
   </div>
@@ -15,32 +15,43 @@ export default {
   props: ['isTms'],
   data() {
     return {
-      count:0,
+      name: '',
+      count: null,
       time: '',
       outTime: '',
       isCount:false,
       isCountS: false,
       isCountM: false,
       isReset: false,
-      message: 'Please select "time"'
+      message: 'Please select "time"',//あとで他のコメントを足すこと！
+      styleObject: {
+        'background-color': ''
+      }
     }
   },
+  mounted() {
+    this.name = this.$store.state.timers[this.id].name; //ストアから名前を反映
+    this.count = this.$store.state.timers[this.id].time; //ストアから設定時間を反映
+  },
   computed: {
-    m() {
-      let m = Math.floor((this.count/6000) % 60);
+    id() {
+      return this.$store.state.currentTimerId;
+    },
+    color() {
+      return this.$store.state.timers[this.id].color; //ストアから色を反映
+    },
+    t() { //時間
+      let t = Math.floor((this.count/3600) % 60);
+      return ("0" + t).slice(-2);
+    },
+    m() { //分
+      let m = Math.floor((this.count/60) % 60);
       return ("0" + m).slice(-2);
     },
-    s() {
-      let s = Math.floor((this.count/100) % 60);
+    s() { //秒
+      let s = Math.floor(this.count % 60);
       return ("0" + s).slice(-2);
     },
-    ms() {
-      let ms = this.count;
-      return ("0" + ms).slice(-2);
-    },
-    checkTms() {
-      return this.changeTms();
-    }
   },
   methods: {
   }
@@ -58,8 +69,8 @@ export default {
   align-items: center;
   text-align: center;
   border-radius: 40px;
-  background-color: rgb(217, 217, 217);
   box-shadow: inset rgba(250, 250, 250, 0.8) 0px 4px 8px, inset rgba(0, 0, 0, 0.7) 0px -4px 8px, rgba(0, 0, 0, 0.5) 0px 30px 90px, rgba(0, 0, 0, 0.5) 0px 30px 90px;
+  z-index: 2;
 }
 /* タイトル */
 .digital>p:first-child {
@@ -85,7 +96,7 @@ export default {
 }
 .watch {
   display: flex;
-  gap: 1rem; 
+  gap: 1rem;
 }
 .watch .text {
   display: block;
