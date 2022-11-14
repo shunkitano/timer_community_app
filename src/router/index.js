@@ -10,19 +10,19 @@ const routes = [
     path: '/',
     name: 'enter',
     component: EnterView,
-    // beforeEnter:(to, from, next) => {
-    //   console.log('route(top):beforeEnter');
-    //   next();
-    // }
+    beforeEnter:(to, from, next) => {
+      console.log('route(top):beforeEnter');
+      next();
+    }
   },
   {
     path: '/top',
     name: 'top',
     component: TopView,
-    // beforeEnter:(to, from, next) => {
-    //   console.log('route(top):beforeEnter');
-    //   next();
-    // }
+    beforeEnter:(to, from, next) => {
+      console.log('route(top):beforeEnter');
+      next();
+    }
   },
   {
     path: '/login',
@@ -92,18 +92,18 @@ const routes = [
     //   }, 1000);
     // }
   },
-  // {
-  //   path: '/sounds',
-  //   name: 'sounds',
+  {
+    path: '/sounds',
+    name: 'sounds',
   //   // route level code-splitting
   //   // this generates a separate chunk (about.[hash].js) for this route
   //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../components/sounds/SoundsComp.vue'),
+     component: () => import(/* webpackChunkName: "about" */ '../components/sounds/SoundsComp.vue'),
   //   beforeEnter:(to, from, next) => {
   //     console.log('route(sounds):beforeEnter');
   //     next();
   //   }
-  // },
+  },
   {
     path: '/sound',
     name: 'sound',

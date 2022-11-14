@@ -1,8 +1,6 @@
 <template>
   <div>
-    <transition :name="slide">
-      <CommunityComp v-show="isShow"></CommunityComp>
-    </transition>
+    <CommunityComp></CommunityComp>
   </div>
 </template>
 
@@ -10,30 +8,26 @@
 import CommunityComp from '@/components/community_comp/CommunityComp.vue'
 
 export default {
-  // beforeRouteLeave (to, from, next) {
-    // this.isShow = false;
-    // setTimeout(() => {
-    //   console.log('community:beforeRouteLeave');
-    //   next();
-    // }, 1000);
-  // },
+  beforeRouteLeave (to, from, next) {
+    setTimeout(() => {
+      console.log('community:beforeRouteLeave');
+      next();
+    }, 1000);
+  },
   components: {
     CommunityComp,
   },
   data() {
     return {
-      isShow: false,
-      slide:"right"
+      
     }
   },
-  mounted() {
-    this.isShow = true;
-  }
+  
 }
 </script>
 
 <style scoped>
-.right-enter-active {
+/* .right-enter-active {
   animation: rightIn 1s;
 }
 .right-leave-active {
@@ -48,5 +42,5 @@ export default {
     opacity: 1;
     transform: translateX(0px);
   }
-}
+} */
 </style>

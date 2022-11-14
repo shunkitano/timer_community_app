@@ -1,14 +1,14 @@
 <template>
   <div class="wrapper">
     <div class="signup" :class="{isActive:isDrag, isActive2:isClose}">
-      <button @touchend="close" @mouseenter="dragIn" class="close">
+      <button @touchend="close" class="close">
         <svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M23.9598 1.74696C24.5456 2.33274 24.5456 3.28249 23.9598 3.86828L4.86796 22.9602C4.28218 23.5459 3.33243 23.5459 2.74664 22.9602C2.16086 22.3744 2.16086 21.4246 2.74664 20.8388L21.8385 1.74696C22.4243 1.16117 23.3741 1.16117 23.9598 1.74696Z" fill="black"/>
           <path fill-rule="evenodd" clip-rule="evenodd" d="M2.03993 1.74694C2.62571 1.16115 3.57546 1.16115 4.16125 1.74694L23.2531 20.8388C23.8389 21.4246 23.8389 22.3744 23.2531 22.9601C22.6673 23.5459 21.7176 23.5459 21.1318 22.9601L2.03993 3.86826C1.45414 3.28247 1.45414 2.33273 2.03993 1.74694Z" fill="black"/>
         </svg>
       </button>
       <h2>Sign Up</h2>
-      <p @touchend="login" class="login">Login</p>
+      <p @touchstart="login" class="login">Login</p>
       <input type="text" placeholder="Name"  v-model="name">
       <input type="text" placeholder="Email"  v-model="email">
       <input type="password" placeholder="Password"  v-model="password">
@@ -39,33 +39,8 @@ export default {
     }
   },
   methods: {
-    close() {
-      this.isClose = true;
-      this.time = setInterval(() => {this.closeBox()}, 1000);
-      // this.$emit("my-click2", true);
-    },
-    closeBox() {
-      if(this.count > 0) {
-        this.count--;
-      } else if (this.count === 0){
-        clearInterval(this.time);
-      } 
+    close() { 
       this.$emit("my-click2", this.isClose);
-    },
-    dragIn() {
-      if(!this.isDrag) {
-        this.isDrag = true;
-        this.time = setInterval(() => {this.shakeBox()}, 1000);
-      }
-    },
-    shakeBox() {
-      if(this.count > 0) {
-        // this.isDrag = true;
-        this.count--;
-      } else if (this.count === 0){
-        clearInterval(this.time);
-      }
-      this.count = 1;
     },
     login() {
       this.$emit("my-click", true);

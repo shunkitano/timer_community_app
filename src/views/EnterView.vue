@@ -113,7 +113,7 @@ export default {
   }
 }
 .top-enter-active {
-  animation: comeIn 1s;
+  animation: comeIn 1.5s;
 }
 .top-leave-active {
   animation: comeIn 1.5s reverse;

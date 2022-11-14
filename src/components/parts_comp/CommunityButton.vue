@@ -6,9 +6,14 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isCom:true
+    }
+  },
   methods: {
     communityRoom() {
-      this.$router.push('/community')
+      // this.$router.push('/community');
     }
   }
 }

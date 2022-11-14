@@ -27,7 +27,7 @@ export default {
     return {
       anim: '', //アニメーション切り替えのためにバインドしている
       isMakeTimer: false,
-      isAtherPage: false
+      isAtherPage: false,
     }
   },
   methods: {

@@ -1,8 +1,6 @@
 <template>
   <div class="top">
-    <transition name="top" mode="out-in">
-      <MainComp v-show="isShow"></MainComp>
-    </transition>
+    <MainComp></MainComp>
   </div>
 </template>
 
@@ -10,16 +8,12 @@
 import MainComp from '@/components/MainComp.vue';
 
 export default {
-  beforeRouteEnter (to, from, next) {
-    console.log('top:beforeRouteEnter');
-    next();
-  },
   beforeRouteLeave (to, from, next) {
     this.isShow = false;
     setTimeout(() => {
       console.log('top:beforeRouteLeave');
       next();
-    }, 1500);
+    }, 1000);
   },
   components: {
     MainComp
@@ -34,24 +28,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.top nav {
-  display: flex;
-  justify-content: space-evenly;
-}
-.top-enter-active {
-  animation: comeIn 1s;
-}
-.top-leave-active {
-  animation: comeIn 1s reverse;
-}
-@keyframes comeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-</style>
