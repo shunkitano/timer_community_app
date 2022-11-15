@@ -242,7 +242,7 @@ export default {
     thisSound(index) {
       const reset = "";
       this.sound = this.sounds[index].name;
-      this.$emit("soundChange", reset, this.sound,this.sounds[index].sound);
+      this.$emit("soundChange", reset, this.sound);
     },
     playSound(index) {
       if(index === 0) {

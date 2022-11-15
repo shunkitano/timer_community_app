@@ -2,7 +2,7 @@
   <div class="community">
     <UserButton class="userBtn"></UserButton>
     <div class="header">
-      <h2>Community</h2>
+      <h2 class="nico">Community</h2>
     </div>
     <ul id="community_room">
       <li v-for="(timer, id) in timers" :key="id">

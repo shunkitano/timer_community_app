@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <button @touchend="userRoom">User</button>
+    <button @touchend="userRoom" class="nico">User</button>
   </div>
 </template>
 

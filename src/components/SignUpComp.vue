@@ -40,7 +40,9 @@ export default {
   },
   methods: {
     close() { 
-      this.$emit("my-click2", this.isClose);
+      if(!this.isClose) {
+        this.$emit("my-click2", this.isClose);
+      }
     },
     login() {
       this.$emit("my-click", true);

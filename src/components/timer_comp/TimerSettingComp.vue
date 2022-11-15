@@ -99,14 +99,6 @@ export default {
     changeHere(reset ,item, style) {
       if(this.isActive === "2") {
         this.styleObject['background-color'] = style;
-        console.log(style);
-      }
-      if(this.isActive === "3") {
-        console.log(reset, item, style);
-        this.$store.commit('selectSound', {
-          i : style
-        });
-        console.log(this.$store.state.currentSound);
       }
       const i = this.isActive;
       this.isActive = reset;
@@ -171,7 +163,7 @@ export default {
         name: this.text,
         time: this.t*3600 + this.m*60 + this.s,
         style: this.selects[0].name,
-        color: this.selects[1].name,
+        color: this.styleObject['background-color'],
         sound: this.selects[2].name,
       })
       this.clear();

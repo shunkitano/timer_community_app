@@ -11,18 +11,17 @@ const store = new Vuex.Store({
         id: 0,
         name: "Sample timer",
         sound: 'delay',
-        style: 'Digital',
+        style: 'digital',
         time: 3600
       }
     ], 
     nextTimerId: 1,
     colors: [
-      {id: 1, name: 'grey',color: 'rgba(200, 200, 200, 0.3)'},
-      {id: 2, name: 'green',color: 'rgba(50, 180, 100, 0.8)'},
-      {id: 3, name: 'blue',color: 'rgba(50, 70, 200, 0.8)'},
-      {id: 4, name: 'red',color: 'rgba(240, 10, 10, 0.8)'},
-      {id: 5, name: 'dark',color
-      : 'rgba(20, 20, 20, 0.8)'}
+      {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
+      {id: 2, name: 'green', color: 'rgba(50, 180, 100, 0.8)'},
+      {id: 3, name: 'blue', color: 'rgba(50, 70, 200, 0.8)'},
+      {id: 4, name: 'red', color: 'rgba(240, 10, 10, 0.8)'},
+      {id: 5, name: 'dark', color: 'rgba(20, 20, 20, 0.8)'}
     ],
     sounds: [
       {id: 1, name: 'single'},
@@ -30,9 +29,9 @@ const store = new Vuex.Store({
       {id: 3, name: 'delay'}
     ],
     styles: [
-      {id: 1, name: 'Digital'},
-      {id: 2, name: 'Clasic'},
-      {id: 3, name: 'Circle'}
+      {id: 1, name: 'digital'},
+      {id: 2, name: 'clasic'},
+      {id: 3, name: 'circle'}
     ],
     currentTimerId: 0, //TimerComp.vueに表示されるタイマーのIDが入る
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="digital" :style="{'background-color': color}">
-    <p>{{name}}</p>
+    <p :style="{'color': color}" class="nico">{{name}}</p>
     <div class="watch">
       <p class="text" :class="{light:isTms === '1', count__now:isCount && t > 0}">{{ t }}</p>
       <p class="text" :class="{light:isTms === '2', count__now:isCount && (m > 0 || m > 0)}">{{ m }}</p>
@@ -68,7 +68,7 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: center;
-  border-radius: 40px;
+  border-radius: 55px;
   box-shadow: inset rgba(250, 250, 250, 0.8) 0px 4px 8px, inset rgba(0, 0, 0, 0.7) 0px -4px 8px, rgba(0, 0, 0, 0.5) 0px 30px 90px, rgba(0, 0, 0, 0.5) 0px 30px 90px;
   z-index: 2;
 }
@@ -79,7 +79,6 @@ export default {
   font-size: 2rem;
   color: rgba(200, 200, 200, 0.8);
   display: inline;
-  font-family: "Nico Moji";
   text-shadow: 1px 1px 1px rgba(240, 240, 240, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.7);
 }
 /* メッセージ */
@@ -90,9 +89,9 @@ export default {
   font-size: 1.2rem;
   color: rgba(0, 255, 4, 0.9);
   display: inline;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   border-radius: 15px;
-  box-shadow: inset rgba(0, 0, 0, 0.7) 0px 1px 2px, inset rgba(240, 240, 240, 0.8) 0px -1px 2px;
+  box-shadow: inset rgba(0, 0, 0, 0.8) 0px 1px 2px, inset rgba(240, 240, 240, 0.8) 0px -1px 2px;
 }
 .watch {
   display: flex;
@@ -105,10 +104,10 @@ export default {
   height: 5rem;
   padding: 1rem;
   line-height: 3rem;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   border-radius: 1rem;
   color: rgba(0, 255, 4, 0.9);
-  box-shadow: inset rgba(0, 0, 0, 0.7) 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
+  box-shadow: inset rgba(0, 0, 0, 0.8) 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .light {
   position: relative;

@@ -66,7 +66,7 @@ button::after {
   z-index: -2;
   box-shadow: 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
-button:active {
+/* button:active {
   width: 30px;
   height: 60px;
   transition: 0.3s ease;
@@ -100,5 +100,5 @@ button:active::before {
   100% {
     transform: translateY(0px);
   }
-}
+} */
 </style>

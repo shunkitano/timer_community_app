@@ -4,9 +4,9 @@
       <TimerSettingComp  v-if="isMakeTimer" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" v-else>
         <TimerHeader @makeTimer="makeTimer"></TimerHeader>
-        <TimerDigital v-if="style === 'Digital'" :isTms="isTms"></TimerDigital>
-        <TimerClasic v-if="style === 'Clasic'"></TimerClasic>
-        <TimerCircle v-if="style === 'Circle'"></TimerCircle>
+        <TimerDigital v-if="style === 'digital'" :isTms="isTms"></TimerDigital>
+        <TimerClasic v-if="style === 'clasic'"></TimerClasic>
+        <TimerCircle v-if="style === 'circle'"></TimerCircle>
         <TimerController class="controller" @select-tms="selectTms"></TimerController>
       </div><!--timer-->
     </transition>
@@ -76,16 +76,16 @@ export default {
   z-index: 100;
 } 
 .set-enter-active {
-  animation: up 1s;
+  animation: up 0.7s;
 }
 .set-leave-active {
-  animation: down 1s;
+  animation: down 0.7s;
 }
 .main-enter-active {
-  animation: down 1s reverse; 
+  animation: down 0.7s reverse; 
 }
 .main-leave-active {
-  animation: up 1s reverse;
+  animation: up 0.7s reverse;
 }
 @keyframes up {
   0% {

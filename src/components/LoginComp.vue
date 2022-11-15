@@ -39,7 +39,9 @@ export default {
   },
   methods: {
     close() {
-      this.$emit("my-click2", this.isClose);
+      if(!this.isClose) {
+        this.$emit("my-click2", this.isClose);
+      }
     },
     signUp() {
       this.$emit("my-click", false);

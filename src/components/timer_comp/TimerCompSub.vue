@@ -11,7 +11,7 @@
               <CommunityButton></CommunityButton>
               <button @touchstart="mainPage"></button>
             </div>
-            <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1>
+            <HamburgerButton @settingBtn="atherPage" v-else></HamburgerButton>
           </transition>   
         </div>
         <div class="watch__wrapper">
@@ -73,7 +73,7 @@
 
 <script>
 import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
-import ButtonComp1 from '@/components/parts_comp/ButtonComp1.vue';
+import HamburgerButton from '@/components/parts_comp/HamburgerButton.vue';
 import UserButton from '@/components/parts_comp/UserButton.vue';
 import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
 import * as Tone from 'tone'; // ここで読み込む。
@@ -81,7 +81,7 @@ import * as Tone from 'tone'; // ここで読み込む。
 export default {
   components: {
     TimerSettingComp,
-    ButtonComp1,
+    HamburgerButton,
     UserButton,
     CommunityButton
   },

@@ -1,25 +1,25 @@
 <template>
   <div class="header">
-    <transition name="slide" mode="out-in">
+    <transition name="hamburger" mode="out-in">
       <div v-if="isAtherPage" class="page__info">
         <UserButton></UserButton>
         <button @touchend="makeTimer">Make</button>
         <CommunityButton></CommunityButton>
         <button @touchend="closeHeader"></button>
       </div>
-      <ButtonComp1 @settingBtn="atherPage" v-else></ButtonComp1>
+      <HamburgerButton @settingBtn="atherPage"  v-else-if="!isAtherPage"></HamburgerButton>
     </transition>         
   </div>
 </template>
 
 <script>
-import ButtonComp1 from '@/components/parts_comp/ButtonComp1.vue';
+import HamburgerButton from '@/components/parts_comp/HamburgerButton.vue';
 import UserButton from '@/components/parts_comp/UserButton.vue';
 import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
 
 export default {
   components: {
-    ButtonComp1,
+    HamburgerButton,
     UserButton,
     CommunityButton
   },
@@ -70,6 +70,7 @@ export default {
   height: 60px;
   transition: 0.5s ease;
   font-size: 1.2rem;
+  font-family: "Nico Moji";
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.5);
   border: solid 1px rgba(250, 250, 250, 1);
@@ -99,24 +100,21 @@ export default {
   background-color: rgba(0, 0, 0, 0);
   z-index: 100;
 }
-/* .slide-enter-active {
-  animation: slideOut 0.7s reverse ease-in;
+.hamburger-enter-active {
+  animation: expand 0.7s ease;
 }
-.slide-leave-active {
-  animation: slideOut 0.5s ease-out;
+.hamburger-leave-active {
+  animation: expand 0.7s reverse ease;
 }
-@keyframes slideOut {
+@keyframes expand {
   0% {
-    opacity: 1;
-    transform: translateX(0px);
-  }
-  50% {
-    opacity: 0.8;
-    width: 80%;
+    width: 50%;
+    opacity: 0.3;
+    transform: translateX(-50%);
   }
   100% {
-    opacity: 0;
-    transform: translateX(100vw);
+    opacity: 1;
+    transform: translateX(0);
   }
-} */
+}
 </style>
