@@ -26,7 +26,7 @@
             <WitchButton></WitchButton>
             <CutButton></CutButton>
           </div><!--edit-->
-          <OpenCloseButton class="open__close" @open-Close="openClose" :childId="timer.id" @btn-slide="btnSlide"></OpenCloseButton>
+          <OpenCloseButton class="open__close" @open-close="openClose" :childId="timer.id" :class="{active:isActive === timer.id}"></OpenCloseButton>
         </li>
       </ul><!--timers-->
     </div>
@@ -54,7 +54,7 @@ export default {
       isSetting: false,
       isTrue: true,
       isEdit: false,
-      childId: ''
+      isActive: ''
     }
   },
   mounted() {
@@ -73,8 +73,9 @@ export default {
       // console.log(this.timers);
     },
     btnSlide() {
-      if(!this.isEdit) {
-        console.log('!');
+      if(!this.isSlide) {
+        console.log("slide!");
+        this.isSlide = true;
       }
     },
     openClose(isOpen, id) {
@@ -82,6 +83,10 @@ export default {
       console.log(isOpen);
       console.log(id);
       this.isId = id;
+      this.isId2 = id;
+      if(isOpen === false) {
+        this.isSlide = false;
+      }
     }
   }
 }
