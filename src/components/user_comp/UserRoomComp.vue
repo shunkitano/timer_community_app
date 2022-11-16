@@ -9,22 +9,26 @@
       <ul id="timers">
         <li v-for="timer in timers" :key="timer.id">
           <div class="nico" @touchstart="selectTimer(timer.id)">
-            <div v-if="timer.time >= 3600" :style="{'background-color': timer.color}" :class="timer.style">
-            <p>{{ (timer.time - timer.time%3600) /3600 + "t"}}</p>
-            <p>{{ timer.time%3600 >= 60 ? timer.time%3600/100 +"m" : timer.time%3600 + "s"}}</p>
+            <div v-if="timer.time >= 3600" :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
+              <p>{{ (timer.time - timer.time%3600) /3600 + "t"}}</p>
+              <p>{{ timer.time%3600 >= 60 ? timer.time%3600/100 +"m" : timer.time%3600 + "s"}}</p>
+            </div>
+            <div v-else-if="timer.time >= 60" :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
+              <p>{{ (timer.time - timer.time%60) /60 + "m"}}</p>
+              <p>{{timer.time%60 + "s"}}</p>
+            </div>
+            <div v-else :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
+              <p>{{ timer.time + "s"}}</p>
+            </div>
+            <p class="timer__name">{{ timer.name }}</p>
           </div>
-          <div v-else-if="timer.time >= 60" :style="{'background-color': timer.color}" :class="timer.style">
-            <p>{{ (timer.time - timer.time%60) /60 + "m"}}</p>
-            <p>{{timer.time%60 + "s"}}</p>
-          </div>
-          <div v-else>
-            <p :style="{'background-color': timer.color}" :class="timer.style">{{ timer.time + "s"}}</p>
-          </div>
-          <p>{{ timer.name }}</p>
-          </div>
-          <WitchButton class="witch"></WitchButton>
+          <div class="edit" v-if="isEdit && isId === timer.id">
+            <WitchButton></WitchButton>
+            <CutButton></CutButton>
+          </div><!--edit-->
+          <OpenCloseButton class="open__close" @open-Close="openClose" :childId="timer.id" @btn-slide="btnSlide"></OpenCloseButton>
         </li>
-      </ul>
+      </ul><!--timers-->
     </div>
   </div>
 </template>
@@ -32,19 +36,25 @@
 <script>
 import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
 import WitchButton from '@/components/parts_comp/WitchButton.vue';
+import CutButton from '@/components/parts_comp/CutButton.vue';
+import OpenCloseButton from '@/components/parts_comp/OpenCloseButton.vue';
 
 export default {
   
   components: {
     CommunityButton,
-    WitchButton
+    WitchButton,
+    CutButton,
+    OpenCloseButton
   },
   data() {
     return {
       timers: [],
       userName: 'User',
       isSetting: false,
-      isTrue: true
+      isTrue: true,
+      isEdit: false,
+      childId: ''
     }
   },
   mounted() {
@@ -55,15 +65,24 @@ export default {
       this.isSetting = !this.isSetting;
     },
     selectTimer(id) {
-      console.log(id);
+      // console.log(id);
       this.$store.commit('selectTimer',{id});
       this.$router.push('/top');
     },
     timersCheck() {
-      console.log(this.timers);
-      console.log(this.timertTime);
+      // console.log(this.timers);
+    },
+    btnSlide() {
+      if(!this.isEdit) {
+        console.log('!');
+      }
+    },
+    openClose(isOpen, id) {
+      this.isEdit = isOpen;
+      console.log(isOpen);
+      console.log(id);
+      this.isId = id;
     }
-    
   }
 }
 </script>
@@ -118,28 +137,36 @@ export default {
 }
 /* Timers */
 #timers {
-  width: 100%;
+  /* width: 100%; */
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-top: 100px;
 }
-#timers li div {
-  position: relative;
+#timers li {
   width: 80%;
-  height: 80px;
+  position: relative;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   text-align: center;
   list-style: none;
   margin: 1rem auto 0;
+  overflow: hidden;
 }
-li div {
+#timers li div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.timer__box {
+  display: flex;
+  flex-direction: column;
   width: 80px;
   height: 80px;
 }
-li p {
+.timer__box p {
   line-height: 40px;
   font-size: 20px;
   font-weight: bold;
@@ -147,10 +174,13 @@ li p {
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
 }
-li p:last-child {
+.timer__box p:last-child {
   margin-left: 20px;
   line-height: 10px;
   font-size: 14px;
+}
+.timer__name {
+  padding-left: 1rem;
 }
 .digital {
   border-radius: 10px;
@@ -177,9 +207,26 @@ li p:last-child {
   backdrop-filter: brightness(70%);
   z-index: -1;
 }
-.witch {
+.edit {
   position: absolute;
-  top: 200px;
+  top: 0;
   left: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+  height: 90%;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
+  backdrop-filter: blur(1px);
+  padding: 0.5rem;
+}
+.open__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 </style>

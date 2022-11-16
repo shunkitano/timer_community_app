@@ -27,13 +27,14 @@ export default {
   display: flex;
   gap: 1rem;
   width: 100%;
+  height: 100%;
 }
 .witch .btn {
   display: block;
-  width: 100px;
-  height: 50px;
+  width: 40%;
+  height: 80%;
   border: none;
-  border-radius: 40px;
+  border-radius: 30px;
   background-color: rgba(200, 200, 200, 0.3);
 }
 .witch .active {
