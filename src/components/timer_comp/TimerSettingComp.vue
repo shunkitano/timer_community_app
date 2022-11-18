@@ -22,8 +22,15 @@
       <input type="button" @touchstart="clear" value="Clear?">
     </div>
     <div class="footer">
-      <button @touchend="mainPage">Main</button>
+      <button @touchend="mainPage" class="nico">Main</button>
     </div>
+    <transition name="empty">
+      <div v-show="isEmpty" class="empty">
+        <h2 class="text">Empty!</h2>
+        <NormalButton text="Close" id="btn" @touchBtn="closeEmpty"></NormalButton>
+      </div>
+    </transition>
+    
   </div>
 </template>
 
@@ -31,12 +38,14 @@
 import ColorChange from '@/components/parts_comp/ColorChange.vue';
 import SoundChange from '@/components/parts_comp/SoundChange.vue';
 import StyleChange from '@/components/parts_comp/StyleChange.vue';
+import NormalButton from '@/components/parts_comp/NormalButton.vue';
 
 export default {
   components: {
     ColorChange,
     SoundChange,
-    StyleChange
+    StyleChange,
+    NormalButton
   },
   data() {
     return {
@@ -57,7 +66,8 @@ export default {
       ],
       styleObject: {
         'background-color': ''
-      }
+      },
+      isEmpty: false
     }
   },
   computed: {
@@ -105,6 +115,7 @@ export default {
       this.selects[i -1].name = item;
     },
     startCalcT(e) {
+      this.isCalc = true;
       this.y = e.changedTouches[0].clientY;
     },
     moveCalcT(e) {
@@ -123,6 +134,7 @@ export default {
       this.y = yy;
     },
     startCalcM(e) {
+      this.isCalc = true;
       this.y = e.changedTouches[0].clientY;
     },
     moveCalcM(e) {
@@ -141,6 +153,7 @@ export default {
       this.y = yy;
     },
     startCalcS(e) {
+      this.isCalc = true;
       this.y = e.changedTouches[0].clientY;
     },
     moveCalcS(e) {
@@ -159,17 +172,22 @@ export default {
       this.y = yy;
     },
     makeTimer() {
-      this.$store.commit('makeTimer', {
+      if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "Color" || this.selects[2].name === "Sound" || !this.isCalc) {
+        this.isEmpty = true;
+      } else {
+        this.$store.commit('makeTimer', {
         name: this.text,
-        time: this.t*3600 + this.m*60 + this.s,
+        time: this.t*3600 + this.m*60 + this.s*1, //this.sだけだと文字列として処理された。そのため、*1をつけてみた。結果、数値として扱ってくれた
         style: this.selects[0].name,
         color: this.styleObject['background-color'],
         sound: this.selects[2].name,
-      })
-      this.clear();
-      this.$router.push('/user');
+        })
+        this.$router.push('/user');
+        this.clear();
+      }
     },
     clear() {
+
       this.text = '';
       this.time = '';
       this.selects[0].name = "Style";
@@ -182,6 +200,9 @@ export default {
       this.isActive = '';
       this.isCalc = false;
     },
+    closeEmpty(isFalse) {
+      this.isEmpty = isFalse;
+    }
   }
 }
 </script>
@@ -210,6 +231,7 @@ input[type="text"],[type="number"] {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  padding-top: 1rem;
   width: 60%;
 }
 .setting input {
@@ -218,7 +240,7 @@ input[type="text"],[type="number"] {
   margin-top: 1.5rem;
   border-radius: 40px;
   color: rgba(0, 0, 0, 1);
-  text-shadow: 1px 0px 2px white;
+  text-shadow: 1px 0px 2px rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0);
   border: solid 1px rgba(0, 0, 0, 1);
 }
@@ -256,7 +278,7 @@ input[type="text"],[type="number"] {
   width: 35%;
   color: rgba(250, 250, 250, 1);
   text-shadow: 1px 0px 2px rgba(0, 0, 0, 1);
-  background-color: rgb(240, 120, 100);
+  background-color: rgba(240, 10, 10, 0.8);
 }
 .new__timer input:last-child {
   width: 20%;
@@ -272,7 +294,7 @@ input[type="text"],[type="number"] {
   font-size: 1.2rem;
   width: 100%;
   height: 50px;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   border-radius: 40px;
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.7);
@@ -337,6 +359,61 @@ input[type="text"],[type="number"] {
   width: 20%;
   height: 30px;
   border-radius: 40px 40px 0 0;
+}
+.empty {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  width: 80%;
+  height: 30%;
+  background-color: rgba(250, 250, 250, 0.7);
+  backdrop-filter: blur(2px);
+  border-radius: 40px;
+  color: rgba(240, 10, 10, 0.8);
+  font-size: 1.4rem;
+}
+.empty-enter-active {
+  animation: emptyAlert 0.3s;
+}
+.empty-leave-active {
+  animation: emptyAlertClose 0.5s;
+}
+@keyframes emptyAlert {
+  0% {
+    scale: 1.1;
+  }
+  25% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.1;
+  }
+  75% {
+    scale: 1;
+  }
+  100% {
+    scale: 1.1;
+  }
+}
+@keyframes emptyAlertClose {
+  0% {
+    scale: 1;
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2, 0.7);
+  }
+  100% {
+    transform: scale(2, 0);
+    opacity: 0;
+  }
 }
 </style>
 

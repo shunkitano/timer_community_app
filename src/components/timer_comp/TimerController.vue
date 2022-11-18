@@ -223,7 +223,7 @@ export default {
   margin-right: 1rem;
 }
 .ssr button:first-child {
-  background-color: red;
+  background-color: rgba(240, 10, 10, 0.8);
   width: 40px;
   height: 40px;
   border: none;

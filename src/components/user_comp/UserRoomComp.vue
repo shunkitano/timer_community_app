@@ -1,35 +1,31 @@
 <template>
-  <div>
-    <div class="user__room">
-      <input type="button" class="logout nico" value="Logout" @touchstart="timersCheck">
-      <CommunityButton class="comBtn"></CommunityButton>
-      <div class="header">
-        <h2 class="nico">{{ userName }}</h2>
-      </div>
-      <ul id="timers">
-        <li v-for="timer in timers" :key="timer.id">
-          <div class="nico" @touchstart="selectTimer(timer.id)">
-            <div v-if="timer.time >= 3600" :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
-              <p>{{ (timer.time - timer.time%3600) /3600 + "t"}}</p>
-              <p>{{ timer.time%3600 >= 60 ? timer.time%3600/100 +"m" : timer.time%3600 + "s"}}</p>
-            </div>
-            <div v-else-if="timer.time >= 60" :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
-              <p>{{ (timer.time - timer.time%60) /60 + "m"}}</p>
-              <p>{{timer.time%60 + "s"}}</p>
-            </div>
-            <div v-else :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
-              <p>{{ timer.time + "s"}}</p>
-            </div>
-            <p class="timer__name">{{ timer.name }}</p>
+  <div class="user__room">
+    <input type="button" class="logout nico" value="Logout" @touchstart="timersCheck">
+    <CommunityButton class="comBtn"></CommunityButton>
+    <div class="header">
+      <h2 class="nico">{{ userName }}</h2>
+    </div>
+    <ul id="timers">
+      <li v-for="timer in timers" :key="timer.id">
+        <div class="nico" @touchstart="selectTimer(timer.id)">
+          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
+            <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
+            <p>:</p>
+            <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
+            <p>:</p>
+            <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
+          <p class="timer__name">{{ timer.name }}</p>
+        </div>
+        <transition name="fade">
           <div class="edit" v-if="isEdit && isId === timer.id">
-            <WitchButton></WitchButton>
+            <WitchButton text1="private" text2='community'></WitchButton>
             <CutButton></CutButton>
           </div><!--edit-->
-          <OpenCloseButton class="open__close" @open-close="openClose" :childId="timer.id" :class="{active:isActive === timer.id}"></OpenCloseButton>
-        </li>
-      </ul><!--timers-->
-    </div>
+        </transition>
+        <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.id" :class="{active:isActive === timer.id}"></OpenCloseButton>
+      </li>
+    </ul><!--timers-->
   </div>
 </template>
 
@@ -66,24 +62,17 @@ export default {
     },
     selectTimer(id) {
       // console.log(id);
-      this.$store.commit('selectTimer',{id});
+      if(!this.isEdit) {
+        this.$store.commit('selectTimer',{id});
       this.$router.push('/top');
+      } 
     },
     timersCheck() {
       // console.log(this.timers);
     },
-    btnSlide() {
-      if(!this.isSlide) {
-        console.log("slide!");
-        this.isSlide = true;
-      }
-    },
     openClose(isOpen, id) {
       this.isEdit = isOpen;
-      console.log(isOpen);
-      console.log(id);
       this.isId = id;
-      this.isId2 = id;
       if(isOpen === false) {
         this.isSlide = false;
       }
@@ -129,7 +118,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
 .header h2 {
   font-size: 1rem;
   height: 60px;
@@ -142,15 +130,14 @@ export default {
 }
 /* Timers */
 #timers {
-  /* width: 100%; */
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 100px;
+  margin-top: 5rem;
 }
 #timers li {
-  width: 80%;
+  width:80%;
   position: relative;
   display: flex;
   align-items: center;
@@ -159,33 +146,33 @@ export default {
   list-style: none;
   margin: 1rem auto 0;
   overflow: hidden;
+  background-color: rgba(20, 20, 20, 0.1);
+  border-radius: 10px;
 }
 #timers li div {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
 }
 .timer__box {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   width: 80px;
   height: 80px;
+  border: solid 0.5px rgba(20, 20, 20, 0.8);
 }
 .timer__box p {
-  line-height: 40px;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: bold;
-  margin-top: 5px;
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
 }
-.timer__box p:last-child {
-  margin-left: 20px;
-  line-height: 10px;
-  font-size: 14px;
-}
 .timer__name {
-  padding-left: 1rem;
+  padding: 1rem;
+  margin-left: 1rem;
+  background-color: rgba(250, 250, 250, 0.8);
+  border-radius: 20px;
 }
 .digital {
   border-radius: 10px;
@@ -218,14 +205,31 @@ export default {
   left: 0;
   bottom: 0;
   margin: auto;
+  margin-left: 0.25rem;
   display: flex;
   justify-content: space-between;
-  width: 85%;
+  width: 80%;
   height: 90%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(250, 250, 250, 0.5);
   border-radius: 30px;
   backdrop-filter: blur(1px);
   padding: 0.5rem;
+}
+.fade-enter-active {
+  animation: comeOut 0.5s;
+}
+.fade-leave-active {
+  animation: comeOut 0.5s reverse;
+}
+@keyframes comeOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-100vw);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 .open__close {
   position: absolute;

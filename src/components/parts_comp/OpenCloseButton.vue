@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  props: ['childId'],
+  props: ['childId', 'childEdit'],
   data() {
     return {
       opCl:'close',
@@ -18,11 +18,11 @@ export default {
   },
   methods: {
     openClose() {
-      if(this.opCl === 'close') {
+      if(this.opCl === 'close' && this.childEdit === false) {
         this.opCl = 'open';
         this.isOpen = true;
         this.$emit("open-close", this.isOpen, this.childId);
-      } else {
+      } else if(this.opCl === 'open' && this.childEdit === true) {
         this.opCl = 'close';
         this.isOpen = false;
         this.$emit("open-close", this.isOpen, this.childId);
@@ -30,7 +30,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
@@ -55,7 +54,7 @@ p {
   position: absolute;
   top: 10px;
   left: 0;
-  background-color: rgba(20, 20, 20, 0.8);
+  background-color: rgb(230, 230, 230);
   width: 40px;
   height: 5px;
   border-radius: 2px;
@@ -65,7 +64,7 @@ p {
   position: absolute;
   bottom: 10px;
   left: 0;
-  background-color: rgba(20, 20, 20, 0.8);
+  background-color: rgb(230, 230, 230);
   width: 40px;
   height: 5px;
   border-radius: 2px;
@@ -78,9 +77,9 @@ p {
   right: 0;
   bottom: 0;
   margin: auto;
-  background-color: rgba(240, 10, 10, 0.8);
+  background-color: rgba(240, 10, 10, 1);
   width: 40px;
-  height: 5px;
+  height: 4px;
   border-radius: 2px;
   animation: turn 0.5s ease;
   transform: rotateZ(45deg);
@@ -93,16 +92,16 @@ p {
   right: 0;
   bottom: 0;
   margin: auto;
-  background-color: rgba(240, 10, 10, 0.8);
+  background-color: rgba(240, 10, 10, 1);
   width: 40px;
-  height: 5px;
+  height: 4px;
   border-radius: 2px;
   animation: reverseTurn 0.5s ease;
   transform: rotateZ(-45deg);
 }
 @keyframes turn {
   0% {
-    background-color: rgba(20, 20, 20, 0.8);
+    background-color: rgb(230, 230, 230);
     transform: rotateZ(0deg);
   }
   100% {
@@ -111,7 +110,7 @@ p {
 }
 @keyframes reverseTurn {
   0% {
-    background-color: rgba(20, 20, 20, 0.8);
+    background-color: rgb(230, 230, 230);
     transform: rotateZ(0deg);
   }
   100% {

@@ -101,10 +101,10 @@ export default {
   z-index: 100;
 }
 .hamburger-enter-active {
-  animation: expand 0.7s ease;
+  animation: expand 0.5s ease;
 }
 .hamburger-leave-active {
-  animation: expand 0.7s reverse ease;
+  animation: expand 0.5s reverse ease;
 }
 @keyframes expand {
   0% {

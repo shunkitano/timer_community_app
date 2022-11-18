@@ -9,13 +9,23 @@ const store = new Vuex.Store({
       {
         color: 'rgba(20, 20, 20, 0.8)',
         id: 0,
-        name: "Sample timer",
+        name: "Sample",
         sound: 'delay',
         style: 'digital',
-        time: 3600
+        time: 3600,
+        open: true
+      },
+      {
+        color: 'rgba(200, 200, 200, 0.3)',
+        id: 1,
+        name: "Sample1",
+        sound: 'delay',
+        style: 'digital',
+        time: 3905,
+        open: false
       }
     ], 
-    nextTimerId: 1,
+    nextTimerId: 2,
     colors: [
       {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
       {id: 2, name: 'green', color: 'rgba(50, 180, 100, 0.8)'},
@@ -48,8 +58,10 @@ const store = new Vuex.Store({
         color,
         sound,
         style,
+        open: false
       })
-    state.nextTimerId++
+    state.nextTimerId++;
+    console.log(state.timers);
     }
   }
 })

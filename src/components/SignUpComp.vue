@@ -94,7 +94,7 @@ input {
 }
 .signup {
   position: relative;
-  width: 350px;
+  width: 80%;
   height: 70vh;
   background-color: rgba(250, 250, 250, 0.7);
   display: flex;
