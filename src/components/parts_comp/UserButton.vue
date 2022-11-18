@@ -6,9 +6,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isUser:false
+    }
+  },
   methods: {
     userRoom() {
-      this.$router.push('/user')
+      if(!this.isUser) {
+        this.$router.push('/user');
+      }
     }
   }
 }

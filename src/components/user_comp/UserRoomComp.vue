@@ -1,6 +1,6 @@
 <template>
   <div class="user__room">
-    <input type="button" class="logout nico" value="Logout" @touchstart="timersCheck">
+    <input type="button" class="logout nico" value="Logout" @touchstart="timersTest">
     <CommunityButton class="comBtn"></CommunityButton>
     <div class="header">
       <h2 class="nico">{{ userName }}</h2>
@@ -19,11 +19,11 @@
         </div>
         <transition name="fade">
           <div class="edit" v-if="isEdit && isId === timer.id">
-            <WitchButton text1="private" text2='community'></WitchButton>
+            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childId="timer.id"></WitchButton>
             <CutButton></CutButton>
           </div><!--edit-->
         </transition>
-        <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.id" :class="{active:isActive === timer.id}"></OpenCloseButton>
+        <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.id"></OpenCloseButton>
       </li>
     </ul><!--timers-->
   </div>
@@ -50,7 +50,7 @@ export default {
       isSetting: false,
       isTrue: true,
       isEdit: false,
-      isActive: ''
+
     }
   },
   mounted() {
@@ -67,8 +67,19 @@ export default {
       this.$router.push('/top');
       } 
     },
-    timersCheck() {
-      // console.log(this.timers);
+    timersTest() {
+      // const array = this.$store.state.timers;
+      // const newArray = array.filter(e => e.isCom === true);
+      // console.log(array);
+      // console.log(newArray);
+      // newArray[1].isCom = true;
+      // console.log(newArray);
+
+      const array = this.$store.state.timers;
+      const array2 = array;
+      console.log(array2[1]);
+      array2[1].isCom = true;
+      console.log(array2[1]);
     },
     openClose(isOpen, id) {
       this.isEdit = isOpen;
@@ -76,6 +87,18 @@ export default {
       if(isOpen === false) {
         this.isSlide = false;
       }
+    },
+    putPrivate(childId) { //プライベイトにする
+      console.log(childId);
+      this.$store.commit('putPrivate', {
+        id: childId,
+      })
+    },
+    putCom(childId) { //コミュニティに公開する
+      console.log(childId);
+      this.$store.commit('putCom', {
+        id: childId,
+      })
     }
   }
 }
@@ -102,11 +125,13 @@ export default {
   left: 0;
   width: 80px;
   height: 60px;
-  border: solid 1px rgba(0, 0, 0, 1);
-  border-radius: 40px;
-  background-color: rgb(220, 220, 220);
   margin-left: 1rem;
   z-index: 100;
+  color: rgba(250, 250, 250, 1);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: solid 1px rgba(250, 250, 250, 1);
+  border-radius: 40px;
+  box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 /* header */
 .header {
@@ -127,6 +152,7 @@ export default {
   background-color: rgba(240, 240, 240, 1);
   border: solid 1px rgba(0, 0, 0, 1);
   border-radius: 40px;
+  box-shadow: inset rgba(20, 20, 20, 0.8) 0px 2px 4px, inset rgba(20, 20, 20, 0.8) 0px -2px 4px;
 }
 /* Timers */
 #timers {

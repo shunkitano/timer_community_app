@@ -1,11 +1,12 @@
 <template>
-  <div class="circle__wrapper">
-    <div class="circle" @touchstart="startCircle" @touchmove="moveCircle">
-    <div class="needle"></div> 
-    <div class="circle__top"></div>    
-  </div><!--circle-->
+  <div class="wrapper">
+    <div class="circle__wrapper">
+      <div class="circle" @touchstart="startCircle" @touchmove="moveCircle">
+        <div class="needle"></div> 
+        <div class="circle__top"></div>    
+      </div><!--circle-->
+    </div>
   </div>
-  
 </template>
 
 <script>
@@ -51,10 +52,16 @@ export default {
 </script>
 
 <style scoped>
-.circle__wrapper {
+.wrapper {
   position: relative;
+}
+.circle__wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   margin: auto;
-  margin-top: 40%;
   width: 300px;
   height: 300px;
   border-radius: 50%;

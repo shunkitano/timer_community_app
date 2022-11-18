@@ -1,13 +1,16 @@
 <template>
-  <div class="digital" :style="{'background-color': color}">
-    <p :style="{'color': color}" class="nico">{{name}}</p>
-    <div class="watch">
-      <p class="text" :class="{light:isTms === '1', count__now:isCount && t > 0}">{{ t }}</p>
-      <p class="text" :class="{light:isTms === '2', count__now:isCount && (m > 0 || m > 0)}">{{ m }}</p>
-      <p class="text" :class="{light:isTms === '3', count__now:isCount}">{{ s }}</p>
+  <div class="wrapper">
+    <div class="digital" :style="{'background-color': color}">
+      <p :style="{'color': color}" class="nico">{{name}}</p>
+        <div class="watch">
+          <p class="text" :class="{light:isTms === '1', count__now:isCount && t > 0}">{{ t }}</p>
+          <p class="text" :class="{light:isTms === '2', count__now:isCount && (m > 0 || m > 0)}">{{ m }}</p>
+          <p class="text" :class="{light:isTms === '3', count__now:isCount}">{{ s }}</p>
+        </div>
+      <p>{{ message }}</p>
     </div>
-    <p>{{ message }}</p>
   </div>
+  
 </template>
 
 <script>
@@ -59,8 +62,16 @@ export default {
 </script>
 
 <style scoped>
-.digital {
+.wrapper {
   position: relative;
+}
+.digital {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
   width: 100%;
   height: 45vh;
   display: flex;
@@ -95,7 +106,7 @@ export default {
 }
 .watch {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 .watch .text {
   display: block;

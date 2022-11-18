@@ -3,7 +3,7 @@
     <transition name="hamburger" mode="out-in">
       <div v-if="isAtherPage" class="page__info">
         <UserButton></UserButton>
-        <button @touchend="makeTimer">Make</button>
+        <button @touchend="makeTimer" class="nico">Make</button>
         <CommunityButton></CommunityButton>
         <button @touchend="closeHeader"></button>
       </div>
@@ -70,7 +70,6 @@ export default {
   height: 60px;
   transition: 0.5s ease;
   font-size: 1.2rem;
-  font-family: "Nico Moji";
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.5);
   border: solid 1px rgba(250, 250, 250, 1);

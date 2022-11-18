@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <div class="circleM">
       <div :style="styleObjectM"></div>
     </div>
@@ -60,12 +60,15 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+  position: relative;
+}
 .circleL div {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 10%;
+  bottom: 0;
   margin: auto;
   width: 150px;
   height: 150px;

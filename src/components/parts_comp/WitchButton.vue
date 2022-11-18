@@ -6,21 +6,26 @@
 </template>
 <script>
 export default {
-  props: ['text1', 'text2'],
+  props: ['text1', 'text2', 'childId'],
   data() {
     return {
-      isThis: false
+      isThis: false,
     }
+  },
+  mounted() {
+    return this.isThis = this.$store.state.timers[this.childId].isCom;
   },
   methods: {
     selectBtn1() {
       if(this.isThis) {
         this.isThis = !this.isThis;
+        this.$emit('is-left', this.childId);
       }
     },
     selectBtn2() {
       if(!this.isThis) {
         this.isThis = !this.isThis;
+        this.$emit('is-right', this.childId);
       }
     },
   }

@@ -8,12 +8,14 @@
 export default {
   data() {
     return {
-      isCom:true
+      isCom:false
     }
   },
   methods: {
     communityRoom() {
-      this.$router.push('/community');
+      if(!this.isCom) {
+        this.$router.push('/community');
+      }
     }
   }
 }

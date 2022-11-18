@@ -9,20 +9,20 @@ const store = new Vuex.Store({
       {
         color: 'rgba(20, 20, 20, 0.8)',
         id: 0,
-        name: "Sample",
-        sound: 'delay',
+        name: "Sample1",
+        sound: 'single',
         style: 'digital',
         time: 3600,
-        open: true
+        isCom: true
       },
       {
         color: 'rgba(200, 200, 200, 0.3)',
         id: 1,
-        name: "Sample1",
+        name: "Sample2",
         sound: 'delay',
         style: 'digital',
-        time: 3905,
-        open: false
+        time: 3661,
+        isCom: false
       }
     ], 
     nextTimerId: 2,
@@ -58,11 +58,20 @@ const store = new Vuex.Store({
         color,
         sound,
         style,
-        open: false
+        isCom: false
       })
     state.nextTimerId++;
     console.log(state.timers);
-    }
+    },
+    //既存のタイマーのisComを編集する
+    putPrivate(state, {id}) {
+      state.timers[id].isCom = false;
+      console.log(state.timers[id]);
+    },
+    putCom(state, {id}) {
+      state.timers[id].isCom = true;
+      console.log(state.timers[id]);
+    },
   }
 })
 export default store

@@ -67,36 +67,36 @@ export default {
 }
 @keyframes cutting1 {
   0% {
-    transform: rotateZ(-45deg);
+    transform: rotateZ(-45deg)translateX(-10px);
   }
   25% {
-    transform: rotateZ(0deg);
+    transform: rotateZ(0deg)translateX(-10px);
   }
   50% {
-    transform: rotateZ(-45deg);
+    transform: rotateZ(-45deg)translateX(-20px);
   }
   75% {
-    transform: rotateZ(0deg);
+    transform: rotateZ(0deg)translateX(-20px);
   }
   100% {
-    transform: rotateZ(-45deg);
+    transform: rotateZ(-45deg)translateX(0px);
   }
 }
 @keyframes cutting2 {
   0% {
-    transform: rotateZ(45deg);
+    transform: rotateZ(45deg)translateX(-10px);
   }
   25% {
-    transform: rotateZ(0deg);
+    transform: rotateZ(0deg)translateX(-10px);
   }
   50% {
-    transform: rotateZ(45deg);
+    transform: rotateZ(45deg)translateX(-20px);
   }
   75% {
-    transform: rotateZ(0deg);
+    transform: rotateZ(0deg)translateX(-20px);;
   }
   100% {
-    transform: rotateZ(45deg);
+    transform: rotateZ(45deg)translateX(0px);
   }
 }
 </style>

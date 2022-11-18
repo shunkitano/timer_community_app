@@ -171,7 +171,7 @@ export default {
       }
       this.y = yy;
     },
-    makeTimer() {
+    makeTimer() { //新しくタイマーを作成する
       if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "Color" || this.selects[2].name === "Sound" || !this.isCalc) {
         this.isEmpty = true;
       } else {
@@ -187,7 +187,6 @@ export default {
       }
     },
     clear() {
-
       this.text = '';
       this.time = '';
       this.selects[0].name = "Style";
