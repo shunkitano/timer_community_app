@@ -58,7 +58,7 @@ export default {
           const errorMessage = error.errorMessage;
           console.log('errorCode: ' + errorCode);
           console.log('errorMessage: ' + errorMessage);
-          alert('認証失敗')
+          alert('認証失敗') //アラートやめたい
         })
     },
     clear() {

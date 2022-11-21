@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="new__timer">
-      <input type="button" @touchstart="makeTimer" @touchstart="makeTimerFirestorage" value="Make!">
+      <input type="button" @touchstart="makeTimer" value="Make!">
       <input type="button" @touchstart="clear" value="Clear?">
     </div>
     <div class="footer">
@@ -39,8 +39,6 @@ import ColorChange from '@/components/parts_comp/ColorChange.vue';
 import SoundChange from '@/components/parts_comp/SoundChange.vue';
 import StyleChange from '@/components/parts_comp/StyleChange.vue';
 import NormalButton from '@/components/parts_comp/NormalButton.vue';
-import { db, storage } from '@/firebase/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 export default {
   components: {
@@ -173,23 +171,35 @@ export default {
       }
       this.y = yy;
     },
-    makeTimer() { //新しくタイマーを作成する
+    // makeTimer() { //新しくタイマーを作成する
+    //   if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "Color" || this.selects[2].name === "Sound" || !this.isCalc) {
+    //     this.isEmpty = true;
+    //   } else {
+    //     this.$store.commit('makeTimer', {
+    //     name: this.text,
+    //     time: this.t*3600 + this.m*60 + this.s*1, //this.sだけだと文字列として処理された。そのため、*1をつけてみた。結果、数値として扱ってくれた
+    //     style: this.selects[0].name,
+    //     color: this.styleObject['background-color'],
+    //     sound: this.selects[2].name,
+    //     })
+    //     this.$router.push('/user');
+    //     this.clear();
+    //   }
+    // },
+    makeTimer() {
       if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "Color" || this.selects[2].name === "Sound" || !this.isCalc) {
         this.isEmpty = true;
       } else {
-        this.$store.commit('makeTimer', {
-        name: this.text,
-        time: this.t*3600 + this.m*60 + this.s*1, //this.sだけだと文字列として処理された。そのため、*1をつけてみた。結果、数値として扱ってくれた
-        style: this.selects[0].name,
-        color: this.styleObject['background-color'],
-        sound: this.selects[2].name,
-        })
-        this.$router.push('/user');
+        const text = this.text;
+        const style = this.selects[0].name;//style
+        const color = this.styleObject['background-color'];//color
+        const sound = this.selects[2].name;//sound
+        const time = this.t*3600 + this.m*60 + this.s*1;//時間
+        this.$store.commit('makeTimer', {text, style, color, sound, time}
+        )
         this.clear();
+        //this.$router.push('/user');
       }
-    },
-    makeTimerFirestorage() {
-      
     },
     clear() {
       this.text = '';
@@ -295,28 +305,6 @@ input[type="text"],[type="number"] {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-.number::before {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  bottom: 0;
-  margin: auto;
-  content: '';
-  width: 100%;
-  height: 1px;
-  background-color: rgba(0, 0, 0, 1);
-}
-.number::after {
-  position: absolute;
-  top: 0;
-  left: 100%;
-  bottom: 0;
-  margin: auto;
-  content: '';
-  width: 100%;
-  height: 1px;
-  background-color: rgba(0, 0, 0, 1);
 }
 .number p {
   font-size: 1.2rem;

@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { db } from '@/firebase/firebase'
+import { addDoc, collection, getDocs, query, serverTimestamp } from 'firebase/firestore'
 
 Vue.use(Vuex)
-
 const store = new Vuex.Store({
   state: {
     timers: [ //ここに作成したタイマーが入る
@@ -24,8 +25,9 @@ const store = new Vuex.Store({
         time: 3661,
         isCom: false
       }
-    ], 
-    nextTimerId: 2,
+    ],
+    fetchTimers: [], 
+    nextTimerId: 1,
     colors: [
       {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
       {id: 2, name: 'green', color: 'rgba(50, 180, 100, 0.8)'},
@@ -50,18 +52,39 @@ const store = new Vuex.Store({
       state.currentTimerId = id;
     },
     //新しいtimerを作る
-    makeTimer(state, {name, time, color, sound, style}) {
-      state.timers.push({
-        id: state.nextTimerId,
-        name,
-        time,
-        color,
-        sound,
-        style,
-        isCom: false
+    // makeTimer(state, {name, time, color, sound, style}) {
+    //   state.timers.push({
+    //     id: state.nextTimerId,
+    //     name,
+    //     time,
+    //     color,
+    //     sound,
+    //     style,
+    //     isCom: false
+    //   })
+    // state.nextTimerId++;
+    // console.log(state.timers);
+    // },
+    //firebaseにタイマーを追加する
+    makeTimer(state, {text, style, color, sound, time}) {
+    addDoc(collection(db, 'timers'), {
+      createdAt: serverTimestamp(),
+      userId: 1,
+      timerId: state.nextTimerId,
+      name: text,
+      style: style,
+      color: color,
+      sound: sound,
+      time: time,
+      isCom: false
       })
-    state.nextTimerId++;
-    console.log(state.timers);
+      .then(doc => {
+        console.log(`DBへのデータ追加成功 (${doc.id})`);
+      })
+      .catch(error => {
+        console.log(`DBへのデータ追加失敗 (${error})`);
+      })
+      state.nextTimerId++;
     },
     //既存のタイマーのisComを編集する
     putPrivate(state, {id}) {
@@ -72,6 +95,25 @@ const store = new Vuex.Store({
       state.timers[id].isCom = true;
       console.log(state.timers[id]);
     },
+    receiveItems(state, datas) {
+      state.fetchTimers = datas;
+    }
+  },
+  getters: {
+    
+  },
+  actions: {
+    async fetchDatas({commit}) {
+      const q = query(collection(db, 'timers'));
+      const timersDoc = await getDocs(q);
+      console.log(timersDoc);
+      const getTimers = [];
+      timersDoc.forEach((doc) => {
+        // console.log(doc.id, "=>", doc.data());
+        getTimers.push(doc.data());
+      })
+      commit('receiveItems', getTimers);
+    }
   }
 })
 export default store

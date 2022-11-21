@@ -6,9 +6,9 @@
       <CommunityButton class="comBtn"></CommunityButton>
     </div>
     <ul id="timers">
-      <li v-for="timer in timers" :key="timer.id">
+      <li v-for="timer in lineUpTimers" :key="timer.timerId">
         <div class="timer nico">
-          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(timer.id)">
+          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(timer.timerId)">
             <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
             <p>:</p>
             <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
@@ -16,12 +16,12 @@
             <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
           <p class="timer__name">{{ timer.name }}</p>
-          <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.id"></OpenCloseButton>
+          <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.timerId"></OpenCloseButton>
         </div>
 
         <transition name="fade">
-          <div class="edit" v-if="isEdit && isId === timer.id">
-            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childId="timer.id"></WitchButton>
+          <div class="edit" v-if="isEdit && isId === timer.timerId">
+            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childId="timer.timerId"></WitchButton>
             <CutButton></CutButton>
           </div><!--edit-->
         </transition>
@@ -50,14 +50,21 @@ export default {
       userName: 'User',
       isSetting: false,
       isTrue: true,
-      isEdit: false,
-
+      isEdit: false
     }
   },
   mounted() {
-    return this.timers = this.$store.state.timers;
+    this.$store.dispatch('fetchDatas');
+  },
+  computed: {
+    lineUpTimers() {
+      return this.$store.state.fetchTimers;
+    }
   },
   methods: {
+    // createTimerRoom() {
+    //   this.timers = this.$store.state.fetchTimers;
+    // },
     toUserSetting() {
       this.isSetting = !this.isSetting;
     },
@@ -100,6 +107,9 @@ export default {
       this.$store.commit('putCom', {
         id: childId,
       })
+    },
+    fetchDatas() {
+      this.$store.dispatch('fetchDatas');
     }
   }
 }

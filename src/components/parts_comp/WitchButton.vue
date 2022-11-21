@@ -13,7 +13,7 @@ export default {
     }
   },
   mounted() {
-    return this.isThis = this.$store.state.timers[this.childId].isCom;
+    return this.isThis = this.$store.state.fetchTimers[this.childId].isCom;
   },
   methods: {
     selectBtn1() {

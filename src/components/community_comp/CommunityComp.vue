@@ -71,19 +71,33 @@ export default {
   data() {
     return {
       userName: 'Who',
-      communityTimers: [],
+      // communityTimers: [],
       isSelect: false,
       selectStyle: '',
       selectTimerName: 'timer name'
     }
   },
   mounted() {
-    const timers = this.$store.state.timers;
-    return timers.forEach((e) => { //isComがtrueのtimerを取り出して配列にpushする
-      if(e.isCom === true) {
-        this.communityTimers.push(e);
-      }
-    })
+    this.$store.dispatch('fetchDatas');
+    // const timers = this.$store.state.timers;
+    // return timers.forEach((e) => { //isComがtrueのtimerを取り出して配列にpushする
+    //   if(e.isCom === true) {
+    //     this.communityTimers.push(e);
+    //   }
+    // })
+  },
+  computed: {
+    communityTimers() {
+      // return this.$store.state.fetchTimers;
+      const timers = this.$store.state.fetchTimers;
+      
+      return timers.forEach((e) => {
+        if(e.isCom === true) {
+          console.log(e);
+          // this.communityTimers.push(e);
+        }
+      })
+    }
   },
   methods: {
     selectTimer(id) {
