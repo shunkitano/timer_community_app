@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="new__timer">
-      <input type="button" @touchstart="makeTimer" value="Make!">
+      <input type="button" @touchstart="makeTimer" @touchstart="makeTimerFirestorage" value="Make!">
       <input type="button" @touchstart="clear" value="Clear?">
     </div>
     <div class="footer">
@@ -39,6 +39,8 @@ import ColorChange from '@/components/parts_comp/ColorChange.vue';
 import SoundChange from '@/components/parts_comp/SoundChange.vue';
 import StyleChange from '@/components/parts_comp/StyleChange.vue';
 import NormalButton from '@/components/parts_comp/NormalButton.vue';
+import { db, storage } from '@/firebase/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 export default {
   components: {
@@ -186,6 +188,9 @@ export default {
         this.clear();
       }
     },
+    makeTimerFirestorage() {
+      
+    },
     clear() {
       this.text = '';
       this.time = '';
@@ -236,7 +241,7 @@ input[type="text"],[type="number"] {
 .setting input {
   font-size: 1.2rem;
   height: 50px;
-  margin-top: 1.5rem;
+  margin: 0.5rem 0 0.5rem;
   border-radius: 40px;
   color: rgba(0, 0, 0, 1);
   text-shadow: 1px 0px 2px rgba(250, 250, 250, 1);
@@ -285,15 +290,38 @@ input[type="text"],[type="number"] {
 }
 /* Number */
 .number {
+  margin: 0.5rem 0 0.5rem;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.number::before {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  bottom: 0;
+  margin: auto;
+  content: '';
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 1);
+}
+.number::after {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  bottom: 0;
+  margin: auto;
+  content: '';
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 1);
 }
 .number p {
   font-size: 1.2rem;
   width: 100%;
   height: 50px;
-  margin-top: 1.5rem;
   border-radius: 40px;
   color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.7);

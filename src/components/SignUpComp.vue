@@ -53,19 +53,18 @@ export default {
           const user = response.user;
           console.log('create user success: ' + user);
           alert('作成成功');
-          this.close()
+          this.close();
         })
         .catch((error) => {
-          const errorCode = error.code
-          const errorMessage = error.message
-          console.log('errorCode: '+ errorCode )
-          console.log('errorMessage: '+ errorMessage)
-          alert('作成失敗')
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log('errorCode: '+ errorCode );
+          console.log('errorMessage: '+ errorMessage);
+          alert('作成失敗');
         })
-
     },
     clear() {
-      this.email = '';
+      this.email = ''; //条件付けをいれる
       this.password = '';
     }
   }

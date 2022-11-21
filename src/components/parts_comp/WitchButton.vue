@@ -36,6 +36,7 @@ export default {
 <style scoped>
 .witch {
   display: flex;
+  align-items: center;
   gap: 0.25rem;
   width: 100%;
   height: 100%;
@@ -47,6 +48,7 @@ export default {
   border: none;
   border-radius: 30px;
   font-weight: bold;
+  padding: 0.5rem;
   background-color: rgba(230, 100, 100, 0.8);
   box-shadow: inset 0px 3px 4px rgba(20, 20, 20, 1);
   transition: 0.5s;

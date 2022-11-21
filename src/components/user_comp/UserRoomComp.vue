@@ -1,14 +1,14 @@
 <template>
   <div class="user__room">
-    <input type="button" class="logout nico" value="Logout" @touchstart="timersTest">
-    <CommunityButton class="comBtn"></CommunityButton>
     <div class="header">
+      <input type="button" class="logout nico" value="Logout" @touchstart="timersTest">
       <h2 class="nico">{{ userName }}</h2>
+      <CommunityButton class="comBtn"></CommunityButton>
     </div>
     <ul id="timers">
       <li v-for="timer in timers" :key="timer.id">
-        <div class="nico" @touchstart="selectTimer(timer.id)">
-          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
+        <div class="timer nico">
+          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(timer.id)">
             <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
             <p>:</p>
             <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
@@ -16,14 +16,15 @@
             <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
           <p class="timer__name">{{ timer.name }}</p>
+          <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.id"></OpenCloseButton>
         </div>
+
         <transition name="fade">
           <div class="edit" v-if="isEdit && isId === timer.id">
             <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childId="timer.id"></WitchButton>
             <CutButton></CutButton>
           </div><!--edit-->
         </transition>
-        <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.id"></OpenCloseButton>
       </li>
     </ul><!--timers-->
   </div>
@@ -108,10 +109,10 @@ export default {
 .user__room {
   position: relative;
   width: 100%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: rgb(230, 230, 230);
 }
 .user__room .comBtn {
   position: absolute;
@@ -142,6 +143,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 .header h2 {
   font-size: 1rem;
@@ -156,39 +158,40 @@ export default {
 }
 /* Timers */
 #timers {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-top: 5rem;
+  padding-top: 5rem;
+  padding-bottom: 2rem;
 }
 #timers li {
-  width:80%;
-  position: relative;
+  list-style: none;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem auto 0;
+}
+.timer {
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  text-align: center;
-  list-style: none;
-  margin: 1rem auto 0;
-  overflow: hidden;
+  justify-content: space-between;
   background-color: rgba(20, 20, 20, 0.1);
   border-radius: 10px;
 }
-#timers li div {
+.timer__time {
   display: flex;
   align-items: center;
-}
-.timer__box {
-  display: flex;
   justify-content: center;
-  align-items: center;
-  text-align: center;
   width: 80px;
   height: 80px;
+  margin-right: 0.5rem;
   border: solid 0.5px rgba(20, 20, 20, 0.8);
 }
-.timer__box p {
+.timer__time p {
   font-size: 14px;
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
@@ -196,9 +199,15 @@ export default {
 }
 .timer__name {
   padding: 1rem;
-  margin-left: 1rem;
   background-color: rgba(250, 250, 250, 0.8);
   border-radius: 20px;
+  width: 100%;
+  overflow: scroll;
+}
+.open__close {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding-top: 20px;
 }
 .digital {
   border-radius: 10px;
@@ -226,42 +235,23 @@ export default {
   z-index: -1;
 }
 .edit {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  margin: auto;
-  margin-left: 0.25rem;
   display: flex;
-  justify-content: space-between;
-  width: 80%;
-  height: 90%;
-  background-color: rgba(250, 250, 250, 0.5);
-  border-radius: 30px;
-  backdrop-filter: blur(1px);
+  align-items: center;
+  width: 100%;
   padding: 0.5rem;
 }
 .fade-enter-active {
-  animation: comeOut 0.5s;
+  animation: comeOut 0.5s ease;
 }
 .fade-leave-active {
-  animation: comeOut 0.5s reverse;
+  animation: comeOut 0.5s ease reverse;
 }
 @keyframes comeOut {
   0% {
     opacity: 0;
-    transform: translateX(-100vw);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
   }
-}
-.open__close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
 }
 </style>

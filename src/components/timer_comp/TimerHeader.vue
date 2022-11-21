@@ -63,6 +63,8 @@ export default {
   justify-content: space-between;
   width: 100%;
   height: 100vh;
+  background-color: rgba(250, 250, 250, 0.1);
+  backdrop-filter: blur(1px);
 }
 .page__info button:nth-child(2) {
   width: 40%;
@@ -96,8 +98,8 @@ export default {
   width: 100%;
   height: 90vh;
   border: none;
+  z-index: 0;
   background-color: rgba(0, 0, 0, 0);
-  z-index: 100;
 }
 .hamburger-enter-active {
   animation: expand 0.5s ease;

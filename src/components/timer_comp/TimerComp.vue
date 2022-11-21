@@ -3,10 +3,10 @@
     <transition :name='anim' @close='anim = $event'>
       <TimerSettingComp  v-if="isMakeTimer" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" v-else>
-        <TimerHeader @makeTimer="makeTimer"></TimerHeader>
-        <TimerDigital v-if="style === 'digital'" :isTms="isTms"></TimerDigital>
-        <TimerClasic v-if="style === 'clasic'"></TimerClasic>
-        <TimerCircle v-if="style === 'circle'"></TimerCircle>
+        <TimerHeader @makeTimer="makeTimer" class="header"></TimerHeader>
+        <TimerDigital v-if="style === 'digital'" :isTms="isTms" class="timer__comp"></TimerDigital>
+        <TimerClasic v-if="style === 'clasic'" class="timer__comp"></TimerClasic>
+        <TimerCircle v-if="style === 'circle'" class="timer__comp"></TimerCircle>
         <TimerController class="controller" @select-tms="selectTms"></TimerController>
       </div><!--timer-->
     </transition>
@@ -71,7 +71,8 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  overflow: hidden;
   /* background-color: rgb(217, 217, 217); */
   z-index: 100;
 } 
@@ -115,9 +116,16 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
+.header {
+  z-index: 1;
+}
+.timer__comp {
+  z-index: 0;
+}
 .controller {
   position: fixed;
   bottom: 0;
   right: 0;
+  z-index: 0;
 }
 </style>

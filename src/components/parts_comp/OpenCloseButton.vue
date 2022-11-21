@@ -52,69 +52,85 @@ p {
 .close p::before {
   content: '';
   position: absolute;
-  top: 10px;
-  left: 0;
+  bottom: 10px;
+  left: -4px;
   background-color: rgb(230, 230, 230);
-  width: 40px;
+  width: 30px;
   height: 5px;
   border-radius: 2px;
+  transform: rotateZ(45deg);
+  animation: push3 0.5s;
 }
 .close p::after {
   content: '';
   position: absolute;
   bottom: 10px;
-  left: 0;
+  left: 14px;
   background-color: rgb(230, 230, 230);
-  width: 40px;
+  width: 30px;
   height: 5px;
   border-radius: 2px;
+  transform: rotateZ(-45deg);
+  animation: push4 0.5s;
 }
 .open p::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: rgba(240, 10, 10, 1);
-  width: 40px;
-  height: 4px;
+  bottom: 10px;
+  left: -4px;
+  background-color: rgb(230, 230, 230);
+  width: 30px;
+  height: 5px;
   border-radius: 2px;
-  animation: turn 0.5s ease;
-  transform: rotateZ(45deg);
+  transform: rotateZ(-45deg);
+  animation: push1 0.5s;
 }
 .open p::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: rgba(240, 10, 10, 1);
-  width: 40px;
-  height: 4px;
+  bottom: 10px;
+  left: 14px;
+  background-color: rgb(230, 230, 230);
+  width: 30px;
+  height: 5px;
   border-radius: 2px;
-  animation: reverseTurn 0.5s ease;
-  transform: rotateZ(-45deg);
+  transform: rotateZ(45deg);
+  animation: push2 0.5s;
 }
-@keyframes turn {
+@keyframes push1 {
   0% {
-    background-color: rgb(230, 230, 230);
-    transform: rotateZ(0deg);
+    transform: rotateZ(45deg)translate(6px, 8px);
   }
   100% {
-    transform: rotateZ(45deg);
+    transform: rotateZ(45deg)translate(0px);
+    opacity: 0;
   }
 }
-@keyframes reverseTurn {
+@keyframes push2 {
   0% {
-    background-color: rgb(230, 230, 230);
-    transform: rotateZ(0deg);
+    transform: rotateZ(-45deg)translate(-6px, 8px);
   }
   100% {
-    transform: rotateZ(-45deg);
+    transform: rotateZ(-45deg)translate(0px);
+    opacity: 0;
+  }
+}
+@keyframes push3 {
+  0% {
+    transform: rotateZ(-45deg)translate(6px, -8px);
+  }
+  100% {
+    transform: rotateZ(-45deg)translate(0px);
+    opacity: 0;
+  }
+}
+@keyframes push4 {
+  0% {
+    transform: rotateZ(45deg)translate(-6px, -8px);
+  }
+  100% {
+    transform: rotateZ(45deg)translate(0px);
+    opacity: 0;
   }
 }
 </style>
