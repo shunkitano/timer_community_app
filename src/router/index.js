@@ -97,6 +97,11 @@ const routes = [
     name: 'sound',
     component: () => import(/* webpackChunkName: "about" */ '../components/sounds/SoundBox.vue')
   },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import(/* webpackChunkName: "about" */ '../components/parts_comp/TestTest.vue')
+  },
 
 ]
 

@@ -22,7 +22,9 @@
 
 <script>
 import firebaseApp from '@/firebase/firebase.js';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { db } from '@firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, addDoc, collection, serverTimestamp} from 'firebase/auth';
+
 
 const auth = getAuth(firebaseApp);
 
@@ -36,6 +38,7 @@ export default {
       isClose: false,
       time: '',
       count: 1,
+      userId: null
     }
   },
   methods: {
@@ -47,12 +50,15 @@ export default {
     login() {
       this.$emit("my-click", true);
     },
-    createUser() {
+    createUser() { //user登録
       createUserWithEmailAndPassword(auth, this.email, this.password)
         .then((response) => {
-          const user = response.user;
-          console.log('create user success: ' + user);
+          const user = response;
+          console.log(user.user.uid);
+          this.userId = user.user.uid;
+          console.log('create user success: ' + user.user.uid);
           alert('作成成功');
+          this.pushUserData();
           this.close();
         })
         .catch((error) => {
@@ -62,6 +68,13 @@ export default {
           console.log('errorMessage: '+ errorMessage);
           alert('作成失敗');
         })
+    },
+    async pushUserData() {
+      await addDoc(collection(db, 'users'), {
+        createdAt:serverTimestamp(),
+        userId: this.userId,
+        name:this.name,
+      })
     },
     clear() {
       this.email = ''; //条件付けをいれる

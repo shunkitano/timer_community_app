@@ -225,7 +225,6 @@
 <script>
 import * as Tone from 'tone'; // ここで読み込む。
 
-
 export default {
   props: ["isSelect"],
   data() {
@@ -246,8 +245,15 @@ export default {
     },
     playSound(index) {
       if(index === 0) {
-        const synth = new Tone.Synth().toDestination();
-        synth.triggerAttackRelease("A4", "8n");
+        // const synth = new Tone.Synth().toDestination();
+        // synth.triggerAttackRelease("A4", "8n");
+        const freeverb = new Tone.Freeverb().toDestination();
+        freeverb.dampening = 3000;
+        const plucky = new Tone.PluckSynth().connect(freeverb);
+        plucky.triggerAttack("G4", "+0.2");
+        plucky.triggerAttack("E5", "+0.4");
+        plucky.triggerAttack("D3", "+0.6");
+        plucky.triggerAttack("A2", "+0.8");
       }
       if(index === 1) {
         const synth2 = new Tone.PolySynth().toDestination();

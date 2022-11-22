@@ -261,8 +261,8 @@ input[type="text"],[type="number"] {
 .setting>input:first-child {
   text-align: center;
 }
-.setting input:focus {
-  animation: neonline 1s ease;
+.setting input:active {
+  animation: neonline 2s ease;
 }
 @keyframes neonline {
   25% {

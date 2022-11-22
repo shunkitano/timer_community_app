@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { db } from '@/firebase/firebase'
-import { addDoc, updateDoc, collection, getDocs, query, serverTimestamp } from 'firebase/firestore'
+import { addDoc, serverTimestamp, updateDoc, collection, getDocs, query,  orderBy } from 'firebase/firestore'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
-    timers: [ 
+    timers: [ //作業用なのであとで消す
       {
         color: 'rgba(20, 20, 20, 0.8)',
         id: 0,
@@ -26,9 +26,9 @@ const store = new Vuex.Store({
         isCom: false
       }
     ],
-    fetchTimers: [], //ここに作成したタイマーが入る
-    communityTimers: [],
-    nextTimerId: 1,
+    fetchTimers: [], //ここにユーザールームのタイマーが入る
+    communityTimers: [], //ここにコミュニティのタイマーが入る
+    nextTimerId: 0, //ユーザーが作成するたびに振られるタイマーのID
     colors: [
       {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
       {id: 2, name: 'green', color: 'rgba(50, 180, 100, 0.8)'},
@@ -46,43 +46,51 @@ const store = new Vuex.Store({
       {id: 2, name: 'clasic'},
       {id: 3, name: 'circle'}
     ],
-    currentTimerId: 0, //TimerComp.vueに表示されるタイマーのIDが入る
+    currentTimerId: 0, //TimerComp.vueに表示されるタイマーのIDが入る（ユーザーが使用するタイマー）
   },
   mutations: {
     selectTimer(state, {id}) {
       state.currentTimerId = id;
     },
-    //firebaseにタイマーを追加する
-    makeTimer(state, {text, style, color, sound, time}) {
-    addDoc(collection(db, 'timers'), {
-      createdAt: serverTimestamp(),
-      userId: 1,
-      timerId: state.nextTimerId,
-      name: text,
-      style: style,
-      color: color,
-      sound: sound,
-      time: time,
-      isCom: false
+    async makeTimer(state, {text, style, color, sound, time}) { //firebaseにタイマーを追加する
+      const q = query(collection(db, 'timers'));
+      const timersDoc = await getDocs(q);
+      let setid = 0;
+      timersDoc.docs.forEach((doc) => { //各ユーザーの現在のタイマー数の中で最も大きいIDを取得
+        const getid = doc.data().timerId;
+        if (getid > setid) {
+          setid = getid;
+        }
       })
-      .then(doc => {
-        console.log(`DBへのデータ追加成功 (${doc.id})`);
-      })
-      .catch(error => {
-        console.log(`DBへのデータ追加失敗 (${error})`);
-      })
-      state.nextTimerId++;
+      console.log("setid:",setid);
+      state.nextTimerId = setid; 
+      state.nextTimerId++; //最新のIDを作成
+      addDoc(collection(db, 'timers'), {
+        createdAt: serverTimestamp(),
+        timerId: state.nextTimerId,
+        userId: 1,
+        name: text,
+        style: style,
+        color: color,
+        sound: sound,
+        time: time,
+        isCom: false
+        })
+        .then(doc => {
+          console.log(`DBへのデータ追加成功 (${doc})`);
+        })
+        .catch(error => {
+          console.log(`DBへのデータ追加失敗 (${error})`);
+        })
     },
-    //既存のタイマーのisComを編集する
-    async putPrivate({id}) {
-      const q = query(collection(db, `timers[${id}]`));
+    async putPrivate() { //タイマーをプライベイトに設定する
+      const q = query(collection(db, 'timers'));
       const updateTimer = await updateDoc(q, {
         isCom: false
-      });
-      // state.fetchTimers[id].isCom = false;
+      }); // state.fetchTimers[id].isCom = false;
       console.log(updateTimer);
     },
-    putCom(state, {id}) {
+    putCom(state, {id}) { //タイマーをコミュニティに公開する
       state.fetchTimers[id].isCom = true;
       console.log(state.fetchTimers[id]);
     },
@@ -101,8 +109,8 @@ const store = new Vuex.Store({
     
   },
   actions: {
-    async fetchDatas({commit}) {
-      const q = query(collection(db, 'timers'));
+    async fetchDatas({commit}) { //各ユーザーの部屋に入るタイマーを取得する
+      const q = query(collection(db, 'timers'), orderBy('createdAt'));//作成された時間でタイマーを並べる為にorderByを入れる
       const timersDoc = await getDocs(q);
       console.log(timersDoc);
       const getTimers = [];
@@ -111,13 +119,13 @@ const store = new Vuex.Store({
       })
       commit('receiveItems', getTimers);
     },
-    async fetchCommunityDatas({commit}) {
-      const q = query(collection(db, 'timers'));
+    async fetchCommunityDatas({commit}) { //コミュニティに入るタイマーを取得する
+      const q = query(collection(db, 'timers'), orderBy('createdAt'));
       const timersDoc = await getDocs(q);
       console.log(timersDoc);
       const getTimers = [];
       timersDoc.forEach((doc) => {
-        if(doc.data().isCom === true) {
+        if(doc.data().isCom === true) {d
           getTimers.push(doc.data());
         }
       })
