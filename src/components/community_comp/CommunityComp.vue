@@ -78,7 +78,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('fetchDatas');
+    this.$store.dispatch('fetchCommunityDatas');
     // const timers = this.$store.state.timers;
     // return timers.forEach((e) => { //isComがtrueのtimerを取り出して配列にpushする
     //   if(e.isCom === true) {
@@ -89,14 +89,8 @@ export default {
   computed: {
     communityTimers() {
       // return this.$store.state.fetchTimers;
-      const timers = this.$store.state.fetchTimers;
+      return this.$store.state.communityTimers;
       
-      return timers.forEach((e) => {
-        if(e.isCom === true) {
-          console.log(e);
-          // this.communityTimers.push(e);
-        }
-      })
     }
   },
   methods: {

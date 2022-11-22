@@ -76,18 +76,7 @@ export default {
       } 
     },
     timersTest() {
-      // const array = this.$store.state.timers;
-      // const newArray = array.filter(e => e.isCom === true);
-      // console.log(array);
-      // console.log(newArray);
-      // newArray[1].isCom = true;
-      // console.log(newArray);
-
-      const array = this.$store.state.timers;
-      const array2 = array;
-      console.log(array2[1]);
-      array2[1].isCom = true;
-      console.log(array2[1]);
+      console.log(this.lineUpTimers.at(0).timerId);
     },
     openClose(isOpen, id) {
       this.isEdit = isOpen;

@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { db } from '@/firebase/firebase'
-import { addDoc, collection, getDocs, query, serverTimestamp } from 'firebase/firestore'
+import { addDoc, updateDoc, collection, getDocs, query, serverTimestamp } from 'firebase/firestore'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
-    timers: [ //ここに作成したタイマーが入る
+    timers: [ 
       {
         color: 'rgba(20, 20, 20, 0.8)',
         id: 0,
@@ -26,7 +26,8 @@ const store = new Vuex.Store({
         isCom: false
       }
     ],
-    fetchTimers: [], 
+    fetchTimers: [], //ここに作成したタイマーが入る
+    communityTimers: [],
     nextTimerId: 1,
     colors: [
       {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
@@ -51,20 +52,6 @@ const store = new Vuex.Store({
     selectTimer(state, {id}) {
       state.currentTimerId = id;
     },
-    //新しいtimerを作る
-    // makeTimer(state, {name, time, color, sound, style}) {
-    //   state.timers.push({
-    //     id: state.nextTimerId,
-    //     name,
-    //     time,
-    //     color,
-    //     sound,
-    //     style,
-    //     isCom: false
-    //   })
-    // state.nextTimerId++;
-    // console.log(state.timers);
-    // },
     //firebaseにタイマーを追加する
     makeTimer(state, {text, style, color, sound, time}) {
     addDoc(collection(db, 'timers'), {
@@ -87,16 +74,27 @@ const store = new Vuex.Store({
       state.nextTimerId++;
     },
     //既存のタイマーのisComを編集する
-    putPrivate(state, {id}) {
-      state.timers[id].isCom = false;
-      console.log(state.timers[id]);
+    async putPrivate({id}) {
+      const q = query(collection(db, `timers[${id}]`));
+      const updateTimer = await updateDoc(q, {
+        isCom: false
+      });
+      // state.fetchTimers[id].isCom = false;
+      console.log(updateTimer);
     },
     putCom(state, {id}) {
-      state.timers[id].isCom = true;
-      console.log(state.timers[id]);
+      state.fetchTimers[id].isCom = true;
+      console.log(state.fetchTimers[id]);
     },
     receiveItems(state, datas) {
       state.fetchTimers = datas;
+      state.nextTimerId = state.fetchTimers.at(0).timerId + 1;
+      // console.log(state.nextTimerId);
+    },
+    receiveCommunityItems(state, datas) {
+      state.communityTimers = datas;
+      // state.nextTimerId = state.communityTimers.at(0).timerId + 1;
+      // console.log(state.nextTimerId);
     }
   },
   getters: {
@@ -109,10 +107,21 @@ const store = new Vuex.Store({
       console.log(timersDoc);
       const getTimers = [];
       timersDoc.forEach((doc) => {
-        // console.log(doc.id, "=>", doc.data());
         getTimers.push(doc.data());
       })
       commit('receiveItems', getTimers);
+    },
+    async fetchCommunityDatas({commit}) {
+      const q = query(collection(db, 'timers'));
+      const timersDoc = await getDocs(q);
+      console.log(timersDoc);
+      const getTimers = [];
+      timersDoc.forEach((doc) => {
+        if(doc.data().isCom === true) {
+          getTimers.push(doc.data());
+        }
+      })
+      commit('receiveCommunityItems', getTimers);
     }
   }
 })
