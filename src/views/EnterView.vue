@@ -44,26 +44,37 @@ export default {
       time:'',
       count: 4,
       isShow: false,
-      isSignUp: false,
+      isSignUp: true,
       isClose: true
     }
+  },
+  async created() {
+    await this.$store.dispatch('fetchUserId');
   },
   mounted() {
     this.isShow = true;
     this.time = setInterval(() => {this.enterPage()}, 1000);
   },
   methods: {
-    enterPage() {
+    async enterPage() {
       if(this.count>0) {
         this.count--;
         console.log(this.count);
       } else if(this.count === 0) {
         clearInterval(this.time);
-        this.isClose = false;
+        if(this.$store.state.uid === null) {
+          this.isClose = false;
+        } else {
+          this.$store.dispatch('fetchDatas');
+          this.$store.dispatch('fetchCommunityDatas');
+          this.$router.push('top');
+        }
       }
     },
-    closeBox(isClose) {
+    async closeBox(isClose) {
       this.isClose = isClose;
+      await this.$store.dispatch('fetchDatas');
+      this.$store.dispatch('fetchCommunityDatas');
       this.$router.push('/top');
     }
   }

@@ -35,33 +35,26 @@ export default {
       isMakeTimer: false, //タイマー作成ページに飛ぶ
       anim: '',
       isTms: '2',
-      id: null,
-      style: '',
+      // id: null,
+      // style: '',
       time: '',
       count: 2
     }
   },
-  created() {
-    this.$store.dispatch('fetchDatas');
+  computed: {
+    id() {
+      return this.$store.state.currentTimerId;
+    },
+    style() {
+      return this.$store.state.fetchTimers[this.id].style; 
+    }
   },
-  mounted() {
-    this.mountedIdandStyle();
-    },
   methods: {
-    mountedIdandStyle() {
-      this.time = setInterval(() => {
-        this.countDown();
-      },1000);
-    },
-    countDown() {
-      if(this.count > 0) {
-        this.count--;
-      } else if(this.count === 0) {
-        clearInterval(this.time);
-        this.id = this.$store.state.currentTimerId;
-        this.style = this.$store.state.fetchTimers[this.id].style; 
-      }
-    },
+    // createdIdandStyle() {
+      
+    //   this.id = this.$store.state.currentTimerId;
+    //   this.style = this.$store.state.fetchTimers[this.id].style; 
+    // },
     makeTimer(anim, isMakeTimer) {
       this.anim = anim;
       this.isMakeTimer = isMakeTimer;

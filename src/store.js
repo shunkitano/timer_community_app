@@ -31,7 +31,7 @@ const store = new Vuex.Store({
     fetchTimersIds: [],
     communityTimers: [], //ここにコミュニティのタイマーが入る
     nextTimerId: 0, //ユーザーが作成するたびに振られるタイマーのID
-    uid: '',
+    uid: null,
     colors: [
       {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
       {id: 2, name: 'green', color: 'rgba(50, 180, 100, 0.8)'},
@@ -118,47 +118,56 @@ const store = new Vuex.Store({
     },
     receiveCommunityItems(state, datas) {
       state.communityTimers = datas;
+      console.log(state.communityTimers)
     }
   },
   getters: {
     
   },
   actions: {
-    async fetchDatas({commit}) { //各ユーザーの部屋に入るタイマーを取得する
-      const auth = getAuth();
+    async fetchUserId({commit}) {
+      const auth = await getAuth();
       onAuthStateChanged(auth, (user) => {
         if(user) {
-          const uid = user.uid ;
+          const uid = user.uid;
+          console.log(uid);
           commit('receiveUid', uid);
-        } else {
+        } else { 
           console.log("user not exist!");
+          const uid = null;
+          console.log(uid);
+          commit('receiveUid', uid);
         }
       })
-      const q = query(collection(db, 'timers'),where('userId', '==', `"`+`${uid}`+`"`),orderBy('createdAt'));//作成された時間でタイマーを並べる為にorderByを入れる
-      const timersDoc = await getDocs(q);
+    },
+    async fetchDatas({commit, state}) { //各ユーザーの部屋に入るタイマーを取得する 
+      console.log("userId:",state.uid);
       const getTimers = [];
       const getTimersIds = [];
-      console.log(timersDoc);
+      const q = query(collection(db, 'timers'),where('userId', '==', state.uid),orderBy('createdAt'));//作成された時間でタイマーを並べる為にorderByを入れる
+      const timersDoc = await getDocs(q);
+      console.log("userTimers",timersDoc);
       timersDoc.forEach((doc) => {
         getTimers.push(doc.data());
       });
       timersDoc.docs.forEach((doc) => {
         getTimersIds.push(doc.id);
       });
-      commit('receiveItems', getTimers);
-      commit('receiveIds', getTimersIds);
+      commit('receiveItems', await getTimers);
+      commit('receiveIds', await getTimersIds);
     },
     async fetchCommunityDatas({commit}) { //コミュニティに入るタイマーを取得する
-      const q = query(collection(db, 'timers'), orderBy('createdAt'));
+      const q = await query(collection(db, 'timers'), orderBy('createdAt'));
       const timersDoc = await getDocs(q);
-      console.log(timersDoc);
+      // console.log("com:",timersDoc);
       const getTimers = [];
       timersDoc.forEach((doc) => {
         if(doc.data().isCom === true) {
           getTimers.push(doc.data());
         }
       })
-      commit('receiveCommunityItems', getTimers);
+      console.log("getComTimers",getTimers)
+      commit('receiveCommunityItems', await getTimers);
     }
   }
 })

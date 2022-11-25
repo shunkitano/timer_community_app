@@ -56,7 +56,8 @@ export default {
       isEdit: false
     }
   },
-  mounted() {
+  async mounted() {
+    await this.$store.dispatch('fetchUserId');
     this.$store.dispatch('fetchDatas');
   },
   computed: {

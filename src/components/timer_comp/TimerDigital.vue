@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="digital" :style="{'background-color': color}">
+    <div class="digital" :style="{'background-color': color }">
       <p :style="{'color': color}" class="nico">{{name}}</p>
         <div class="watch">
           <p class="text" :class="{light:isTms === '1', count__now:isCount && t > 0}">{{ t }}</p>

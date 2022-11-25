@@ -5,8 +5,8 @@
       <h2 class="nico">Community</h2>
     </div>
     <ul id="timers">
-      <li v-for="timer in communityTimers" :key="timer.id">
-        <div class="nico" @touchstart="selectTimer(timer.id)">
+      <li v-for="(timer, index) in communityTimers" :key="index">
+        <div class="nico" @touchstart="selectTimer(index)">
             <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
               <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
               <p>:</p>
@@ -88,19 +88,18 @@ export default {
   },
   computed: {
     communityTimers() {
-      // return this.$store.state.fetchTimers;
       return this.$store.state.communityTimers;
       
     }
   },
   methods: {
-    selectTimer(id) {
-      // console.log(id);
+    selectTimer(index) {
+      console.log(index);
       // console.log(this.communityTimers);
-      this.selectTimerName = this.communityTimers[id].name;
-      this.selectStyle = this.communityTimers[id].style;
+      this.selectTimerName = this.communityTimers[index].name;
+      this.selectStyle = this.communityTimers[index].style;
       if(!this.isSelect) {
-        this.$store.commit('selectTimer',{id});
+        this.$store.commit('selectTimer',{index});
       } 
       this.isSelect = true;
     },
