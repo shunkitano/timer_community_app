@@ -31,11 +31,11 @@ export default {
   text-align: center;
 }
 .community button {
-  font-size: 1.2rem;
+  font-size: 1rem;
   width: 80%;
   color: #FFF;
-  border: solid 1px rgba(250, 250, 250, 1);
-  background-color: rgba(0, 0, 0, 1);
+  border: solid 1px rgba(250, 250, 250, 0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   border-radius: 40px;
   /* transition: 1s ease; */
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;

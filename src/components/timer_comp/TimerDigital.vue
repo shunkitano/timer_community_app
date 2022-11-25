@@ -33,15 +33,15 @@ export default {
     }
   },
   mounted() {
-    this.name = this.$store.state.timers[this.id].name; //ストアから名前を反映
-    this.count = this.$store.state.timers[this.id].time; //ストアから設定時間を反映
+    this.name = this.$store.state.fetchTimers[this.id].name; //ストアから名前を反映
+    this.count = this.$store.state.fetchTimers[this.id].time; //ストアから設定時間を反映
   },
   computed: {
     id() {
       return this.$store.state.currentTimerId;
     },
     color() {
-      return this.$store.state.timers[this.id].color; //ストアから色を反映
+      return this.$store.state.fetchTimers[this.id].color; //ストアから色を反映
     },
     t() { //時間
       let t = Math.floor((this.count/3600) % 60);

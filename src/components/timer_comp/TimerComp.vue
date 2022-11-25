@@ -34,18 +34,34 @@ export default {
     return {
       isMakeTimer: false, //タイマー作成ページに飛ぶ
       anim: '',
-      isTms: '2'
+      isTms: '2',
+      id: null,
+      style: '',
+      time: '',
+      count: 2
     }
   },
-  computed: {
-    id() {
-      return this.$store.state.currentTimerId;
+  created() {
+    this.$store.dispatch('fetchDatas');
+  },
+  mounted() {
+    this.mountedIdandStyle();
     },
-    style() {
-      return this.$store.state.timers[this.id].style; 
-    }
-  },
   methods: {
+    mountedIdandStyle() {
+      this.time = setInterval(() => {
+        this.countDown();
+      },1000);
+    },
+    countDown() {
+      if(this.count > 0) {
+        this.count--;
+      } else if(this.count === 0) {
+        clearInterval(this.time);
+        this.id = this.$store.state.currentTimerId;
+        this.style = this.$store.state.fetchTimers[this.id].style; 
+      }
+    },
     makeTimer(anim, isMakeTimer) {
       this.anim = anim;
       this.isMakeTimer = isMakeTimer;

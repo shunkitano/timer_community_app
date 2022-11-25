@@ -33,8 +33,8 @@ export default {
 .user button {
   font-size: 1.2rem;
   width: 80%;
-  background-color: rgba(240, 240, 240, 1);
-  border: solid 1px rgba(0, 0, 0, 1);
+  background-color: rgba(240, 240, 240, 0.8);
+  border: solid 1px rgba(0, 0, 0, 0.8);
   border-radius: 40px;
   /* transition: 1s ease; */
   box-shadow: 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;

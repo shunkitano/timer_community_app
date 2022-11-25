@@ -136,9 +136,9 @@ export default {
   height: 60px;
   text-align: center;
   width: 160px;
-  color: rgba(250, 250, 250, 1);
-  background-color: rgba(0, 0, 0, 1);
-  border: solid 1px rgba(250, 250, 250, 1);
+  color: rgba(250, 250, 250, 0.8);
+  background-color: rgba(0, 0, 0, 0.8);
+  border: solid 1px rgba(250, 250, 250, 0.8);
   border-radius: 40px;
   box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }

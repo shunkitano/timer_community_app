@@ -1,14 +1,14 @@
 <template>
   <div class="user__room">
     <div class="header">
-      <input type="button" class="logout nico" value="Logout" @touchstart="timersTest">
+      <input type="button" class="logout nico" value="Logout" @touchstart="logOut">
       <h2 class="nico">{{ userName }}</h2>
       <CommunityButton class="comBtn"></CommunityButton>
     </div>
     <ul id="timers">
-      <li v-for="timer in lineUpTimers" :key="timer.timerId">
+      <li v-for="(timer, index) in lineUpTimers" :key="index">
         <div class="timer nico">
-          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(timer.timerId)">
+          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(index)">
             <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
             <p>:</p>
             <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
@@ -16,13 +16,13 @@
             <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
           <p class="timer__name">{{ timer.name }}</p>
-          <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="timer.timerId"></OpenCloseButton>
+          <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="index"></OpenCloseButton>
         </div>
 
         <transition name="fade">
-          <div class="edit" v-if="isEdit && isId === timer.timerId">
-            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childId="timer.timerId"></WitchButton>
-            <CutButton></CutButton>
+          <div class="edit" v-if="isEdit && isId === index">
+            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childId="index"></WitchButton>
+            <CutButton @cut-item="deleteTimer" :childId="index"></CutButton>
           </div><!--edit-->
         </transition>
       </li>
@@ -35,6 +35,10 @@ import CommunityButton from '@/components/parts_comp/CommunityButton.vue';
 import WitchButton from '@/components/parts_comp/WitchButton.vue';
 import CutButton from '@/components/parts_comp/CutButton.vue';
 import OpenCloseButton from '@/components/parts_comp/OpenCloseButton.vue';
+import firebaseApp from '@/firebase/firebase.js';
+import { getAuth, signOut } from "firebase/auth";
+
+const auth = getAuth(firebaseApp);
 
 export default {
   
@@ -48,7 +52,6 @@ export default {
     return {
       timers: [],
       userName: 'User',
-      isSetting: false,
       isTrue: true,
       isEdit: false
     }
@@ -62,21 +65,23 @@ export default {
     }
   },
   methods: {
-    // createTimerRoom() {
-    //   this.timers = this.$store.state.fetchTimers;
-    // },
-    toUserSetting() {
-      this.isSetting = !this.isSetting;
+    fetchDatas() { //データ削除後の画面更新
+      this.$store.dispatch('fetchDatas');
     },
-    selectTimer(id) {
-      // console.log(id);
+    selectTimer(index) { //書き直し
       if(!this.isEdit) {
-        this.$store.commit('selectTimer',{id});
+        console.log(index);
+        this.$store.commit('selectTimer',{index});
       this.$router.push('/top');
       } 
     },
-    timersTest() {
-      console.log(this.lineUpTimers.at(0).timerId);
+    logOut() {
+      signOut(auth).then(() => {
+        console.log("Sign-out successful");
+      })
+      .catch((error) => {
+        console.log("An error happened", `${error}`)
+      })
     },
     openClose(isOpen, id) {
       this.isEdit = isOpen;
@@ -97,8 +102,14 @@ export default {
         id: childId,
       })
     },
-    fetchDatas() {
-      this.$store.dispatch('fetchDatas');
+    deleteTimer(isId) { //タイマーを削除する
+      console.log(isId);
+      // console.log(this.$store.state.fetchTimersIds[deleteItem]);
+      this.$store.commit('deleteTimer', {
+        id: isId,
+      })
+      this.isEdit = !this.isEdit;
+      this.fetchDatas();
     }
   }
 }
@@ -111,7 +122,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgb(230, 230, 230);
 }
 .user__room .comBtn {
   position: absolute;
@@ -127,8 +137,9 @@ export default {
   height: 60px;
   margin-left: 1rem;
   z-index: 100;
-  color: rgba(250, 250, 250, 1);
-  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+  color: rgba(250, 250, 250, 0.8);
+  background-color: rgba(125, 125, 125, 0.8);
   border: solid 1px rgba(250, 250, 250, 1);
   border-radius: 40px;
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
@@ -139,10 +150,12 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
+  height: 100px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   z-index: 1;
+  background: linear-gradient(rgba(230, 230, 230, 1) 40%, rgba(230, 230, 230, 0));
 }
 .header h2 {
   font-size: 1rem;
@@ -150,7 +163,7 @@ export default {
   line-height: 60px;
   text-align: center;
   width: 160px;
-  background-color: rgba(240, 240, 240, 1);
+  background-color: rgba(240, 240, 240, 0.8);
   border: solid 1px rgba(0, 0, 0, 1);
   border-radius: 40px;
   box-shadow: inset rgba(20, 20, 20, 0.8) 0px 2px 4px, inset rgba(20, 20, 20, 0.8) 0px -2px 4px;

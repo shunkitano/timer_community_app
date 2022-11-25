@@ -395,7 +395,7 @@ input[type="text"],[type="number"] {
   font-size: 1.4rem;
 }
 .empty-enter-active {
-  animation: emptyAlert 0.3s;
+  animation: emptyAlert 0.2s;
 }
 .empty-leave-active {
   animation: emptyAlertClose 0.5s;
@@ -404,13 +404,7 @@ input[type="text"],[type="number"] {
   0% {
     scale: 1.1;
   }
-  25% {
-    scale: 1;
-  }
   50% {
-    scale: 1.1;
-  }
-  75% {
     scale: 1;
   }
   100% {
