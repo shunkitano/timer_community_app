@@ -54,8 +54,6 @@ export default {
   mounted() {
     this.isShow = true;
     this.time = setInterval(() => {this.enterPage()}, 1000);
-    const loginUser = JSON.parse(sessionStorage.getItem('userInfo'));
-    console.log("loginUser",loginUser)
   },
   methods: {
     enterPage() {
