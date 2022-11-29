@@ -49,8 +49,9 @@ export default {
     login() {
       signInWithEmailAndPassword(auth, this.email,this.password)
         .then((userCredential) => {
+          console.log(userCredential)
           const user = userCredential.user
-          console.log('create user success. '+ user)
+          console.log('認証成功'+ user)
           this.close();
         })
         .catch((error) => {

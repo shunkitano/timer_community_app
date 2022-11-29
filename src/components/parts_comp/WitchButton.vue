@@ -6,26 +6,31 @@
 </template>
 <script>
 export default {
-  props: ['text1', 'text2', 'childIndex', 'useOnly'],
+  props: ['text1', 'text2', 'childIndex', 'useOnly', 'isCom'],
   data() {
     return {
-      isThis: false,
+      isThis: null,
     }
   },
   mounted() {
     this.isThis = this.$store.state.fetchTimers[this.childIndex].isCom;
   },
+  // computed: {
+  //   isThis() {
+  //     return this.$store.state.fetchTimers[this.childIndex].isCom;
+  //   }
+  // },
   methods: {
     selectBtn1() {
       if(this.isThis && !this.useOnly) {
         this.isThis = !this.isThis;
-        this.$emit('is-left', this.childIndex);
+        this.$emit('is-left', this.childIndex, this.isThis);
       }
     },
     selectBtn2() {
       if(!this.isThis && !this.useOnly) {
         this.isThis = !this.isThis;
-        this.$emit('is-right', this.childIndex);
+        this.$emit('is-right', this.childIndex, this.isThis);
       }
     },
   }

@@ -7,7 +7,7 @@
     </div>
     <ul id="timers">
       <li v-for="(timer, index) in lineUpTimers" :key="index">
-        <div class="timer nico">
+        <div class="timer nico" :class="{deleted:isCut && isId === index}">
           <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(index)">
             <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
             <p>:</p>
@@ -15,13 +15,13 @@
             <p>:</p>
             <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
-          <p class="timer__name">{{ timer.name }}</p>
+          <p class="timer__name" :class="{add__com:isCom && isId === index}">{{ timer.name }}</p>
           <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childIndex="index"></OpenCloseButton>
         </div>
         <transition name="fade">
           <div class="edit" v-if="isEdit && isId === index">
-            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childIndex="index" :useOnly="timer.useOnly"></WitchButton>
-            <CutButton @cut-item="deleteTimer" :childIndex="index"></CutButton>
+            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childIndex="index" :useOnly="timer.useOnly" :isCom="isCom"></WitchButton>
+            <CutButton @before-cut="beforeCut" @cut-item="deleteTimer" :childIndex="index"></CutButton>
           </div><!--edit-->
         </transition>
       </li>
@@ -52,20 +52,21 @@ export default {
       timers: [],
       userName: '',
       isTrue: true,
-      isEdit: false
+      isEdit: false,
+      isCom: false,
+      isCut: false,
     }
   },
   async mounted() {
     await this.$store.dispatch('fetchUserId');
-    this.$store.dispatch('fetchDatas');
-    this.$store.dispatch('fetchUser');
+    await this.$store.dispatch('fetchDatas');
+    await this.$store.dispatch('fetchUser');
     const getUserName = this.$store.state.users;
     getUserName.forEach((user) => {
       if(user.userId === this.$store.state.uid) {
         this.userName = user.name;
       }
     })
-
   },
   computed: {
     lineUpTimers() {
@@ -96,16 +97,20 @@ export default {
       this.isEdit = isOpen;
       this.isId = index;
     },
-    putPrivate(childId) { //プライベイトにする
-      console.log(childId);
+    putPrivate(childId, isThis) { //プライベイトにする
+      console.log(childId, isThis);
+      this.isCom = isThis;
       this.$store.commit('putPrivate', {
         id: childId,
+        privateCom: isThis,
       })
     },
-    putCom(childId) { //コミュニティに公開する
-      console.log(childId);
+    putCom(childId, isThis) { //コミュニティに公開する
+      console.log(childId, isThis);
+      this.isCom = isThis;
       this.$store.commit('putCom', {
         id: childId,
+        privateCom: isThis,
       })
     },
     deleteTimer(isId) { //タイマーを削除する
@@ -113,8 +118,12 @@ export default {
       this.$store.commit('deleteTimer', {
         id: isId,
       })
+      this.isCut = false;
       this.isEdit = !this.isEdit;
       this.fetchDatas();
+    },
+    beforeCut(isCut) {
+      this.isCut = isCut;
     }
   }
 }
@@ -214,12 +223,116 @@ export default {
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
 }
+.deleted .timer__time {
+  width: 20px;
+  height: 20px;
+  animation: vanish 0.3s;
+}
+
 .timer__name {
   padding: 1rem;
   background-color: rgba(250, 250, 250, 0.8);
   border-radius: 20px;
   width: 100%;
   overflow: scroll;
+}
+.add__com {
+  animation: addCom 0.5s ease;
+}
+@keyframes addCom {
+  0% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8));
+  }
+  10% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 10%, rgba(250, 250, 250, 0.8));
+  }
+  20% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 20%, rgba(250, 250, 250, 0.8));
+  }
+  30% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 30%, rgba(250, 250, 250, 0.8));
+  }
+  40% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 40%, rgba(250, 250, 250, 0.8));
+  }
+  50% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8));
+  }
+  60% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 60%, rgba(250, 250, 250, 0.8));
+  }
+  70% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 70%, rgba(250, 250, 250, 0.8));
+  }
+  80% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 80%, rgba(250, 250, 250, 0.8));
+  }
+  90% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 90%, rgba(250, 250, 250, 0.8));
+  }
+  100% {
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1));
+  }
+}
+.return__com {
+  animation: returnCom 0.5s ease;
+}
+@keyframes returnCom {
+  0% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8));
+  }
+  10% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 90%, rgba(0, 0, 0, 1));
+  }
+  20% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 80%, rgba(0, 0, 0, 1));
+  }
+  30% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 70%, rgba(0, 0, 0, 1));
+  }
+  40% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 60%, rgba(0, 0, 0, 1));
+  }
+  50% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1));
+  }
+  60% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 40%, rgba(0, 0, 0, 1));
+  }
+  70% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 30%, rgba(0, 0, 0, 1));
+  }
+  80% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 20%, rgba(0, 0, 0, 1));
+  }
+  90% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 10%, rgba(0, 0, 0, 1));
+  }
+  100% {
+    color: rgba(0, 0, 0, 1);
+    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1));
+  }
 }
 .open__close {
   margin-left: 0.5rem;

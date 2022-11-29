@@ -56,6 +56,7 @@ export default {
         .then((response) => {
           const user = response;
           console.log(user.user.uid);
+          console.log(user);
           this.userId = user.user.uid;
           console.log('create user success: ' + user.user.uid);
           alert('作成成功');

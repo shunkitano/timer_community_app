@@ -25,6 +25,7 @@ export default {
     addClass() {
       if(!this.isCut) {
         this.isCut = !this.isCut;
+        this.$emit("before-cut", this.isCut);
       }
     },
     cutItem() {

@@ -84,20 +84,24 @@ const store = new Vuex.Store({
       state.currentTimerId = index;
       console.log(state.fetchTimers);
     },
-    async putPrivate(state, {id}) { //タイマーをプライベイトに設定する
+    async putPrivate(state, {id, privateCom}) { //タイマーをプライベイトに設定する
       console.log(state.fetchTimersIds, id);
       const timerId = state.fetchTimersIds[id];
       console.log(timerId);
+      console.log(privateCom);
+      state.fetchTimers[id].isCom = privateCom;
       const q = doc(db, 'timers', timerId);
       console.log(q)
       await updateDoc(q, {
         isCom: false
       });
     },
-    async putCom(state, {id}) { //タイマーをコミュニティに公開する
+    async putCom(state, {id, privateCom}) { //タイマーをコミュニティに公開する
       console.log(state.fetchTimersIds, id);
       const timerId = state.fetchTimersIds[id];
       console.log(timerId);
+      console.log(privateCom);
+      state.fetchTimers[id].isCom = privateCom;
       const q = doc(db, 'timers', timerId);
       console.log(q)
       await updateDoc(q, {
@@ -119,9 +123,8 @@ const store = new Vuex.Store({
       state.setTime = setInterval(() => {
         if(state.getTime > - state.fetchTimers[state.currentTimerId].time) {
           state.getTime--;
-        } else if (state.getTime === 0) {
+        } else if (state.getTime === - state.fetchTimers[state.currentTimerId].time) {
           clearInterval(state.setTime);
-          state.isStop = true;
           const sound = state.fetchTimers[state.currentTimerId].sound;
           if(sound === 'single') {
             const freeverb = new Tone.Freeverb().toDestination();
@@ -143,6 +146,7 @@ const store = new Vuex.Store({
             synth3.set({ detune: -800 });
             synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
           }
+          state.isStop = true;
         }
       }, 1000);
     },
