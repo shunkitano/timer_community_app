@@ -47,82 +47,85 @@
     </div>
     <!-- <button class="pm__set" @touchstart="plusMinus"></button> -->
     <div class="ssr">
-      <button @touchend="playSound"></button>
-      <button></button>
+      <button @touchend="resetTime">R</button>
+      <button @touchend="startStop">S / S</button>
     </div>
-    
   </div>
 </template>
 
 <script>
-import * as Tone from 'tone';
-
 export default {
   data() {
     return {
-      isActive: true,
-      num: 0,
-      time: '',
+      time: null,
       x: 0,
       y: 0,
       isTT: false,
       isMM: true,
-      tms: ""
+      tms: "",
+      setTime: '',
+      countTime: null
     }
+  },
+  mounted() {
+    this.time = this.$store.state.fetchTimers[this.id].time;
   },
   computed: {
     id() {
       return this.$store.state.currentTimerId;
     },
     sound() { //これを直接メソッドに突っ込む
-      return this.$store.state.timers[this.id].sound; 
+      return this.$store.state.fetchTimers[this.id].sound; 
     }
   },
   methods: {
-    startPlus(e) {
-      this.num++;
-      this.y = e.changedTouches[0].clientY;
+    startPlus() {
+      let addTime = this.$store.getters.getTime;
+      let count = 1;
+      let number;
+      if(this.isMM) {
+        number = count *60;
+        if(this.time + addTime + number <= 36000) {
+          this.$store.commit('changeTime', {number});
+        }
+      } else if(this.isTT) {
+        number = count *3600;
+        if(this.time + addTime + number <= 36000) {
+          this.$store.commit('changeTime', {number});
+        }
+      } else if(!this.isMM && !this.isTT) {
+        number = count;
+        if(this.time + addTime + number <= 36000) {
+          this.$store.commit('changeTime', {number});
+        }  
+      }
     },
     movePlus(e) {
-      let yy = e.changedTouches[0].clientY;
-      if(this.y > yy+1) {
-        this.num++;
-      }
-      this.y = yy;
+      console.log(e);
     },
-    startMinus(e) {
-      this.num--;
-      this.y = e.changedTouches[0].clientY;
+    startMinus() {
+      let addTime = this.$store.getters.getTime;
+      let count = -1;
+      let number;
+      if(this.isMM && this.time + addTime) {
+        number = count *60;
+        if(this.time + addTime + number >= 0) {
+          this.$store.commit('changeTime', {number});
+        }
+      } else if(this.isTT) {
+        number = count *3600;
+        if(this.time + addTime + number >= 0) {
+          this.$store.commit('changeTime', {number});
+        }
+      } else if(!this.isMM && !this.isTT) {
+        number = count;
+        if(this.time + addTime + number >= 0) {
+          this.$store.commit('changeTime', {number});
+        }
+      }
     },
     moveMinus(e) {
-      let yy = e.changedTouches[0].clientY;
-      if(this.y < yy-1) {
-        this.num--;
-      }
-      this.y = yy;
-    },
-    // タイマーの設定 //
-    plusMinus() {
-      this.isActive = !this.isActive;
-    },
-    playSound() {
-      console.log("!");
-      // this.$store.commit('selectSound');
-      if(this.sound === "single") {
-        const synth = new Tone.Synth().toDestination();
-        synth.triggerAttackRelease("A4", "8n");
-      }
-      if(this.sound === "poly") {
-        const synth2 = new Tone.PolySynth().toDestination();
-        synth2.set({ detune: -800 });
-        synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
-      }
-      if(this.sound === 'delay') {
-        const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
-        const synth3 = new Tone.PolySynth().connect(pingPong);
-        synth3.set({ detune: -800 });
-        synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
-      }
+      console.log(e);
     },
     // tt:mm::ssの選択 //
     checkToggle(e) {
@@ -161,6 +164,26 @@ export default {
       }
       this.x = xx;
       this.$emit("select-tms", this.tms);
+    },
+    resetTime() { //リセット完成
+      const number = - this.$store.getters.time - this.$store.getters.getTime; 
+      // console.log(number);
+      this.$store.commit('changeTime', {number});
+    },
+    startStop() {
+      console.log("S/S");
+      this.setTime = setInterval(() => {
+        this.countDown()
+      }, 1000);
+    },
+    countDown() {
+      if(number > 0) {
+        number--;
+        console.log(number)
+      } else if(number === 0) {
+        clearInterval(this.setTime);
+        console.log("計測修了");
+      }
     }
   }
 }
@@ -223,6 +246,8 @@ export default {
   margin-right: 1rem;
 }
 .ssr button:first-child {
+  color: rgba(240, 10, 10, 0.8);
+  text-shadow: 1px 1px 1px rgba(240, 240, 240, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.7);
   background-color: rgba(240, 10, 10, 0.8);
   width: 40px;
   height: 40px;
@@ -235,7 +260,9 @@ export default {
   height: 60px;
   border: none;
   border-radius: 50%;
+  color:rgba(210, 210, 210, 0.8);
   background-color: rgba(210, 210, 210, 0.8);
-  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset 0px -2px 4px;
+  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(0, 0, 0, 0.8) 0px -2px 4px;
+  text-shadow: 1px 1px 1px rgba(240, 240, 240, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.7);
 }
 </style>

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import EnterView from '../views/EnterView.vue'
 import TopView from '../views/TopView.vue'
+import { auth } from '@/firebase/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 Vue.use(VueRouter)
 
@@ -67,6 +69,7 @@ const routes = [
   {
     path: '/user',
     name: 'user',
+    meta: { requiresAuth: true },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -109,6 +112,24 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    const authApp = auth;
+    onAuthStateChanged(authApp, (user) => {
+      if(!user) {
+        next({
+          path: '/',
+          query: { redirect: to.fullPath }
+        })
+      } else {
+        next()
+      }
+    })
+  } else {
+    next()
+  }   
 })
 
 export default router

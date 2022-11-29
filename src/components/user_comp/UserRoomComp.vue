@@ -2,7 +2,7 @@
   <div class="user__room">
     <div class="header">
       <input type="button" class="logout nico" value="Logout" @touchstart="logOut">
-      <h2 class="nico">{{ userName }}</h2>
+      <h2 class="nico">{{userName}}'s timers</h2>
       <CommunityButton class="comBtn"></CommunityButton>
     </div>
     <ul id="timers">
@@ -16,13 +16,12 @@
             <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
           <p class="timer__name">{{ timer.name }}</p>
-          <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childId="index"></OpenCloseButton>
+          <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childIndex="index"></OpenCloseButton>
         </div>
-
         <transition name="fade">
           <div class="edit" v-if="isEdit && isId === index">
-            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childId="index"></WitchButton>
-            <CutButton @cut-item="deleteTimer" :childId="index"></CutButton>
+            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childIndex="index" :useOnly="timer.useOnly"></WitchButton>
+            <CutButton @cut-item="deleteTimer" :childIndex="index"></CutButton>
           </div><!--edit-->
         </transition>
       </li>
@@ -51,7 +50,7 @@ export default {
   data() {
     return {
       timers: [],
-      userName: 'User',
+      userName: '',
       isTrue: true,
       isEdit: false
     }
@@ -59,6 +58,14 @@ export default {
   async mounted() {
     await this.$store.dispatch('fetchUserId');
     this.$store.dispatch('fetchDatas');
+    this.$store.dispatch('fetchUser');
+    const getUserName = this.$store.state.users;
+    getUserName.forEach((user) => {
+      if(user.userId === this.$store.state.uid) {
+        this.userName = user.name;
+      }
+    })
+
   },
   computed: {
     lineUpTimers() {
@@ -79,17 +86,15 @@ export default {
     logOut() {
       signOut(auth).then(() => {
         console.log("Sign-out successful");
+        this.$router.push('/');
       })
       .catch((error) => {
         console.log("An error happened", `${error}`)
       })
     },
-    openClose(isOpen, id) {
+    openClose(isOpen, index) {
       this.isEdit = isOpen;
-      this.isId = id;
-      if(isOpen === false) {
-        this.isSlide = false;
-      }
+      this.isId = index;
     },
     putPrivate(childId) { //プライベイトにする
       console.log(childId);
@@ -105,7 +110,6 @@ export default {
     },
     deleteTimer(isId) { //タイマーを削除する
       console.log(isId);
-      // console.log(this.$store.state.fetchTimersIds[deleteItem]);
       this.$store.commit('deleteTimer', {
         id: isId,
       })
@@ -165,9 +169,9 @@ export default {
   text-align: center;
   width: 160px;
   background-color: rgba(240, 240, 240, 0.8);
-  border: solid 1px rgba(0, 0, 0, 1);
+  border: solid 1px rgba(125, 125, 125, 0.8);
   border-radius: 40px;
-  box-shadow: inset rgba(20, 20, 20, 0.8) 0px 2px 4px, inset rgba(20, 20, 20, 0.8) 0px -2px 4px;
+  box-shadow: inset rgba(125, 125, 125, 0.8) 0px 2px 4px, inset rgba(125, 125, 125, 0.8) 0px -2px 4px;
 }
 /* Timers */
 #timers {

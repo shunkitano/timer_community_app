@@ -13,9 +13,8 @@ export default {
   },
   methods: {
     userRoom() {
-      if(!this.isUser) {
-        this.$router.push('/user');
-      }
+      this.isUser = !this.isUser;
+      this.$router.push("/user");
     }
   }
 }

@@ -8,24 +8,33 @@
 
 <script>
 export default {
-  props: ['childId', 'childEdit'],
+  props: ['childIndex', 'childEdit'],
   data() {
     return {
       opCl:'close',
-      isOpen: false,
-      isSlide: false
+      isOpen: false
+    }
+  },
+  computed: {
+    
+  },
+  watch: {
+    childEdit() {
+      if(!this.childEdit) { //タイマーが削除されたときに強制的に"close"クラスをふる
+        this.opCl = "close"
+      }
     }
   },
   methods: {
     openClose() {
-      if(this.opCl === 'close' && this.childEdit === false) {
+      if(this.opCl === "close" && !this.childEdit) {
         this.opCl = 'open';
         this.isOpen = true;
-        this.$emit("open-close", this.isOpen, this.childId);
-      } else if(this.opCl === 'open' && this.childEdit === true) {
+        this.$emit("open-close", this.isOpen, this.childIndex);
+      } else if(this.opCl === "open" && this.childEdit) {
         this.opCl = 'close';
         this.isOpen = false;
-        this.$emit("open-close", this.isOpen, this.childId);
+        this.$emit("open-close", this.isOpen, this.childIndex);
       }
     }
   }
@@ -42,7 +51,7 @@ export default {
   align-items: center;
   background-color: rgba(0,0,0,0);
 }
-p {
+.open__close p {
   position: relative;
   background-color: rgba(0,0,0,0);
   width: 40px;

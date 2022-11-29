@@ -7,27 +7,28 @@
     <ul id="timers">
       <li v-for="(timer, index) in communityTimers" :key="index">
         <div class="nico" @touchstart="selectTimer(index)">
-            <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
-              <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
-              <p>:</p>
-              <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
-              <p>:</p>
-              <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
-            </div>
-            <p class="timer__name">{{ timer.name }}</p>
+          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
+            <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
+            <p>:</p>
+            <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
+            <p>:</p>
+            <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
+          <p class="timer__name">{{ timer.name }}</p>
+          <p>{{ timer.userName ? timer.userName : "none"}}</p>
+        </div>
       </li>
     </ul>
     <transition name="look">
       <div id="select" v-if="isSelect">
         <p class="nico">{{ selectTimerName }}</p>
         <div class="select__timer">
-          <TimerDigital v-if="selectStyle === 'digital'" class="sample"></TimerDigital>
-          <TimerClasic v-if="selectStyle === 'clasic'" class="sample"></TimerClasic>
-          <TimerCircle v-if="selectStyle === 'circle'" class="sample"></TimerCircle>
+          <TimerDigital v-if="selectStyle === 'digital'" class="sample" :isUse="isUse"></TimerDigital>
+          <TimerClasic v-if="selectStyle === 'clasic'" class="sample" :isUse="isUse"></TimerClasic>
+          <TimerCircle v-if="selectStyle === 'circle'" class="sample" :isUse="isUse"></TimerCircle>
         </div>
         <div class="select__box">
-          <svg width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg @touchend="addCommunityTimer" width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g filter="url(#filter0_i_148_36)">
               <path d="M24.493 2.5C26.4175 -0.833332 31.2288 -0.833335 33.1533 2.5L56.969 43.75C58.8935 47.0833 56.4879 51.25 52.6389 51.25H5.00746C1.15846 51.25 -1.24717 47.0833 0.677332 43.75L24.493 2.5Z" fill="#F3F3F3" fill-opacity="0.8"/>
             </g>
@@ -70,34 +71,33 @@ export default {
   },
   data() {
     return {
-      userName: 'Who',
-      // communityTimers: [],
       isSelect: false,
-      selectStyle: '',
-      selectTimerName: 'timer name'
+      selectStyle: '', //表示するタイマーの種類を絞り込む
+      selectTimerName: '',
+      isUse: false,
+      index: null
     }
   },
-  mounted() {
-    this.$store.dispatch('fetchCommunityDatas');
-    // const timers = this.$store.state.timers;
-    // return timers.forEach((e) => { //isComがtrueのtimerを取り出して配列にpushする
-    //   if(e.isCom === true) {
-    //     this.communityTimers.push(e);
-    //   }
-    // })
+  async mounted() {
+    await this.$store.dispatch('fetchCommunityDatas');
+    await this.$store.dispatch('fetchUser');
   },
   computed: {
     communityTimers() {
       return this.$store.state.communityTimers;
-      
+    },
+    user() {
+      return this.userName();
     }
   },
   methods: {
     selectTimer(index) {
       console.log(index);
-      // console.log(this.communityTimers);
-      this.selectTimerName = this.communityTimers[index].name;
-      this.selectStyle = this.communityTimers[index].style;
+      this.index = index;
+      console.log(this.$store.state.communityTimers[index].name);
+      console.log(this.$store.state.communityTimers[index].userId);
+      this.selectTimerName = this.$store.state.communityTimers[index].name;
+      this.selectStyle = this.$store.state.communityTimers[index].style;
       if(!this.isSelect) {
         this.$store.commit('selectTimer',{index});
       } 
@@ -105,6 +105,19 @@ export default {
     },
     closeSelect(isClose) {
       this.isSelect = isClose;
+    },
+    addCommunityTimer() {
+      if(this.$store.state.uid === null) {
+        this.$router.push('/');
+      } else if(this.$store.state.uid !== null) {
+        const name = this.communityTimers[this.index].name;
+        const style = this.communityTimers[this.index].style;
+        const color = this.communityTimers[this.index].color;
+        const sound = this.communityTimers[this.index].sound;
+        const time = this.communityTimers[this.index].time;
+        this.$store.commit('addCommunityTimer', {name, style, color, sound, time});
+        this.closeSelect();
+      }
     }
   }
 }
@@ -135,7 +148,7 @@ export default {
   height: 60px;
   text-align: center;
   width: 160px;
-  color: rgba(250, 250, 250, 0.8);
+  color: rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0.8);
   border: solid 1px rgba(250, 250, 250, 0.8);
   border-radius: 40px;
@@ -161,7 +174,7 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  /* justify-content: center; */
   text-align: center;
   list-style: none;
   margin: 1rem auto 0;
@@ -170,6 +183,7 @@ export default {
   border-radius: 10px;
 }
 #timers li div {
+  /* width: 100%; */
   display: flex;
   align-items: center;
 }
@@ -187,6 +201,13 @@ export default {
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
+}
+.nico>p:last-child {
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  color: rgba(0, 0, 0, 1);
+  background-color: rgba(250, 250, 250, 1);
+  border-radius: 20px;
 }
 .timer__name {
   padding: 1rem;

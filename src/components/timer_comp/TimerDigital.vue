@@ -15,12 +15,12 @@
 
 <script>
 export default {
-  props: ['isTms'],
+  props: ['isUse','isTms'],//TimerCompから情報をうけとる
   data() {
     return {
       name: '',
-      count: null,
-      time: '',
+      time: null,
+      color: '',
       outTime: '',
       isCount:false,
       isCountS: false,
@@ -33,15 +33,20 @@ export default {
     }
   },
   mounted() {
-    this.name = this.$store.state.fetchTimers[this.id].name; //ストアから名前を反映
-    this.count = this.$store.state.fetchTimers[this.id].time; //ストアから設定時間を反映
+    console.log(this.isUse? "ここはメインです": "ここはコミュニティーです");
+    if(this.isUse) {
+      this.name = this.$store.state.fetchTimers[this.id].name; 
+      this.time = this.$store.getters.time; 
+      this.color = this.$store.state.fetchTimers[this.id].color;
+    } else if(!this.isUse) {
+      this.name = this.$store.state.communityTimers[this.id].name; 
+      this.time = this.$store.state.communityTimers[this.id].time; 
+      this.color = this.$store.state.communityTimers[this.id].color;
+    }
   },
   computed: {
     id() {
       return this.$store.state.currentTimerId;
-    },
-    color() {
-      return this.$store.state.fetchTimers[this.id].color; //ストアから色を反映
     },
     t() { //時間
       let t = Math.floor((this.count/3600) % 60);
@@ -55,8 +60,33 @@ export default {
       let s = Math.floor(this.count % 60);
       return ("0" + s).slice(-2);
     },
+    count() {
+      let tms = this.time + this.getTime;
+      return tms;
+    },
+    getTime() {
+      return this.$store.getters.getTime;
+    },
+    reset() {
+      return this.$store.getters.reset;
+    }
   },
   methods: {
+    startStop() {
+      console.log("S/S");
+      this.setTime = setInterval(() => {
+        this.countDown()
+      }, 1000);
+    },
+    countDown() {
+      let number = this.$store.getters.time + this.$store.getters.getTime; 
+      if(number > 0) {
+        number--;
+      } else if(number === 0) {
+        clearInterval(this.setTime);
+        console.log("計測修了");
+      }
+    }
   }
 }
 </script>
@@ -87,7 +117,7 @@ export default {
 .digital>p:first-child {
   position: absolute;
   top: 2rem;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: rgba(200, 200, 200, 0.8);
   display: inline;
   text-shadow: 1px 1px 1px rgba(240, 240, 240, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.7);

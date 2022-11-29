@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  props: ["childId"],
+  props: ["childIndex"],
   data() {
     return {
       isCut: false
@@ -28,7 +28,7 @@ export default {
       }
     },
     cutItem() {
-      this.$emit("cut-item", this.childId);
+      this.$emit("cut-item", this.childIndex );
     }
   }
 }

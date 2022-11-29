@@ -1,31 +1,31 @@
 <template>
   <div class="witch">
-    <button class="btn" :class="{active:isThis}" @touchstart="selectBtn1">{{text1}}</button>
+    <button class="btn" :class="{active:isThis, useOnly:useOnly}" @touchstart="selectBtn1">{{text1}}</button>
     <button class="btn" :class="{active:!isThis}" @touchstart="selectBtn2">{{text2}}</button>
   </div>
 </template>
 <script>
 export default {
-  props: ['text1', 'text2', 'childId'],
+  props: ['text1', 'text2', 'childIndex', 'useOnly'],
   data() {
     return {
       isThis: false,
     }
   },
   mounted() {
-    return this.isThis = this.$store.state.fetchTimers[this.childId].isCom;
+    this.isThis = this.$store.state.fetchTimers[this.childIndex].isCom;
   },
   methods: {
     selectBtn1() {
-      if(this.isThis) {
+      if(this.isThis && !this.useOnly) {
         this.isThis = !this.isThis;
-        this.$emit('is-left', this.childId);
+        this.$emit('is-left', this.childIndex);
       }
     },
     selectBtn2() {
-      if(!this.isThis) {
+      if(!this.isThis && !this.useOnly) {
         this.isThis = !this.isThis;
-        this.$emit('is-right', this.childId);
+        this.$emit('is-right', this.childIndex);
       }
     },
   }
@@ -57,5 +57,9 @@ export default {
   color: rgba(50, 50, 50, 0.8);
   background-color: rgba(220, 220, 220, 0.8);
   box-shadow: inset 0px 3px 4px rgba(250, 250, 250, 0.8), inset 0px -3px 4px rgba(20, 20, 20, 0.8);
+}
+.witch .useOnly {
+  color: rgba(250, 250, 250, 0.8);
+  background-color: rgba(10, 10, 10, 0.8);
 }
 </style>

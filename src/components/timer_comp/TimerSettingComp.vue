@@ -88,9 +88,6 @@ export default {
     checkNum() {
       return this.isActive = this.text;
     },
-    mainPage() { //メインページへ飛ぶ
-      this.$emit("my-click", this.isFalse);
-    },
     selectName() {
       this.isActive = "";
     },
@@ -171,34 +168,23 @@ export default {
       }
       this.y = yy;
     },
-    // makeTimer() { //新しくタイマーを作成する
-    //   if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "Color" || this.selects[2].name === "Sound" || !this.isCalc) {
-    //     this.isEmpty = true;
-    //   } else {
-    //     this.$store.commit('makeTimer', {
-    //     name: this.text,
-    //     time: this.t*3600 + this.m*60 + this.s*1, //this.sだけだと文字列として処理された。そのため、*1をつけてみた。結果、数値として扱ってくれた
-    //     style: this.selects[0].name,
-    //     color: this.styleObject['background-color'],
-    //     sound: this.selects[2].name,
-    //     })
-    //     this.$router.push('/user');
-    //     this.clear();
-    //   }
-    // },
     makeTimer() {
       if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "Color" || this.selects[2].name === "Sound" || !this.isCalc) {
         this.isEmpty = true;
       } else {
-        const text = this.text;
-        const style = this.selects[0].name;//style
-        const color = this.styleObject['background-color'];//color
-        const sound = this.selects[2].name;//sound
-        const time = this.t*3600 + this.m*60 + this.s*1;//時間
-        this.$store.commit('makeTimer', {text, style, color, sound, time}
-        )
-        this.clear();
-        //this.$router.push('/user');
+        if(this.$store.state.uid !== null) {
+          const text = this.text;
+          const style = this.selects[0].name;//style
+          const color = this.styleObject['background-color'];//color
+          const sound = this.selects[2].name;//sound
+          const time = this.t*3600 + this.m*60 + this.s*1;//時間
+          this.$store.commit('makeTimer', {text, style, color, sound, time})
+          this.clear();
+          this.$router.push('/user');
+        } else if (this.$store.state.uid === null) {
+          this.clear();
+          this.$router.push('/');
+        }
       }
     },
     clear() {
@@ -216,6 +202,11 @@ export default {
     },
     closeEmpty(isFalse) {
       this.isEmpty = isFalse;
+    },
+    mainPage() { //メインページへ飛ぶ
+      if(!this.$store.state.empty) {
+        this.$emit("my-click", this.isFalse);
+      }
     }
   }
 }

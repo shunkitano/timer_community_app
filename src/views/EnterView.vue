@@ -37,9 +37,9 @@ export default {
   data() {
     return {
       texts: [
-        "つな",
-        "がる",
-        "タイマー"
+        "つ な",
+        "が る",
+        "タ イ マ ー"
       ],
       time:'',
       count: 4,
@@ -88,36 +88,70 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
   background-color: #EEE;
 }
+.enter ul {
+  width: 100%;
+  text-align: center;
+  text-align: center;
+  animation: enterDown 2s ease;
+}
 .enter li {
+  margin: auto;
   font-size: 2rem;
   color: goldenrod;
   display: inline;
   font-family: "Nico Moji";
-}
-.enter li {
   width: 100px;
-  animation: enterin 3s ease-out;
+  align-items: center;
+  animation: enterin 2.5s ease;
+}
+@keyframes enterDown {
+  0% {
+    height: 100vh;
+  }
+  40% {
+    height: 0vh;
+  }
+  60% {
+    height: 30vh;
+  }
+  70% {
+    height: 0vh;
+  }
+  80% {
+    height: 20vh;
+  }
+  90% {
+    height: 0vh;
+  }
+  95% {
+    height: 5vh;
+  }
+  100% {
+    height: 0vh;
+  }
 }
 @keyframes enterin {
   0% {
     opacity: 0;
-    width: 200%;
-    margin-left: -20px;
-    margin-right: 30px;
+    margin-left: -5px;
+    margin-right: 5px;
     color: goldenrod;
   }
   50% {
     opacity: 0.5;
-    width: 150%;
-    margin-left: 20px;
-    margin-right: 10px;
+    margin-left: 10px;
+    margin-right: -10px;
+    color: goldenrod;
+  }
+  75% {
+    opacity: 0.8;
+    margin-left: -5px;
+    margin-right: 5px;
     color: goldenrod;
   }
   100% {
-    width: 0%;
     margin-left: 0px;
     margin-right: 0px;
     color: goldenrod;

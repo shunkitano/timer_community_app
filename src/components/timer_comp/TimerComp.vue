@@ -4,9 +4,9 @@
       <TimerSettingComp  v-if="isMakeTimer" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" v-else>
         <TimerHeader @makeTimer="makeTimer" class="header"></TimerHeader>
-        <TimerDigital v-if="style === 'digital'" :isTms="isTms" class="timer__comp"></TimerDigital>
-        <TimerClasic v-if="style === 'clasic'" class="timer__comp"></TimerClasic>
-        <TimerCircle v-if="style === 'circle'" class="timer__comp"></TimerCircle>
+        <TimerDigital v-if="style === 'digital'" :isTms="isTms" class="timer__comp" :isUse="isUse"></TimerDigital>
+        <TimerClasic v-if="style === 'clasic'" :isTms="isTms" class="timer__comp" :isUse="isUse"></TimerClasic>
+        <TimerCircle v-if="style === 'circle'" :isTms="isTms" class="timer__comp" :isUse="isUse"></TimerCircle>
         <TimerController class="controller" @select-tms="selectTms"></TimerController>
       </div><!--timer-->
     </transition>
@@ -20,6 +20,7 @@ import TimerClasic from '@/components/timer_comp/TimerClasic.vue';
 import TimerDigital from '@/components/timer_comp/TimerDigital.vue';
 import TimerCircle from '@/components/timer_comp/TimerCircle.vue';
 import TimerController from '@/components/timer_comp/TimerController.vue';
+import * as Tone from 'tone';
 
 export default {
   components: {
@@ -35,26 +36,24 @@ export default {
       isMakeTimer: false, //タイマー作成ページに飛ぶ
       anim: '',
       isTms: '2',
-      // id: null,
-      // style: '',
-      time: '',
-      count: 2
+      reset: false,
+      id: null,
+      style: '',
+      count: 2,
+      isUse: true //各タイマーにfetchTimersとcommunityTimersの判別をさせる
     }
   },
-  computed: {
-    id() {
-      return this.$store.state.currentTimerId;
-    },
-    style() {
-      return this.$store.state.fetchTimers[this.id].style; 
+  beforeCreate() {
+    this.isMakeTimer = this.$store.state.empty;
+    console.log(this.isMakeTimer)
+  },
+  mounted() {
+    if(!this.isMakeTimer) {
+      this.id = this.$store.state.currentTimerId;
+      this.style = this.$store.state.fetchTimers[this.id].style;
     }
   },
   methods: {
-    // createdIdandStyle() {
-      
-    //   this.id = this.$store.state.currentTimerId;
-    //   this.style = this.$store.state.fetchTimers[this.id].style; 
-    // },
     makeTimer(anim, isMakeTimer) {
       this.anim = anim;
       this.isMakeTimer = isMakeTimer;
@@ -66,7 +65,24 @@ export default {
     // コントローラーからtmsを受け取る //
     selectTms(tms) {
       this.isTms = tms;
-    }
+    },
+    playSound() {
+      if(this.sound === "single") {
+        const synth = new Tone.Synth().toDestination();
+        synth.triggerAttackRelease("A4", "8n");
+      }
+      if(this.sound === "poly") {
+        const synth2 = new Tone.PolySynth().toDestination();
+        synth2.set({ detune: -800 });
+        synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
+      }
+      if(this.sound === 'delay') {
+        const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
+        const synth3 = new Tone.PolySynth().connect(pingPong);
+        synth3.set({ detune: -800 });
+        synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
+      }
+    },
   }
 }
 </script>
