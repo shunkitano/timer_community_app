@@ -3,9 +3,9 @@
     <div class="digital" :style="{'background-color': color }">
       <p :style="{'color': color}" class="nico">{{name}}</p>
         <div class="watch">
-          <p class="text" :class="{light:isTms === '1', count__now:isCount && t > 0}">{{ t }}</p>
-          <p class="text" :class="{light:isTms === '2', count__now:isCount && (m > 0 || m > 0)}">{{ m }}</p>
-          <p class="text" :class="{light:isTms === '3', count__now:isCount}">{{ s }}</p>
+          <p class="text" :class="{light:isTms === '1'}">{{ t }}</p>
+          <p class="text" :class="{light:isTms === '2'}">{{ m }}</p>
+          <p class="text" :class="{light:isTms === '3'}">{{ s }}</p>
         </div>
       <p>{{ message }}</p>
     </div>
@@ -14,19 +14,13 @@
 </template>
 
 <script>
-export default {
+export default { //タイマー自体はstoreから情報を受け取るのみ！
   props: ['isUse','isTms'],//TimerCompから情報をうけとる
   data() {
     return {
       name: '',
       time: null,
       color: '',
-      outTime: '',
-      isCount:false,
-      isCountS: false,
-      isCountM: false,
-      isReset: false,
-      message: 'Please select "time"',//あとで他のコメントを足すこと！
       styleObject: {
         'background-color': ''
       }
@@ -69,23 +63,27 @@ export default {
     },
     reset() {
       return this.$store.getters.reset;
+    },
+    message() {
+      return this.returnMessage();
+    },
+    checkStop() {
+      return this.$store.state.isStop;
     }
   },
   methods: {
-    startStop() {
-      console.log("S/S");
-      this.setTime = setInterval(() => {
-        this.countDown()
-      }, 1000);
-    },
-    countDown() {
-      let number = this.$store.getters.time + this.$store.getters.getTime; 
-      if(number > 0) {
-        number--;
-      } else if(number === 0) {
-        clearInterval(this.setTime);
-        console.log("計測修了");
+    returnMessage() {
+      let message;
+      if(this.checkStop === true) {
+        if(this.t + this.m + this.s !== "000000") {
+          message = "Push 'S' or 'R'";
+        } else if(this.t + this.m + this.s === "000000") {
+          message = "Please add 'time'";
+        }
+      } else if(this.checkStop === false) {
+        message = "Now countDown";
       }
+      return message;
     }
   }
 }

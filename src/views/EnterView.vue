@@ -56,7 +56,7 @@ export default {
     this.time = setInterval(() => {this.enterPage()}, 1000);
   },
   methods: {
-    async enterPage() {
+    enterPage() {
       if(this.count>0) {
         this.count--;
         console.log(this.count);
@@ -65,16 +65,16 @@ export default {
         if(this.$store.state.uid === null) {
           this.isClose = false;
         } else {
-          this.$store.dispatch('fetchDatas');
-          this.$store.dispatch('fetchCommunityDatas');
+          // this.$store.dispatch('fetchDatas');
+          // this.$store.dispatch('fetchCommunityDatas');
           this.$router.push('top');
         }
       }
     },
-    async closeBox(isClose) {
+    closeBox(isClose) {
       this.isClose = isClose;
-      await this.$store.dispatch('fetchDatas');
-      this.$store.dispatch('fetchCommunityDatas');
+      // await this.$store.dispatch('fetchDatas');
+      // this.$store.dispatch('fetchCommunityDatas');
       this.$router.push('/top');
     }
   }

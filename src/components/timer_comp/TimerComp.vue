@@ -20,7 +20,6 @@ import TimerClasic from '@/components/timer_comp/TimerClasic.vue';
 import TimerDigital from '@/components/timer_comp/TimerDigital.vue';
 import TimerCircle from '@/components/timer_comp/TimerCircle.vue';
 import TimerController from '@/components/timer_comp/TimerController.vue';
-import * as Tone from 'tone';
 
 export default {
   components: {
@@ -35,7 +34,7 @@ export default {
     return {
       isMakeTimer: false, //タイマー作成ページに飛ぶ
       anim: '',
-      isTms: '2',
+      isTms: '2', //初期はm（分）に配置
       reset: false,
       id: null,
       style: '',
@@ -45,9 +44,11 @@ export default {
   },
   beforeCreate() {
     this.isMakeTimer = this.$store.state.empty;
-    console.log(this.isMakeTimer)
+    console.log(this.isMakeTimer);
   },
-  mounted() {
+  async created() {
+    await this.$store.dispatch('fetchUserId');
+    await this.$store.dispatch('fetchDatas');
     if(!this.isMakeTimer) {
       this.id = this.$store.state.currentTimerId;
       this.style = this.$store.state.fetchTimers[this.id].style;
@@ -65,24 +66,7 @@ export default {
     // コントローラーからtmsを受け取る //
     selectTms(tms) {
       this.isTms = tms;
-    },
-    playSound() {
-      if(this.sound === "single") {
-        const synth = new Tone.Synth().toDestination();
-        synth.triggerAttackRelease("A4", "8n");
-      }
-      if(this.sound === "poly") {
-        const synth2 = new Tone.PolySynth().toDestination();
-        synth2.set({ detune: -800 });
-        synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
-      }
-      if(this.sound === 'delay') {
-        const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
-        const synth3 = new Tone.PolySynth().connect(pingPong);
-        synth3.set({ detune: -800 });
-        synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
-      }
-    },
+    }
   }
 }
 </script>
@@ -98,7 +82,6 @@ export default {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  /* background-color: rgb(217, 217, 217); */
   z-index: 100;
 } 
 .set-enter-active {

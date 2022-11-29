@@ -3,13 +3,15 @@ import Vuex from 'vuex'
 import { db } from '@/firebase/firebase'
 import { addDoc, collection, serverTimestamp,  getDocs, query, updateDoc, orderBy , doc, deleteDoc, where} from 'firebase/firestore'
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import * as Tone from 'tone';
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     fetchTimers: [], //ここにユーザールームのタイマーが入る
-    getTime: 0,
-    reset: false,
+    getTime: 0, //タイマー使用時のカウントが入る
+    setTime: '', //カウントダウン用
+    isStop: true,
     fetchTimersIds: [], //ユーザーのタイマーIDが入る
     nextTimerId: 0, //ユーザーがはじめてタイマーを作成するときのID
     communityTimers: [], //ここにコミュニティのタイマーが入る
@@ -41,9 +43,6 @@ const store = new Vuex.Store({
     },
     getTime(state) {
       return state.getTime;
-    },
-    reset(state) {
-      return state.reset;
     }
   },
   mutations: {
@@ -105,16 +104,51 @@ const store = new Vuex.Store({
         isCom: true
       });
     },
-    async deleteTimer(state,{id}) { //タイマーを削除するasync 
+    async deleteTimer(state, {id}) { //タイマーを削除するasync 
       console.log(state.fetchTimersIds[id]);
       const docId = state.fetchTimersIds[id];
       await deleteDoc(doc(db, 'timers', `${docId}` ));
     },
     changeTime(state, {number}) { //使用するタイマーの時間を変更する
       const time = state.getTime;
-      console.log("getTime:",time);
       state.getTime = time + number;
-      console.log(state.getTime);
+    },
+    countTime(state) {
+      state.isStop = false;
+      console.log(state.getTime, state.fetchTimers[state.currentTimerId].time);
+      state.setTime = setInterval(() => {
+        if(state.getTime > - state.fetchTimers[state.currentTimerId].time) {
+          state.getTime--;
+        } else if (state.getTime === 0) {
+          clearInterval(state.setTime);
+          state.isStop = true;
+          const sound = state.fetchTimers[state.currentTimerId].sound;
+          if(sound === 'single') {
+            const freeverb = new Tone.Freeverb().toDestination();
+            freeverb.dampening = 3000;
+            const plucky = new Tone.PluckSynth().connect(freeverb);
+            plucky.triggerAttack("G4", "+0.2");
+            plucky.triggerAttack("E5", "+0.4");
+            plucky.triggerAttack("D3", "+0.6");
+            plucky.triggerAttack("A2", "+0.8");
+          }
+          if(sound === 'poly') {
+            const synth2 = new Tone.PolySynth().toDestination();
+            synth2.set({ detune: -800 });
+            synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
+          }
+          if(sound === 'delay') {
+            const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
+            const synth3 = new Tone.PolySynth().connect(pingPong);
+            synth3.set({ detune: -800 });
+            synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
+          }
+        }
+      }, 1000);
+    },
+    stopTime(state) {
+      state.isStop = true;
+      clearInterval(state.setTime);
     },
     async addCommunityTimer(state, {name, style, color, sound, time}) {
       const q = query(collection(db, 'timers'));

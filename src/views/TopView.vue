@@ -8,13 +8,14 @@
 import MainComp from '@/components/MainComp.vue';
 
 export default {
-  // beforeRouteLeave (to, from, next) {
-  //   this.isShow = false;
-  //   setTimeout(() => {
-  //     console.log('top:beforeRouteLeave');
-  //     next();
-  //   }, 1000);
-  // },
+  beforeRouteLeave (to, from, next) {
+    setTimeout(() => {
+      this.$store.state.getTime = 0;
+      console.log(this.$store.state.getTime)
+      console.log('user:beforeRouteLeave');
+      next();
+    }, 500);
+  },
   components: {
     MainComp
   },

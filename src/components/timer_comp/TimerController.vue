@@ -57,18 +57,13 @@
 export default {
   data() {
     return {
-      time: null,
       x: 0,
       y: 0,
       isTT: false,
       isMM: true,
       tms: "",
-      setTime: '',
       countTime: null
     }
-  },
-  mounted() {
-    this.time = this.$store.state.fetchTimers[this.id].time;
   },
   computed: {
     id() {
@@ -76,59 +71,20 @@ export default {
     },
     sound() { //これを直接メソッドに突っ込む
       return this.$store.state.fetchTimers[this.id].sound; 
+    },
+    isStop() {
+      return this.$store.state.isStop;
+    },
+    time() {
+      return this.$store.state.fetchTimers[this.id].time;
     }
   },
   methods: {
-    startPlus() {
-      let addTime = this.$store.getters.getTime;
-      let count = 1;
-      let number;
-      if(this.isMM) {
-        number = count *60;
-        if(this.time + addTime + number <= 36000) {
-          this.$store.commit('changeTime', {number});
-        }
-      } else if(this.isTT) {
-        number = count *3600;
-        if(this.time + addTime + number <= 36000) {
-          this.$store.commit('changeTime', {number});
-        }
-      } else if(!this.isMM && !this.isTT) {
-        number = count;
-        if(this.time + addTime + number <= 36000) {
-          this.$store.commit('changeTime', {number});
-        }  
-      }
-    },
-    movePlus(e) {
-      console.log(e);
-    },
-    startMinus() {
-      let addTime = this.$store.getters.getTime;
-      let count = -1;
-      let number;
-      if(this.isMM && this.time + addTime) {
-        number = count *60;
-        if(this.time + addTime + number >= 0) {
-          this.$store.commit('changeTime', {number});
-        }
-      } else if(this.isTT) {
-        number = count *3600;
-        if(this.time + addTime + number >= 0) {
-          this.$store.commit('changeTime', {number});
-        }
-      } else if(!this.isMM && !this.isTT) {
-        number = count;
-        if(this.time + addTime + number >= 0) {
-          this.$store.commit('changeTime', {number});
-        }
-      }
-    },
-    moveMinus(e) {
-      console.log(e);
-    },
     // tt:mm::ssの選択 //
     checkToggle(e) {
+      console.log(this.time);
+      console.log(this.$store.getters.getTime);
+      console.log(this.$store.getters.time)
       this.x = e.changedTouches[0].clientX;
     },
     slideToggle(e) {
@@ -165,24 +121,71 @@ export default {
       this.x = xx;
       this.$emit("select-tms", this.tms);
     },
-    resetTime() { //リセット完成
-      const number = - this.$store.getters.time - this.$store.getters.getTime; 
-      // console.log(number);
-      this.$store.commit('changeTime', {number});
+    startPlus() { //カウントを足す
+      if(this.isStop) {
+        let addTime = this.$store.getters.getTime;
+        let count = 1;
+        let number;
+        if(this.isMM) {
+          number = count *60;
+          if(this.time + addTime + number <= 36000) {
+            this.$store.commit('changeTime', {number});
+          }
+        } else if(this.isTT) {
+          number = count *3600;
+          if(this.time + addTime + number <= 36000) {
+            this.$store.commit('changeTime', {number});
+          }
+        } else if(!this.isMM && !this.isTT) {
+          number = count;
+          if(this.time + addTime + number <= 36000) {
+            this.$store.commit('changeTime', {number});
+          }  
+        }
+      }
     },
-    startStop() {
-      console.log("S/S");
-      this.setTime = setInterval(() => {
-        this.countDown()
-      }, 1000);
+    movePlus(e) {
+      console.log(e);
     },
-    countDown() {
-      if(number > 0) {
-        number--;
-        console.log(number)
-      } else if(number === 0) {
-        clearInterval(this.setTime);
-        console.log("計測修了");
+    startMinus() { //カウントを減らす
+      if(this.isStop) {
+        let addTime = this.$store.getters.getTime;
+        let count = -1;
+        let number;
+        if(this.isMM && this.time + addTime) {
+          number = count *60;
+          if(this.time + addTime + number >= 0) {
+            this.$store.commit('changeTime', {number});
+          }
+        } else if(this.isTT) {
+          number = count *3600;
+          if(this.time + addTime + number >= 0) {
+            this.$store.commit('changeTime', {number});
+          }
+        } else if(!this.isMM && !this.isTT) {
+          number = count;
+          if(this.time + addTime + number >= 0) {
+            this.$store.commit('changeTime', {number});
+          }
+        }
+      }
+    },
+    moveMinus(e) {
+      console.log(e);
+    },
+    resetTime() { //カウントのリセット
+      if(this.isStop) {
+        const number = - this.$store.getters.time - this.$store.getters.getTime; 
+        this.$store.commit('changeTime', {number});
+      }
+    },
+    startStop() { //カウントダウンの入り切り
+      if(this.$store.getters.getTime  > - this.$store.getters.time) {
+        if(this.isStop) {
+          this.$store.commit('countTime');
+        } else if(!this.isStop) {
+          this.$store.commit('stopTime');
+        }
       }
     }
   }
