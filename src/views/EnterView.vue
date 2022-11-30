@@ -187,12 +187,11 @@ export default {
 @keyframes slideIn {
   0% {
     opacity: 0;
-    transform: rotateY(90deg);
-    scale: 0.7;
+    scale: 0;
   }
   100% {
     opacity: 1;
-    transform: rotateY(0deg);
+    scale: 1;
   }
 }
 </style>

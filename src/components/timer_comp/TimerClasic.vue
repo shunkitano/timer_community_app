@@ -1,52 +1,112 @@
 <template>
   <div class="wrapper">
     <div class="circle__wrapper">
-      <div class="circle" @touchstart="startCircle" @touchmove="moveCircle">
-        <div class="needle"></div> 
-        <div class="circle__top"></div>    
+      <div class="circle">
+        <div class="needle" :style="{'background-color': color, rotation}"></div> 
+        <div class="circle__top" :style="{'background-color': color}"></div>    
       </div><!--circle-->
+      <div class="text">
+      <p>{{ t }}:{{ m }}:{{ s }}</p>
+      <p>{{ name }}</p>
+    </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
+export default { //タイマー自体はstoreから情報を受け取るのみ！
+  props: ['isUse','isTms'],//TimerCompから情報をうけとる
   data() {
     return {
+      name: '',
+      time:null,
+      color: '',
       selectColor:'',
       num: 0,
       x: 0,
-      y: 0
+      y: 0,
+      styleObject: {
+        'background-color': ''
+      },
+      rotateNeedle: {
+        'transform': ''
+      } 
     }
   },
-  methods: {
-    startCircle(e) {
-      this.x = e.changedTouches[0].clientX;
-      this.y = e.changedTouches[0].clientY;
-      console.log(this.y);
-      console.log(this.x);
-    },
-    moveCircle(e) {
-      let xx = e.changedTouches[0].clientX;
-      let yy = e.changedTouches[0].clientY;
-      if(this.num <= 30 ) {
-        if(this.y < yy) {
-          this.num++;
-        }
-        else if(this.y > yy) {
-        this.num--;
-        }
-      }else if(30 < this.num) {
-        if(this.y < yy) {
-          this.num--;
-        }
-        else if(this.y > yy) {
-          this.num++;
-        }
-      }
-      this.y = yy;
-      this.x = xx;
+  mounted() {
+    console.log(this.isUse? "ここはメインです": "ここはコミュニティーです");
+    if(this.isUse) {
+      this.name = this.$store.state.fetchTimers[this.id].name; 
+      this.time = this.$store.getters.time; 
+      this.color = this.$store.state.fetchTimers[this.id].color;
+    } else if(!this.isUse) {
+      this.name = this.$store.state.communityTimers[this.id].name; 
+      this.time = this.$store.state.communityTimers[this.id].time; 
+      this.color = this.$store.state.communityTimers[this.id].color;
     }
+  },
+  computed: {
+    id() {
+      return this.$store.state.currentTimerId;
+    },
+    t() { //時間
+      let t = Math.floor((this.count/3600) % 60);
+      return ("0" + t).slice(-2);
+    },
+    m() { //分
+      let m = Math.floor((this.count/60) % 60);
+      return ("0" + m).slice(-2);
+    },
+    s() { //秒
+      let s = Math.floor(this.count % 60);
+      return ("0" + s).slice(-2);
+    },
+    count() {
+      let tms = this.time + this.getTime;
+      return tms;
+    },
+    getTime() {
+      return this.$store.getters.getTime;
+    },
+    reset() {
+      return this.$store.getters.reset;
+    },
+    checkStop() {
+      return this.$store.state.isStop;
+    },
+    rotation() {
+      return this.rotateNeedle['trasform'] = 'rotateZ(45deg)';
+    }
+    /* transform: rotateZ(45deg); */
+  },
+  methods: {
+    // startCircle(e) {
+    //   this.x = e.changedTouches[0].clientX;
+    //   this.y = e.changedTouches[0].clientY;
+    //   console.log(this.y);
+    //   console.log(this.x);
+    // },
+    // moveCircle(e) {
+    //   let xx = e.changedTouches[0].clientX;
+    //   let yy = e.changedTouches[0].clientY;
+    //   if(this.num <= 30 ) {
+    //     if(this.y < yy) {
+    //       this.num++;
+    //     }
+    //     else if(this.y > yy) {
+    //     this.num--;
+    //     }
+    //   }else if(30 < this.num) {
+    //     if(this.y < yy) {
+    //       this.num--;
+    //     }
+    //     else if(this.y > yy) {
+    //       this.num++;
+    //     }
+    //   }
+    //   this.y = yy;
+    //   this.x = xx;
+    // }
   }
 }
 </script>
@@ -79,7 +139,6 @@ export default {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  box-shadow: 0px 30px 90px, rgba(240, 240, 240, 0.8) 0px -30px 90px;
 }
 .circle {
   position: absolute;
@@ -92,8 +151,6 @@ export default {
   height: 250px;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
-  /* transform: rotateZ(45deg); */
   z-index: 1;
 }
 .needle {
@@ -105,7 +162,6 @@ export default {
   width: 3px;
   height: 125px;
   background: rgb(250, 50, 50);
-  box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 4px;
 }
 .circle__top {
   position: absolute;
@@ -118,7 +174,15 @@ export default {
   height: 20px;
   border-radius: 50%;
   background: rgba(250, 50, 50, 0.9);
-  box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 4px;
+}
+.text {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
 }
 </style>
 

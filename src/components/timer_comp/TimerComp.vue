@@ -53,8 +53,6 @@ export default {
       this.id = this.$store.state.currentTimerId;
       this.style = this.$store.state.fetchTimers[this.id].style;
     }
-    const loginUser = JSON.parse(sessionStorage.getItem('userInfo'));
-    console.log("loginUser",loginUser)
   },
   methods: {
     makeTimer(anim, isMakeTimer) {

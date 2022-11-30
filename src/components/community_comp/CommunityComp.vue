@@ -1,8 +1,8 @@
 <template>
   <div class="community">
     <UserButton class="userBtn"></UserButton>
-    <div class="header">
-      <h2 class="nico">Community</h2>
+    <div class="header" :class="{to__use:toUse}">
+      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "Community" : "Use timer"}}</h2>
     </div>
     <ul id="timers">
       <li v-for="(timer, index) in communityTimers" :key="index">
@@ -14,8 +14,11 @@
             <p>:</p>
             <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
-          <p class="timer__name">{{ timer.name }}</p>
-          <p>{{ timer.userName ? timer.userName : "none"}}</p>
+          <div class="timer__name">
+            <p>{{ timer.name }}</p>
+            <p>{{ timer.userName ? timer.userName : "none"}}</p>
+          </div>
+          
         </div>
       </li>
     </ul>
@@ -51,6 +54,13 @@
         </div><!--select__box-->
       </div><!--#select-->
     </transition>
+    <transition name="gest">
+      <div v-show="isGest" class="gest">
+        <h2 class="text">Please</h2>
+        <p class="text">login or sign up!</p>
+        <NormalButton text="Close" @touchBtn="closeGest"></NormalButton>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -60,6 +70,7 @@ import CloseBtn from '@/components/parts_comp/CloseBtn.vue';
 import TimerDigital from '@/components/timer_comp/TimerDigital.vue';
 import TimerClasic from '@/components/timer_comp/TimerClasic.vue';
 import TimerCircle from '@/components/timer_comp/TimerCircle.vue';
+import NormalButton from '@/components/parts_comp/NormalButton.vue';
 
 export default {
   components: {
@@ -67,7 +78,8 @@ export default {
     CloseBtn,
     TimerDigital,
     TimerClasic,
-    TimerCircle
+    TimerCircle,
+    NormalButton
   },
   data() {
     return {
@@ -75,7 +87,9 @@ export default {
       selectStyle: '', //表示するタイマーの種類を絞り込む
       selectTimerName: '',
       isUse: false,
-      index: null
+      index: null,
+      toUse: false,
+      isGest: false
     }
   },
   async mounted() {
@@ -91,6 +105,12 @@ export default {
     }
   },
   methods: {
+    useTimer() {
+      this.toUse = true;
+    },
+    toTop() {
+      this.$router.push('/top');
+    },
     selectTimer(index) {
       console.log(index);
       this.index = index;
@@ -108,7 +128,8 @@ export default {
     },
     addCommunityTimer() {
       if(this.$store.state.uid === null) {
-        this.$router.push('/');
+        this.closeSelect();
+        this.isGest = true;
       } else if(this.$store.state.uid !== null) {
         const name = this.communityTimers[this.index].name;
         const style = this.communityTimers[this.index].style;
@@ -118,7 +139,10 @@ export default {
         this.$store.commit('addCommunityTimer', {name, style, color, sound, time});
         this.closeSelect();
       }
-    }
+    },
+    closeGest(isFalse) {
+      this.isGest = isFalse;
+    },
   }
 }
 </script>
@@ -154,6 +178,18 @@ export default {
   border-radius: 40px;
   box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
+.to__use h2 {
+  animation: vanish1 0.5s ease;
+}
+@keyframes vanish1 {
+  0% {
+    scale: 1;
+  }
+  100% {
+    color: rgba(240, 10, 10, 0.8);
+    scale: 0.5;
+  }
+}
 .community .userBtn {
   position: absolute;
   top: 0;
@@ -174,7 +210,6 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   text-align: center;
   list-style: none;
   margin: 1rem auto 0;
@@ -183,12 +218,11 @@ export default {
   border-radius: 10px;
 }
 #timers li div {
-  /* width: 100%; */
   display: flex;
   align-items: center;
 }
 .timer__box {
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -202,18 +236,18 @@ export default {
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
 }
-.nico>p:last-child {
+.timer__name {
+  padding: 0.5rem;
+  margin-left: 1rem;
+  color: rgba(250, 250, 250, 1);
+  background-color: rgba(0, 0, 0, 1);
+  border-radius: 20px;
+}
+.timer__name p:last-child {
   padding: 0.5rem;
   margin-left: 0.5rem;
   color: rgba(0, 0, 0, 1);
   background-color: rgba(250, 250, 250, 1);
-  border-radius: 20px;
-}
-.timer__name {
-  padding: 1rem;
-  margin-left: 1rem;
-  color: rgba(250, 250, 250, 1);
-  background-color: rgba(0, 0, 0, 1);
   border-radius: 20px;
 }
 .digital {
@@ -279,7 +313,7 @@ export default {
 .select__box p {
   width: 80%;
   font-size: 1.6rem;
-  color: rgba(250, 250, 250, 1);
+  color: rgba(250, 250, 250, 0.8);
 }
 .select__box svg {
   transform: rotateZ(-90deg);
@@ -288,30 +322,53 @@ export default {
   width: 100%
 }
 .look-enter-active {
-  animation: appear 0.3s ease;
+  animation: upIn 0.8s ease;
 }
 .look-leave-active {
-  animation: appear 0.5s reverse;
+  animation: upIn 0.5s ease reverse;
 }
-@keyframes appear {
+@keyframes upIn {
   0% {
-    transform: scale(3, 0);
-    opacity: 0;
-  }
-  5% {
-    opacity: 0.8;
-    transform: scale(2, 0.5);
-  }
-  10% {
-    opacity: 0.8;
-    transform: scale(2.5, 0.1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(2, 0.5);
+    transform: translateY(100vh);
   }
   100% {
-    scale: 1;
+    transform: translateY(0);
+  }
+}
+.gest {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  width: 80%;
+  height: 30%;
+  background-color: rgba(250, 250, 250, 0.7);
+  backdrop-filter: blur(2px);
+  border-radius: 40px;
+  color: rgba(240, 10, 10, 0.8);
+  font-size: 1.4rem;
+}
+.gest p {
+  margin-bottom: 1rem;
+}
+.gest-enter-active {
+  animation: downIn 0.8s ease;
+}
+.gest-leave-active {
+  animation: downIn 0.5s ease reverse;
+}
+@keyframes downIn {
+  0% {
+    transform: translateY(-100vh);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 </style>

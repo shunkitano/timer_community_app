@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { db } from '@/firebase/firebase'
-import { addDoc, collection, serverTimestamp,  getDocs, query, updateDoc, orderBy , doc, deleteDoc, where} from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp,  getDocs, query, updateDoc, orderBy , doc, deleteDoc, where} from 'firebase/firestore'//
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import * as Tone from 'tone';
 
@@ -112,6 +112,11 @@ const store = new Vuex.Store({
       console.log(state.fetchTimersIds[id]);
       const docId = state.fetchTimersIds[id];
       await deleteDoc(doc(db, 'timers', `${docId}` ));
+      // const arr = state.fetchTimers;
+      // const index = id;
+      // console.log(arr);
+      // arr.splice(index, 1);
+      // console.log(arr);
     },
     changeTime(state, {number}) { //使用するタイマーの時間を変更する
       const time = state.getTime;

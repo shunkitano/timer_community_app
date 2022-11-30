@@ -35,13 +35,13 @@ export default {
   background-color: rgba(240, 240, 240, 0.8);
   border: solid 1px rgba(0, 0, 0, 0.8);
   border-radius: 40px;
-  /* transition: 1s ease; */
+  transition: 1s ease;
   box-shadow: 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
-/* .user button:active {
+.user button:active {
   font-size: 1.6rem;
   margin-right: 200px;
   border-radius: 0 40px 40px 0;
   border-left: none;
-} */
+}
 </style>

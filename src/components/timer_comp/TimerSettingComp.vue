@@ -27,10 +27,16 @@
     <transition name="empty">
       <div v-show="isEmpty" class="empty">
         <h2 class="text">Empty!</h2>
-        <NormalButton text="Close" id="btn" @touchBtn="closeEmpty"></NormalButton>
+        <NormalButton text="Close" @touchBtn="closeEmpty"></NormalButton>
       </div>
     </transition>
-    
+    <transition name="gest">
+      <div v-show="isGest" class="gest">
+        <h2 class="text">Please</h2>
+        <p class="text">login or sign up!</p>
+        <NormalButton text="Close" @touchBtn="closeGest"></NormalButton>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -67,7 +73,8 @@ export default {
       styleObject: {
         'background-color': ''
       },
-      isEmpty: false
+      isEmpty: false,
+      isGest: false
     }
   },
   computed: {
@@ -183,7 +190,7 @@ export default {
           this.$router.push('/user');
         } else if (this.$store.state.uid === null) {
           this.clear();
-          this.$router.push('/');
+          this.isGest = true;
         }
       }
     },
@@ -202,6 +209,9 @@ export default {
     },
     closeEmpty(isFalse) {
       this.isEmpty = isFalse;
+    },
+    closeGest(isFalse) {
+      this.isGest = isFalse;
     },
     mainPage() { //メインページへ飛ぶ
       if(!this.$store.state.empty) {
@@ -242,18 +252,21 @@ input[type="text"],[type="number"] {
 .setting input {
   font-size: 1.2rem;
   height: 50px;
-  margin: 0.5rem 0 0.5rem;
+  margin: 1rem 0 0;
   border-radius: 40px;
   color: rgba(0, 0, 0, 1);
   text-shadow: 1px 0px 2px rgba(250, 250, 250, 1);
   background-color: rgba(0, 0, 0, 0);
-  border: solid 1px rgba(0, 0, 0, 1);
+  border: none;
+  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(0, 0, 0, 1) 0px -2px 4px;
 }
 .setting>input:first-child {
+  border: solid 1px rgba(0, 0, 0, 1);
   text-align: center;
+  box-shadow: none;
 }
 .setting input:active {
-  animation: neonline 2s ease;
+  animation: neonline 0.3s ease;
 }
 @keyframes neonline {
   25% {
@@ -291,7 +304,7 @@ input[type="text"],[type="number"] {
 }
 /* Number */
 .number {
-  margin: 0.5rem 0 0.5rem;
+  margin: 1rem 0 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -331,6 +344,7 @@ input[type="text"],[type="number"] {
   margin-top: 5px;
   width: 32%;
   height: 60px;
+  box-shadow: none;
 }
 .calc input:first-child {
   border-radius: 0 0 0 20px;
@@ -413,6 +427,42 @@ input[type="text"],[type="number"] {
   100% {
     transform: scale(2, 0);
     opacity: 0;
+  }
+}
+.gest {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  width: 80%;
+  height: 30%;
+  background-color: rgba(250, 250, 250, 0.7);
+  backdrop-filter: blur(2px);
+  border-radius: 40px;
+  color: rgba(240, 10, 10, 0.8);
+  font-size: 1.4rem;
+}
+.gest p {
+  margin-bottom: 1rem;
+}
+.gest-enter-active {
+  animation: downIn 0.8s ease;
+}
+.gest-leave-active {
+  animation: downIn 0.5s ease reverse;
+}
+@keyframes downIn {
+  0% {
+    transform: translateY(-100vh);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 </style>

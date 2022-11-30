@@ -29,7 +29,7 @@ export default {
       }
     },
     cutItem() {
-      this.$emit("cut-item", this.childIndex );
+      this.$emit("cut-item", this.childIndex);
     }
   }
 }

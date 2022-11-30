@@ -49,7 +49,7 @@ p {
   right: 0;
   bottom: 0;
   margin: auto;
-  background-color: rgba(240, 10, 10, 1);
+  background-color: rgba(230, 230, 230, 1);
   width: 40px;
   height: 4px;
   border-radius: 2px;
@@ -64,7 +64,7 @@ p {
   right: 0;
   bottom: 0;
   margin: auto;
-  background-color: rgba(240, 10, 10, 1);
+  background-color: rgba(230, 230, 230, 1);
   width: 40px;
   height: 4px;
   border-radius: 2px;

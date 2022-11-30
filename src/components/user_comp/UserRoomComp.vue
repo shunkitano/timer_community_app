@@ -1,8 +1,8 @@
 <template>
   <div class="user__room">
-    <div class="header">
-      <input type="button" class="logout nico" value="Logout" @touchstart="logOut">
-      <h2 class="nico">{{userName}}'s timers</h2>
+    <div class="header" :class="{to__use:toUse}">
+      <input type="button" class="logout nico" value="Logout" @touchstart="beforeLogOut" @touchend="logOut" :class="{before__logout:isLogOut}">
+      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "user :" + userName : "Use timer"}}</h2>
       <CommunityButton class="comBtn"></CommunityButton>
     </div>
     <ul id="timers">
@@ -15,12 +15,12 @@
             <p>:</p>
             <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
           </div>
-          <p class="timer__name" :class="{add__com:isCom && isId === index}">{{ timer.name }}</p>
+          <p class="timer__name" :class="{add__com:isCom && isId === index, return__com:!isCom && isId === index}">{{ timer.name }}</p>
           <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childIndex="index"></OpenCloseButton>
         </div>
         <transition name="fade">
           <div class="edit" v-if="isEdit && isId === index">
-            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childIndex="index" :useOnly="timer.useOnly" :isCom="isCom"></WitchButton>
+            <WitchButton text1="private" text2='community' @is-left="putPrivate" @is-right="putCom" :childIndex="index" :useOnly="timer.useOnly"></WitchButton>
             <CutButton @before-cut="beforeCut" @cut-item="deleteTimer" :childIndex="index"></CutButton>
           </div><!--edit-->
         </transition>
@@ -53,8 +53,11 @@ export default {
       userName: '',
       isTrue: true,
       isEdit: false,
-      isCom: false,
       isCut: false,
+      isId: null,
+      isCom: -1,
+      toUse: false,
+      isLogOut: false
     }
   },
   async mounted() {
@@ -74,6 +77,12 @@ export default {
     }
   },
   methods: {
+    useTimer() {
+      this.toUse = true;
+    },
+    toTop() {
+      this.$router.push('/top');
+    },
     fetchDatas() { //データ削除後の画面更新
       this.$store.dispatch('fetchDatas');
     },
@@ -83,6 +92,9 @@ export default {
         this.$store.commit('selectTimer',{index});
       this.$router.push('/top');
       } 
+    },
+    beforeLogOut() {
+      this.isLogOut = true;
     },
     logOut() {
       signOut(auth).then(() => {
@@ -113,9 +125,9 @@ export default {
         privateCom: isThis,
       })
     },
-    deleteTimer(isId) { //タイマーを削除する
+    async deleteTimer(isId) { //タイマーを削除する
       console.log(isId);
-      this.$store.commit('deleteTimer', {
+      await this.$store.commit('deleteTimer', {
         id: isId,
       })
       this.isCut = false;
@@ -158,6 +170,18 @@ export default {
   border-radius: 40px;
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
+.user__room .before__logout {
+  animation: inflate 0.5s ease;
+}
+@keyframes inflate {
+  0% {
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.5;
+  }
+}
 /* header */
 .header {
   position: fixed;
@@ -181,6 +205,18 @@ export default {
   border: solid 1px rgba(125, 125, 125, 0.8);
   border-radius: 40px;
   box-shadow: inset rgba(125, 125, 125, 0.8) 0px 2px 4px, inset rgba(125, 125, 125, 0.8) 0px -2px 4px;
+}
+.to__use h2 {
+  animation: vanish 0.5s ease;
+}
+@keyframes vanish {
+  0% {
+    scale: 1;
+  }
+  100% {
+    color: rgba(240, 10, 10, 0.8);
+    scale: 0.5;
+  }
 }
 /* Timers */
 #timers {
@@ -223,12 +259,6 @@ export default {
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
 }
-.deleted .timer__time {
-  width: 20px;
-  height: 20px;
-  animation: vanish 0.3s;
-}
-
 .timer__name {
   padding: 1rem;
   background-color: rgba(250, 250, 250, 0.8);
@@ -246,39 +276,39 @@ export default {
   }
   10% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 10%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1));
   }
   20% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 20%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1));
   }
   30% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 30%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 1));
   }
   40% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 40%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 1));
   }
   50% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
   }
   60% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 60%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 1));
   }
   70% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 70%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 1));
   }
   80% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 80%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 1));
   }
   90% {
     color: rgba(250, 250, 250, 0.8);
-    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 90%, rgba(250, 250, 250, 0.8));
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 1));
   }
   100% {
     color: rgba(250, 250, 250, 0.8);
@@ -290,48 +320,48 @@ export default {
 }
 @keyframes returnCom {
   0% {
-    color: rgba(0, 0, 0, 1);
+    color: rgba(250, 250, 250, 0.8);
     background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8));
   }
   10% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 90%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 90%, rgba(0, 0, 0, 1));
   }
   20% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 80%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 80%, rgba(0, 0, 0, 1));
   }
   30% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 70%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 70%, rgba(0, 0, 0, 1));
   }
   40% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 60%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 60%, rgba(0, 0, 0, 1));
   }
   50% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1));
   }
   60% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 40%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 40%, rgba(0, 0, 0, 1));
   }
   70% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 30%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 30%, rgba(0, 0, 0, 1));
   }
   80% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 20%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 20%, rgba(0, 0, 0, 1));
   }
   90% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8) 10%, rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(250, 250, 250, 0.8) 10%, rgba(0, 0, 0, 1));
   }
   100% {
-    color: rgba(0, 0, 0, 1);
-    background: linear-gradient(0.25turn, rgba(0, 0, 0, 1), rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1));
+    color: rgba(250, 250, 250, 0.8);
+    background: linear-gradient(0.25turn, rgba(250, 250, 250, 0.8), rgba(0, 0, 0, 1));
   }
 }
 .open__close {
