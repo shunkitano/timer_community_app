@@ -42,21 +42,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../components/SignUpComp.vue')
   },
   {
-    path: '/clasic',
-    name: 'clasic',
-    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerClasic.vue')
-  },
-  {
-    path: '/digital',
-    name: 'digital',
-    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerDigital.vue')
-  },
-  {
-    path: '/circle',
-    name: 'circle',
-    component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerCircle.vue')
-  },
-  {
     path: '/controller',
     name: 'controller',
     component: () => import(/* webpackChunkName: "about" */ '../components/timer_comp/TimerController.vue')

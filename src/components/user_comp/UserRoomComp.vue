@@ -8,12 +8,12 @@
     <ul id="timers">
       <li v-for="(timer, index) in lineUpTimers" :key="index">
         <div class="timer nico" :class="{deleted:isCut && isId === index}">
-          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(index)">
-            <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
+          <div :style="{'background-color': timer.themeColor}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(index)">
+            <p>{{ ((timer.time - timer.time%360000) / 360000) >= 10 ? (timer.time - timer.time%360000) / 360000 : "0" + ((timer.time - timer.time%360000) / 360000) }}</p>
             <p>:</p>
-            <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
+            <p>{{ ((timer.time%360000 - timer.time%6000 ) / 6000) >= 10 ? (timer.time%360000 - timer.time%6000 ) / 6000 : "0" + ((timer.time%360000 - timer.time%6000 ) / 6000) }}</p>
             <p>:</p>
-            <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
+            <p>{{ timer.time%6000 /100  >= 10 ? timer.time%6000 /100  : "0" + timer.time%6000 /100 }}</p>
           </div>
           <p class="timer__name" :class="{add__com:isCom && isId === index, return__com:!isCom && isId === index}">{{ timer.name }}</p>
           <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childIndex="index"></OpenCloseButton>
@@ -245,12 +245,13 @@ export default {
   border-radius: 10px;
 }
 .timer__time {
-  display: flex;
-  align-items: center;
+  display: block;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   width: 80px;
   height: 80px;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
   border: solid 0.5px rgba(20, 20, 20, 0.8);
 }
 .timer__time p {
@@ -258,6 +259,7 @@ export default {
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
+  text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 2px;
 }
 .timer__name {
   padding: 1rem;
@@ -372,7 +374,7 @@ export default {
 .digital {
   border-radius: 10px;
 }
-.clasic {
+.chronograph {
   border-radius: 30px;
 }
 .circle {

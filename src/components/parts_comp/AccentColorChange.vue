@@ -22,14 +22,13 @@ export default {
     }
   },
   mounted() {
-    return this.colors = this.$store.state.colors;
+    return this.colors = this.$store.state.accentColors;
   },
   methods: {
     thisColor(index) {
       const reset = "";
       this.color = this.colors[index].name;
       this.$emit("colorChange", reset, this.color, this.colors[index].color);
-      // console.log(this.colors[index].color);
       this.styleObject['background-color'] = this.colors[index].color;
     }
   }

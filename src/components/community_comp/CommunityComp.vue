@@ -7,12 +7,12 @@
     <ul id="timers">
       <li v-for="(timer, index) in communityTimers" :key="index">
         <div class="nico" @touchstart="selectTimer(index)">
-          <div :style="{'background-color': timer.color}" :class="timer.style" class="timer__box">
-            <p>{{ ((timer.time - timer.time%3600) / 3600) >= 10 ? (timer.time - timer.time%3600) / 3600 : "0" + ((timer.time - timer.time%3600) / 3600) }}</p>
+          <div :style="{'background-color': timer.themeColor}" :class="timer.style" class="timer__box">
+            <p :style="{'color': timer.accentColor}">{{ ((timer.time - timer.time%360000) / 360000) >= 10 ? (timer.time - timer.time%360000) / 360000 : "0" + ((timer.time - timer.time%360000) / 360000) }}</p>
             <p>:</p>
-            <p>{{ ((timer.time%3600 - timer.time%60 ) / 60) >= 10 ? (timer.time%3600 - timer.time%60 ) / 60 : "0" + ((timer.time%3600 - timer.time%60 ) / 60) }}</p>
+            <p :style="{'color': timer.accentColor}">{{ ((timer.time%360000 - timer.time%6000 ) / 6000) >= 10 ? (timer.time%360000 - timer.time%6000 ) / 6000 : "0" + ((timer.time%360000 - timer.time%6000 ) / 6000) }}</p>
             <p>:</p>
-            <p>{{ timer.time%60 >= 10 ? timer.time%60 : "0" + timer.time%60}}</p>
+            <p :style="{'color': timer.accentColor}">{{ timer.time%6000 /100  >= 10 ? timer.time%6000 /100  : "0" + timer.time%6000 /100 }}</p>
           </div>
           <div class="timer__name">
             <p>{{ timer.name }}</p>
@@ -24,10 +24,9 @@
     </ul>
     <transition name="look">
       <div id="select" v-if="isSelect">
-        <p class="nico">{{ selectTimerName }}</p>
         <div class="select__timer">
-          <TimerDigital v-if="selectStyle === 'digital'" class="sample" :isUse="isUse"></TimerDigital>
-          <TimerClasic v-if="selectStyle === 'clasic'" class="sample" :isUse="isUse"></TimerClasic>
+          <DigitalTimer v-if="selectStyle === 'digital'" class="sample" :isUse="isUse"></DigitalTimer>
+          <ChronographTimer v-if="selectStyle === 'chronograph'" class="sample" :isUse="isUse"></ChronographTimer>
           <TimerCircle v-if="selectStyle === 'circle'" class="sample" :isUse="isUse"></TimerCircle>
         </div>
         <div class="select__box">
@@ -67,8 +66,8 @@
 <script>
 import UserButton from '@/components/parts_comp/UserButton.vue';
 import CloseBtn from '@/components/parts_comp/CloseBtn.vue';
-import TimerDigital from '@/components/timer_comp/TimerDigital.vue';
-import TimerClasic from '@/components/timer_comp/TimerClasic.vue';
+import DigitalTimer from '@/components/timer_comp/DigitalTimer.vue';
+import ChronographTimer from '@/components/timer_comp/ChronographTimer.vue';
 import TimerCircle from '@/components/timer_comp/TimerCircle.vue';
 import NormalButton from '@/components/parts_comp/NormalButton.vue';
 
@@ -76,8 +75,8 @@ export default {
   components: {
     UserButton,
     CloseBtn,
-    TimerDigital,
-    TimerClasic,
+    DigitalTimer,
+    ChronographTimer,
     TimerCircle,
     NormalButton
   },
@@ -133,10 +132,11 @@ export default {
       } else if(this.$store.state.uid !== null) {
         const name = this.communityTimers[this.index].name;
         const style = this.communityTimers[this.index].style;
-        const color = this.communityTimers[this.index].color;
+        const themeColor = this.communityTimers[this.index].themeColor;
+        const accentColor = this.communityTimers[this.index].accentColor;
         const sound = this.communityTimers[this.index].sound;
         const time = this.communityTimers[this.index].time;
-        this.$store.commit('addCommunityTimer', {name, style, color, sound, time});
+        this.$store.commit('addCommunityTimer', {name, style, themeColor, accentColor, sound, time});
         this.closeSelect();
       }
     },
@@ -235,6 +235,7 @@ export default {
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
+  text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 2px;
 }
 .timer__name {
   padding: 0.5rem;
@@ -253,7 +254,7 @@ export default {
 .digital {
   border-radius: 10px;
 }
-.clasic {
+.chronograph {
   border-radius: 30px;
 }
 .circle {
@@ -275,6 +276,7 @@ export default {
   backdrop-filter: brightness(70%);
   z-index: -1;
 }
+/*Select*/
 #select {
   position: absolute;
   top: 0;
@@ -289,9 +291,9 @@ export default {
   align-items: center;
   text-align: center;
   width: 100%;
-  height: 80vh;
-  background-color: rgba(250, 250, 250, 0.5);
-  backdrop-filter: blur(1px);
+  height: 100vh;
+  /* background-color: rgba(250, 250, 250, 0.5);
+  backdrop-filter: blur(1px); */
 }
 #select p:first-child {
   position: fixed;

@@ -4,8 +4,8 @@
       <TimerSettingComp  v-if="isMakeTimer" class="setting" @my-click='closeSetting'></TimerSettingComp>
       <div class="timer" v-else>
         <TimerHeader @makeTimer="makeTimer" class="header"></TimerHeader>
-        <TimerDigital v-if="style === 'digital'" :isTms="isTms" class="timer__comp" :isUse="isUse"></TimerDigital>
-        <TimerClasic v-if="style === 'clasic'" :isTms="isTms" class="timer__comp" :isUse="isUse"></TimerClasic>
+        <DigitalTimer v-if="style === 'digital'" :isTms="isTms" class="timer__comp" :isUse="isUse"></DigitalTimer>
+        <ChronographTimer v-if="style === 'chronograph'" :isTms="isTms" class="timer__comp" :isUse="isUse"></ChronographTimer>
         <TimerCircle v-if="style === 'circle'" :isTms="isTms" class="timer__comp" :isUse="isUse"></TimerCircle>
         <TimerController class="controller" @select-tms="selectTms"></TimerController>
       </div><!--timer-->
@@ -16,8 +16,8 @@
 <script>
 import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
 import TimerHeader from '@/components/timer_comp/TimerHeader.vue';
-import TimerClasic from '@/components/timer_comp/TimerClasic.vue';
-import TimerDigital from '@/components/timer_comp/TimerDigital.vue';
+import ChronographTimer from '@/components/timer_comp/ChronographTimer.vue';
+import DigitalTimer from '@/components/timer_comp/DigitalTimer.vue';
 import TimerCircle from '@/components/timer_comp/TimerCircle.vue';
 import TimerController from '@/components/timer_comp/TimerController.vue';
 
@@ -25,8 +25,8 @@ export default {
   components: {
     TimerSettingComp,
     TimerHeader,
-    TimerClasic,
-    TimerDigital,
+    ChronographTimer,
+    DigitalTimer,
     TimerCircle,
     TimerController
   },

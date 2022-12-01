@@ -1,13 +1,18 @@
 <template>
   <div class="wrapper">
-    <div class="digital" :style="{'background-color': color }">
-      <p :style="{'color': color}" class="nico">{{name}}</p>
+    <div class="digital" :style="{'background-color': themeColor}">
+      <p class="nico">{{name}}</p>
         <div class="watch">
-          <p class="text" :class="{light:isTms === '1'}">{{ t }}</p>
-          <p class="text" :class="{light:isTms === '2'}">{{ m }}</p>
-          <p class="text" :class="{light:isTms === '3'}">{{ s }}</p>
+          <p class="text" :style="{'color': accentColor}">{{ t }}</p>
+          <p class="text" :style="{'color': accentColor}">{{ m }}</p>
+          <p class="text" :style="{'color': accentColor}">{{ s }}</p>
+          <div class="light__wrapper">
+            <p :class="{light:isTms === '1'}"></p>
+            <p :class="{light:isTms === '2'}"></p>
+            <p :class="{light:isTms === '3'}"></p>
+          </div>
         </div>
-      <p>{{ message }}</p>
+      <p :style="{'color': accentColor}">{{ message }}</p>
     </div>
   </div>
   
@@ -20,10 +25,8 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
     return {
       name: '',
       time: null,
-      color: '',
-      styleObject: {
-        'background-color': ''
-      }
+      themeColor: '',
+      accentColor: ''
     }
   },
   mounted() {
@@ -31,11 +34,13 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
     if(this.isUse) {
       this.name = this.$store.state.fetchTimers[this.id].name; 
       this.time = this.$store.getters.time; 
-      this.color = this.$store.state.fetchTimers[this.id].color;
+      this.themeColor = this.$store.state.fetchTimers[this.id].themeColor;
+      this.accentColor = this.$store.state.fetchTimers[this.id].accentColor;
     } else if(!this.isUse) {
       this.name = this.$store.state.communityTimers[this.id].name; 
       this.time = this.$store.state.communityTimers[this.id].time; 
-      this.color = this.$store.state.communityTimers[this.id].color;
+      this.themeColor = this.$store.state.communityTimers[this.id].themeColor;
+      this.accentColor = this.$store.state.communityTimers[this.id].accentColor;
     }
   },
   computed: {
@@ -43,15 +48,15 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       return this.$store.state.currentTimerId;
     },
     t() { //時間
-      let t = Math.floor((this.count/3600) % 60);
+      let t = Math.floor((this.count/360000) % 60);
       return ("0" + t).slice(-2);
     },
     m() { //分
-      let m = Math.floor((this.count/60) % 60);
+      let m = Math.floor((this.count/6000) % 60);
       return ("0" + m).slice(-2);
     },
     s() { //秒
-      let s = Math.floor(this.count % 60);
+      let s = Math.floor(this.count/100 % 60);
       return ("0" + s).slice(-2);
     },
     count() {
@@ -114,11 +119,11 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
 /* タイトル */
 .digital>p:first-child {
   position: absolute;
-  top: 2rem;
+  top: 1rem;
   font-size: 2.2rem;
-  color: rgba(200, 200, 200, 0.8);
+  color: rgba(0, 0, 0, 0.9);
   display: inline;
-  text-shadow: 1px 1px 1px rgba(240, 240, 240, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.7);
+  /* text-shadow: 1px 1px 1px rgba(240, 240, 240, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.7); */
 }
 /* メッセージ */
 .digital>p:last-child {
@@ -126,13 +131,14 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   bottom: 2rem;
   width: 240px;
   font-size: 1.2rem;
-  color: rgba(0, 255, 4, 0.9);
+  /* color: rgba(0, 255, 4, 0.9); */
   display: inline;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(20, 20, 20, 0.9);
   border-radius: 15px;
   box-shadow: inset rgba(0, 0, 0, 0.8) 0px 1px 2px, inset rgba(240, 240, 240, 0.8) 0px -1px 2px;
 }
 .watch {
+  position: relative;
   display: flex;
   gap: 0.5rem;
 }
@@ -143,24 +149,37 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   height: 5rem;
   padding: 1rem;
   line-height: 3rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(20, 20, 20, 0.9);
   border-radius: 1rem;
-  color: rgba(0, 255, 4, 0.9);
   box-shadow: inset rgba(0, 0, 0, 0.8) 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
-.light {
-  position: relative;
-}
-.light::after {
-  content: "";
+.light__wrapper {
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
   margin: auto;
-  width: 50%;
-  height: 4px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.light__wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 85%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+.light__wrapper .light {
   border-radius: 2px;
+  width: 50px;
+  height: 4px;
   background-color: rgba(0, 255, 4, 0.9);
+  margin-bottom: 0.5rem;
 }
 </style>

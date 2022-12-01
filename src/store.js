@@ -18,12 +18,21 @@ const store = new Vuex.Store({
     users: [], //コミュニティのタイマーにユーザー名を結びつけるための配列
     uid: null, //ログインしているユーザーのuid
     empty: '', //ログインしておりかつ、タイマーが空の場合に、作成画面に飛ぶ
-    colors: [
+    themeColors: [
       {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
-      {id: 2, name: 'green', color: 'rgba(50, 180, 100, 0.8)'},
+      {id: 2, name: 'green', color: 'rgba(0, 255, 4, 0.9)'},
       {id: 3, name: 'blue', color: 'rgba(50, 70, 200, 0.8)'},
       {id: 4, name: 'red', color: 'rgba(240, 10, 10, 0.8)'},
-      {id: 5, name: 'dark', color: 'rgba(20, 20, 20, 0.8)'}
+      {id: 1, name: 'darkgrey', color: 'rgba(100, 100, 100, 0.8)'},
+      {id: 5, name: 'brack', color: 'rgba(20, 20, 20, 0.8)'}
+    ],
+    accentColors: [
+      {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
+      {id: 2, name: 'green', color: 'rgba(0, 255, 4, 0.9)'},
+      {id: 3, name: 'blue', color: 'rgba(50, 70, 200, 0.8)'},
+      {id: 4, name: 'red', color: 'rgba(240, 10, 10, 0.8)'},
+      {id: 1, name: 'darkgrey', color: 'rgba(100, 100, 100, 0.8)'},
+      {id: 5, name: 'brack', color: 'rgba(20, 20, 20, 0.8)'}
     ],
     sounds: [
       {id: 1, name: 'single'},
@@ -32,7 +41,7 @@ const store = new Vuex.Store({
     ],
     styles: [
       {id: 1, name: 'digital'},
-      {id: 2, name: 'clasic'},
+      {id: 2, name: 'chronograph'},
       {id: 3, name: 'circle'}
     ],
     currentTimerId: 0, //TimerComp.vueに表示されるタイマーのIDが入る（ユーザーが使用するタイマー）
@@ -46,7 +55,7 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    async makeTimer(state, {text, style, color, sound, time}) { //firebaseにタイマーを追加する
+    async makeTimer(state, {text, style, themeColor, accentColor, sound, time}) { //firebaseにタイマーを追加する
       const q = query(collection(db, 'timers'));
       const timersDoc = await getDocs(q);
       let setid = 0;
@@ -66,7 +75,8 @@ const store = new Vuex.Store({
         userId: state.uid,
         name: text,
         style: style,
-        color: color,
+        themeColor: themeColor,
+        accentColor: accentColor,
         sound: sound,
         time: time,
         isCom: false,
@@ -112,11 +122,6 @@ const store = new Vuex.Store({
       console.log(state.fetchTimersIds[id]);
       const docId = state.fetchTimersIds[id];
       await deleteDoc(doc(db, 'timers', `${docId}` ));
-      // const arr = state.fetchTimers;
-      // const index = id;
-      // console.log(arr);
-      // arr.splice(index, 1);
-      // console.log(arr);
     },
     changeTime(state, {number}) { //使用するタイマーの時間を変更する
       const time = state.getTime;
@@ -153,13 +158,13 @@ const store = new Vuex.Store({
           }
           state.isStop = true;
         }
-      }, 1000);
+      }, 10);
     },
     stopTime(state) {
       state.isStop = true;
       clearInterval(state.setTime);
     },
-    async addCommunityTimer(state, {name, style, color, sound, time}) {
+    async addCommunityTimer(state, {name, style, themeColor, accentColor, sound, time}) {
       const q = query(collection(db, 'timers'));
       const timersDoc = await getDocs(q);
       let setid = 0;
@@ -179,7 +184,8 @@ const store = new Vuex.Store({
         userId: state.uid,
         name: name,
         style: style,
-        color: color,
+        themeColor: themeColor,
+        accentColor: accentColor,
         sound: sound,
         time: time,
         isCom: false,
@@ -256,7 +262,6 @@ const store = new Vuex.Store({
     async fetchCommunityDatas({commit}) { //コミュニティに入るタイマーを取得する
       const q = await query(collection(db, 'timers'), orderBy('createdAt'));
       const timersDoc = await getDocs(q);
-      // console.log("com:",timersDoc);
       const getTimers = [];
       timersDoc.forEach((doc) => {
         if(doc.data().isCom === true) {

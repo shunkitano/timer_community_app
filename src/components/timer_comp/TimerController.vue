@@ -127,18 +127,18 @@ export default {
         let count = 1;
         let number;
         if(this.isMM) {
-          number = count *60;
-          if(this.time + addTime + number <= 36000) {
+          number = count *6000;
+          if(this.time + addTime + number <= 3600000) {
             this.$store.commit('changeTime', {number});
           }
         } else if(this.isTT) {
-          number = count *3600;
-          if(this.time + addTime + number <= 36000) {
+          number = count *360000;
+          if(this.time + addTime + number <= 3600000) {
             this.$store.commit('changeTime', {number});
           }
         } else if(!this.isMM && !this.isTT) {
-          number = count;
-          if(this.time + addTime + number <= 36000) {
+          number = count *100;
+          if(this.time + addTime + number <= 3600000) {
             this.$store.commit('changeTime', {number});
           }  
         }
@@ -153,17 +153,17 @@ export default {
         let count = -1;
         let number;
         if(this.isMM && this.time + addTime) {
-          number = count *60;
+          number = count *6000;
           if(this.time + addTime + number >= 0) {
             this.$store.commit('changeTime', {number});
           }
         } else if(this.isTT) {
-          number = count *3600;
+          number = count *360000;
           if(this.time + addTime + number >= 0) {
             this.$store.commit('changeTime', {number});
           }
         } else if(!this.isMM && !this.isTT) {
-          number = count;
+          number = count *100;
           if(this.time + addTime + number >= 0) {
             this.$store.commit('changeTime', {number});
           }
