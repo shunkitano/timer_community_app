@@ -82,9 +82,6 @@ export default {
   methods: {
     // tt:mm::ssの選択 //
     checkToggle(e) {
-      // console.log(this.time);
-      // console.log(this.$store.getters.getTime);
-      // console.log(this.$store.getters.time)
       this.x = e.changedTouches[0].clientX;
     },
     slideToggle(e) {
@@ -146,6 +143,7 @@ export default {
     },
     movePlus(e) {
       console.log(e);
+      
     },
     startMinus() { //カウントを減らす
       if(this.isStop) {

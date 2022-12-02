@@ -9,11 +9,11 @@
       <li v-for="(timer, index) in lineUpTimers" :key="index">
         <div class="timer nico" :class="{deleted:isCut && isId === index}">
           <div :style="{'background-color': timer.themeColor}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(index)">
-            <p>{{ ((timer.time - timer.time%360000) / 360000) >= 10 ? (timer.time - timer.time%360000) / 360000 : "0" + ((timer.time - timer.time%360000) / 360000) }}</p>
-            <p>:</p>
-            <p>{{ ((timer.time%360000 - timer.time%6000 ) / 6000) >= 10 ? (timer.time%360000 - timer.time%6000 ) / 6000 : "0" + ((timer.time%360000 - timer.time%6000 ) / 6000) }}</p>
-            <p>:</p>
-            <p>{{ timer.time%6000 /100  >= 10 ? timer.time%6000 /100  : "0" + timer.time%6000 /100 }}</p>
+            <p :style="{'color': timer.accentColor}">{{ ((timer.time - timer.time%360000) / 360000) >= 10 ? (timer.time - timer.time%360000) / 360000 : "0" + ((timer.time - timer.time%360000) / 360000) }}</p>
+            <p :style="{'color': timer.accentColor}">:</p>
+            <p :style="{'color': timer.accentColor}">{{ ((timer.time%360000 - timer.time%6000 ) / 6000) >= 10 ? (timer.time%360000 - timer.time%6000 ) / 6000 : "0" + ((timer.time%360000 - timer.time%6000 ) / 6000) }}</p>
+            <p :style="{'color': timer.accentColor}">:</p>
+            <p :style="{'color': timer.accentColor}">{{ timer.time%6000 /100  >= 10 ? timer.time%6000 /100  : "0" + timer.time%6000 /100 }}</p>
           </div>
           <p class="timer__name" :class="{add__com:isCom && isId === index, return__com:!isCom && isId === index}">{{ timer.name }}</p>
           <OpenCloseButton class="open__close" @open-close="openClose" :childEdit="isEdit" :childIndex="index"></OpenCloseButton>
@@ -191,7 +191,6 @@ export default {
   height: 100px;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   z-index: 1;
   background: linear-gradient(rgba(230, 230, 230, 1) 40%, rgba(230, 230, 230, 0));
 }
@@ -223,6 +222,8 @@ export default {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   padding-top: 5rem;
   padding-bottom: 2rem;
 }
@@ -230,36 +231,37 @@ export default {
   list-style: none;
   width: 80%;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   text-align: center;
+  flex-direction: column;
   margin: 1.5rem auto 0;
+  overflow: hidden;
 }
 .timer {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background-color: rgba(20, 20, 20, 0.1);
   border-radius: 10px;
 }
 .timer__time {
-  display: block;
+  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   width: 80px;
   height: 80px;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
   border: solid 0.5px rgba(20, 20, 20, 0.8);
 }
 .timer__time p {
+  
   font-size: 14px;
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
-  text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 2px;
+  text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 3px;
 }
 .timer__name {
   padding: 1rem;

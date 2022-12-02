@@ -37,24 +37,19 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-.style input {
-  width: 60%;
-  height: 40px;
-  margin: 0 auto;
-  border-radius: 5px;
-  color: #FFF;
-  text-shadow: 1px 1px 2px #000;
-}
 .style ul {
   display: flex;
   justify-content: center;
   text-align: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 .style li {
   list-style: none;
   animation: look 1.5s;
   margin-top: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0 0.5rem;
+  border-radius: 10px;
 }
 @keyframes look {
   0% {

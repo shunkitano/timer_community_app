@@ -9,9 +9,9 @@
         <div class="nico" @touchstart="selectTimer(index)">
           <div :style="{'background-color': timer.themeColor}" :class="timer.style" class="timer__box">
             <p :style="{'color': timer.accentColor}">{{ ((timer.time - timer.time%360000) / 360000) >= 10 ? (timer.time - timer.time%360000) / 360000 : "0" + ((timer.time - timer.time%360000) / 360000) }}</p>
-            <p>:</p>
+            <p :style="{'color': timer.accentColor}">:</p>
             <p :style="{'color': timer.accentColor}">{{ ((timer.time%360000 - timer.time%6000 ) / 6000) >= 10 ? (timer.time%360000 - timer.time%6000 ) / 6000 : "0" + ((timer.time%360000 - timer.time%6000 ) / 6000) }}</p>
-            <p>:</p>
+            <p :style="{'color': timer.accentColor}">:</p>
             <p :style="{'color': timer.accentColor}">{{ timer.time%6000 /100  >= 10 ? timer.time%6000 /100  : "0" + timer.time%6000 /100 }}</p>
           </div>
           <div class="timer__name">
@@ -203,7 +203,7 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 5rem;
+  padding-top: 5rem;
 }
 #timers li {
   width:80%;
@@ -235,7 +235,7 @@ export default {
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
   -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
-  text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 2px;
+  text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 3px;
 }
 .timer__name {
   padding: 0.5rem;
@@ -292,23 +292,20 @@ export default {
   text-align: center;
   width: 100%;
   height: 100vh;
-  /* background-color: rgba(250, 250, 250, 0.5);
-  backdrop-filter: blur(1px); */
 }
 #select p:first-child {
   position: fixed;
   top: 2rem;
   font-size: 1.4rem;
-  margin-bottom: 1rem;
 }
 .select__box {
   position: fixed;
-  bottom: 1rem;
+  bottom: 0;
   display: flex;
   width: 80%;
   align-items: center;
   background-color: rgba(50, 50, 50, 0.5);
-  border-radius: 30px;
+  border-radius: 30px 30px 0 0;
   padding: 0.5rem 1rem;
   z-index: 1;
 }

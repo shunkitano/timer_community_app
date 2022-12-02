@@ -1,8 +1,8 @@
 <template>
   <div class="outer">
     <div class="setting">
-      <input type="text" placeholder="Timer Name" v-model="text" @touchstart="selectName">
-      <input type="button" :value="selects[0].name" @touchstart="selectStyle">
+      <input type="text" placeholder="Timer Name" v-model="text" @touchstart="selectName" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
+      <input type="button" :value="selects[0].name" @touchstart="selectStyle" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
       <StyleChange @styleChange="changeHere" v-show="isActive === '1'"></StyleChange>
       <input type="button" :value="selects[1].name" @touchstart="selectThemeColor" :style="styleObject1">
       <ThemeColorChange @colorChange="changeHere" v-show="isActive === '2'"></ThemeColorChange>

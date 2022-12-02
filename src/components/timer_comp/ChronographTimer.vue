@@ -128,7 +128,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: linear-gradient(90deg,rgba(100, 100, 100, 0.8), rgba(150, 150, 150, 0.8)60%, rgba(250, 250, 250, 0.8)70%, rgba(0, 0, 0, 0.4)75%, rgba(150, 150, 150, 0.8));
+  background: linear-gradient(90deg, rgba(100, 100, 100, 0.8), rgba(250, 250, 250, 0.8)10%, rgba(100, 100, 100, 0.8), rgba(150, 150, 150, 0.8)75%, rgba(250, 250, 250, 0.8)80%, rgba(0, 0, 0, 0.4)85%, rgba(150, 150, 150, 0.8));
 }
 .circle__wrapper2 {
   position: relative;
@@ -136,7 +136,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   height: 290px;
   border-radius: 50%;
   /* background-color: rgba(150, 150, 150, 1); */
-  box-shadow: inset rgba(0, 0, 0, 0.3) 0px 2px 4px, inset rgba(100, 100, 100, 0.3) 0px -2px 4px;
+  box-shadow: inset  rgba(0, 0, 0, 0.3) 0px 2px 4px, inset rgba(100, 100, 100, 0.3) 0px -2px 4px;
 }
 .circle1 {
   position: absolute;
@@ -157,8 +157,8 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   left: 0;
   right: 0;
   margin: auto;
-  width: 3px;
-  height: 10px;
+  width: 2px;
+  height: 5px;
   background-color: rgba(180, 180, 180, 1);
   box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px;
 }
@@ -169,8 +169,8 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   left: 0;
   right: 0;
   margin: auto;
-  width: 3px;
-  height: 10px;
+  width: 2px;
+  height: 5px;
   background-color: rgba(180, 180, 180, 1);
   box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px;
 }
@@ -182,8 +182,8 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   margin: 25px auto 0;
   width: 2px;
   height: 55px;
-  background-color: rgba(240, 10, 10, 0.8);
   transform-origin: 1px 55px;
+  border-radius: 1px 1px 0px 0px/20px 20px 0px 0px;
   z-index: 3;
 }
 .circle1__top {
@@ -194,7 +194,6 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   margin: auto;
   width: 10px;
   height: 10px;
-  background-color: rgba(240, 10, 10, 0.8);
   border-radius: 50%;
   z-index: 3;
 }
@@ -203,10 +202,10 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 70px;
+  left: 75px;
   margin: auto;
-  width: 10px;
-  height: 3px;
+  width: 5px;
+  height: 2px;
   background-color: rgba(180, 180, 180, 1);
   box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px; 
 }
@@ -215,10 +214,10 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   position: absolute;
   top: 0;
   bottom: 0;
-  right: 70px;
+  right: 75px;
   margin: auto;
-  width: 10px;
-  height: 3px;
+  width: 5px;
+  height: 2px;
   background-color: rgba(180, 180, 180, 1);
   box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px;
 }
@@ -268,7 +267,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 2px;
   height: 35px;
   transform-origin: 1px 35px;
-  background-color: rgba(240, 10, 10, 0.8);
+  border-radius: 1px 1px 0px 0px/20px 20px 0px 0px;
 }
 .circle2__top {
   position: absolute;
@@ -279,7 +278,6 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   margin: auto;
   width: 10px;
   height: 10px;
-  background-color: rgba(240, 10, 10, 0.8);
   border-radius: 50%;
 }
 .circle2__top::before {
@@ -352,7 +350,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 2px;
   height: 35px;
   transform-origin: 1px 35px;
-  background-color: rgba(240, 10, 10, 0.8);
+  border-radius: 1px 1px 0px 0px/20px 20px 0px 0px;
 }
 .circle3__top {
   position: absolute;
@@ -363,7 +361,6 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   margin: auto;
   width: 10px;
   height: 10px;
-  background-color: rgba(240, 10, 10, 0.8);
   border-radius: 50%;
 }
 .circle3__top::before {
@@ -468,7 +465,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 2px;
   height: 30px;
   transform-origin: 1px 30px;
-  background-color: rgba(240, 10, 10, 0.8);
+  border-radius: 1px 1px 0px 0px/15px 15px 0px 0px;
 }
 .circle4__top {
   position: absolute;
@@ -479,7 +476,6 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   margin: auto;
   width: 10px;
   height: 10px;
-  background-color: rgba(240, 10, 10, 0.8);
   border-radius: 50%;
 }
 .circle4__top::before {
