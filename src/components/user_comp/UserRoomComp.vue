@@ -2,7 +2,7 @@
   <div class="user__room">
     <div class="header" :class="{to__use:toUse}">
       <input type="button" class="logout nico" value="Logout" @touchstart="beforeLogOut" @touchend="logOut" :class="{before__logout:isLogOut}">
-      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "user :" + userName : "Use timer"}}</h2>
+      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "user :" + userName : "Measure time"}}</h2>
       <CommunityButton class="comBtn"></CommunityButton>
     </div>
     <ul id="timers">
@@ -49,13 +49,11 @@ export default {
   },
   data() {
     return {
-      timers: [],
       userName: '',
       isTrue: true,
       isEdit: false,
       isCut: false,
       isId: null,
-      isCom: -1,
       toUse: false,
       isLogOut: false
     }
@@ -74,6 +72,9 @@ export default {
   computed: {
     lineUpTimers() {
       return this.$store.state.fetchTimers;
+    },
+    isCom() {
+      return this.isId ? this.$store.state.fetchTimers[this.isId].isCom : true;
     }
   },
   methods: {
@@ -111,7 +112,7 @@ export default {
     },
     putPrivate(childId, isThis) { //プライベイトにする
       console.log(childId, isThis);
-      this.isCom = isThis;
+      // this.isCom = isThis;
       this.$store.commit('putPrivate', {
         id: childId,
         privateCom: isThis,
@@ -119,7 +120,7 @@ export default {
     },
     putCom(childId, isThis) { //コミュニティに公開する
       console.log(childId, isThis);
-      this.isCom = isThis;
+      // this.isCom = isThis;
       this.$store.commit('putCom', {
         id: childId,
         privateCom: isThis,

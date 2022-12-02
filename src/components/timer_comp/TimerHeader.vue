@@ -3,7 +3,7 @@
     <transition name="hamburger" mode="out-in">
       <div v-if="isAtherPage" class="page__info">
         <UserButton></UserButton>
-        <button @touchend="makeTimer" class="nico">Make</button>
+        <button @touchend="makeTimer" class="nico">MAKE</button>
         <CommunityButton></CommunityButton>
         <button @touchend="closeHeader"></button>
       </div>

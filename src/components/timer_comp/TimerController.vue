@@ -5,7 +5,7 @@
     </div>
     <div class="pm">
       <span>
-        <svg  @touchstart="startPlus" @touchmove="movePlus" width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg  @touchstart="startPlus" @touchend="stopPlus" @touchleave="stopPlus" width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_i_148_36)">
         <path d="M24.493 2.5C26.4175 -0.833332 31.2288 -0.833335 33.1533 2.5L56.969 43.75C58.8935 47.0833 56.4879 51.25 52.6389 51.25H5.00746C1.15846 51.25 -1.24717 47.0833 0.677332 43.75L24.493 2.5Z" fill="#F3F3F3" fill-opacity="0.8"/>
         </g>
@@ -25,7 +25,7 @@
         </svg>
       </span>
       <span>
-        <svg @touchstart="startMinus" @touchmove="moveMinus" width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg @touchstart="startMinus" @touchend="stopMinus" @touchleave="stopMinus" width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_i_148_37)">
         <path d="M33.1535 49.5C31.229 52.8333 26.4177 52.8333 24.4932 49.5L0.677502 8.25001C-1.247 4.91668 1.15862 0.750005 5.00762 0.750005L52.639 0.75C56.488 0.75 58.8936 4.91667 56.9691 8.25L33.1535 49.5Z" fill="#F3F3F3" fill-opacity="0.8"/>
         </g>
@@ -62,7 +62,9 @@ export default {
       isTT: false,
       isMM: true,
       tms: "",
-      countTime: null
+      countTime: null,
+      setTime: '',
+      setNumber: null
     }
   },
   computed: {
@@ -125,25 +127,35 @@ export default {
         let number;
         if(this.isMM) {
           number = count *6000;
+          this.setNumber = number;
           if(this.time + addTime + number <= 3600000) {
             this.$store.commit('changeTime', {number});
           }
         } else if(this.isTT) {
           number = count *360000;
+          this.setNumber = number;
           if(this.time + addTime + number <= 3600000) {
             this.$store.commit('changeTime', {number});
           }
         } else if(!this.isMM && !this.isTT) {
           number = count *100;
+          this.setNumber = number;
           if(this.time + addTime + number <= 3600000) {
             this.$store.commit('changeTime', {number});
           }  
         }
       }
+      this.setTime = setInterval(() => {
+        let addTime = this.$store.getters.getTime; 
+        let number;
+        number = this.setNumber;
+        if(this.time + addTime + number <= 3600000) {
+        this.$store.commit('changeTime', {number});
+        }
+      }, 200)
     },
-    movePlus(e) {
-      console.log(e);
-      
+    stopPlus() {
+      clearInterval(this.setTime);
     },
     startMinus() { //カウントを減らす
       if(this.isStop) {
@@ -152,24 +164,35 @@ export default {
         let number;
         if(this.isMM && this.time + addTime) {
           number = count *6000;
+          this.setNumber = number;
           if(this.time + addTime + number >= 0) {
             this.$store.commit('changeTime', {number});
           }
         } else if(this.isTT) {
           number = count *360000;
+          this.setNumber = number;
           if(this.time + addTime + number >= 0) {
             this.$store.commit('changeTime', {number});
           }
         } else if(!this.isMM && !this.isTT) {
           number = count *100;
+          this.setNumber = number;
           if(this.time + addTime + number >= 0) {
             this.$store.commit('changeTime', {number});
           }
         }
       }
+      this.setTime = setInterval(() => {
+        let addTime = this.$store.getters.getTime; 
+        let number;
+        number = this.setNumber;
+        if(this.time + addTime + number >= 0) {
+        this.$store.commit('changeTime', {number});
+        }
+      }, 200)
     },
-    moveMinus(e) {
-      console.log(e);
+    stopMinus() {
+      clearInterval(this.setTime);
     },
     resetTime() { //カウントのリセット
       if(this.isStop) {

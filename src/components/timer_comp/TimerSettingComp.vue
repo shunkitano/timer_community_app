@@ -1,23 +1,35 @@
 <template>
   <div class="outer">
     <div class="setting">
-      <input type="text" placeholder="Timer Name" v-model="text" @touchstart="selectName" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
-      <input type="button" :value="selects[0].name" @touchstart="selectStyle" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
+      <input type="text" placeholder="Timer Name" v-model="text" @touchstart="selectName" class="neon" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
+      <input type="button" :value="selects[0].name" @touchstart="selectStyle" class="neon" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
       <StyleChange @styleChange="changeHere" v-show="isActive === '1'"></StyleChange>
-      <input type="button" :value="selects[1].name" @touchstart="selectThemeColor" :style="styleObject1">
+      <input type="button" :value="selects[1].name" @touchstart="selectThemeColor" :style="styleObject1" class="neon">
       <ThemeColorChange @colorChange="changeHere" v-show="isActive === '2'"></ThemeColorChange>
-      <input type="button" :value="selects[2].name" @touchstart="selectAccentColor" :style="styleObject2">
+      <input type="button" :value="selects[2].name" @touchstart="selectAccentColor" :style="styleObject2" class="neon">
       <AccentColorChange @colorChange="changeHere" v-show="isActive === '3'"></AccentColorChange>
-      <input type="button" :value="selects[3].name" @touchstart="selectSound">
+      <input type="button" :value="selects[3].name" @touchstart="selectSound" class="neon">
       <SoundChange @soundChange="changeHere" v-show="isActive === '4'"></SoundChange>
       <div class="number" :class="{active:isActive === '5'}" @touchstart="selectCalc">
-        <p>{{ tt }}:{{ mm }}:{{ ss }}</p>
-        <div class="calc" v-show="isActive === '5'">
-          <input type="number" min="0" max="59" v-model="t" @touchstart="startCalcT" @touchmove="moveCalcT">
-          <input type="number" min="0" max="59" v-model="m" @touchstart="startCalcM" @touchmove="moveCalcM">
-          <input type="number" min="0" max="59" v-model="s" @touchstart="startCalcS" @touchmove="moveCalcS">
-        </div>
-      </div>
+        <p class="neon">{{ tt }}:{{ mm }}:{{ ss }}</p>
+        <div class="calc__wrapper" v-show="isActive === '5'">
+          <div class="calc__tt neon">
+            <p class="text">{{ ttPlus > 10 ? null : ttPlus }}</p>
+            <input type="number" min="0" max="59" v-model="t" @touchstart="startCalcT" @touchmove="moveCalcT">
+            <p class="text">{{ ttMinus > -1 ? ttMinus : null }}</p>
+          </div>
+          <div class="calc__mm neon">
+            <p class="text">{{ mmPlus > 60 ? null : mmPlus }}</p>
+            <input type="number" min="0" max="59" v-model="m" @touchstart="startCalcM" @touchmove="moveCalcM">
+            <p class="text">{{ mmMinus > -1 ? mmMinus : null }}</p>
+          </div>
+          <div class="calc__ss neon">
+            <p class="text">{{ ssPlus > 60 ? null : ssPlus }}</p>
+            <input type="number" min="0" max="59" v-model="s" @touchstart="startCalcS" @touchmove="moveCalcS">
+            <p class="text">{{ ssMinus > -1 ? ssMinus : null }}</p>
+          </div>
+        </div><!--calc__wrapper-->
+      </div><!--number-->
     </div>
     <div class="new__timer">
       <input type="button" @touchstart="makeTimer" value="Make!">
@@ -97,6 +109,24 @@ export default {
     },
     ss() {
       return ("0" + (this.s %60)).slice(-2);
+    },
+    ttPlus() {
+      return ("0" + (this.t +1 %60)).slice(-2);
+    },
+    ttMinus() {
+      return ("0" + (this.t -1 %60)).slice(-2);
+    },
+    mmPlus() {
+      return ("0" + (this.m +1 %60)).slice(-2);
+    },
+    mmMinus() {
+      return ("0" + (this.m -1 %60)).slice(-2);
+    },
+    ssPlus() {
+      return ("0" + (this.s +1 %60)).slice(-2);
+    },
+    ssMinus() {
+      return ("0" + (this.s -1 %60)).slice(-2);
     }
   },
   methods: {
@@ -138,16 +168,10 @@ export default {
     },
     moveCalcT(e) {
       let yy = e.changedTouches[0].clientY;
-      if(this.t >= 0 && this.t <= 10) {
-        if(this.y > yy) {
-          this.t++;
-        } else if(this.y < yy) {
-          this.t--;
-        }
-      } else if(this.t === 11) {
-        this.t = 0;
-      }else if(this.t === -1) {
-        this.t = 10;
+      if(this.t >= 0 && this.t < 10 && this.y < yy) {
+        this.t++;
+      } else if(this.t > 0 && this.t <= 10 && this.y > yy) {
+        this.t--;
       }
       this.y = yy;
     },
@@ -157,16 +181,10 @@ export default {
     },
     moveCalcM(e) {
       let yy = e.changedTouches[0].clientY;
-      if(this.m >= 0 && this.m <= 60) {
-        if(this.y > yy) {
-          this.m++;
-        } else if(this.y < yy) {
-          this.m--;
-        }
-      } else if(this.m === 61) {
-        this.m = 0;
-      }else if(this.m === -1) {
-        this.m = 60;
+      if(this.m >= 0 && this.m < 60 && this.y < yy) {
+        this.m++;
+      } else if(this.m > 0 && this.m <= 60 && this.y > yy) {
+        this.m--;
       }
       this.y = yy;
     },
@@ -176,16 +194,10 @@ export default {
     },
     moveCalcS(e) {
       let yy = e.changedTouches[0].clientY;
-      if(this.s >= 0 && this.s <= 60) {
-        if(this.y > yy) {
-          this.s++;
-        } else if(this.y < yy) {
-          this.s--;
-        }
-      } else if(this.s === 61) {
-        this.s = 0;
-      }else if(this.s === -1) {
-        this.s = 60;
+      if(this.s >= 0 && this.s < 60 && this.y < yy) {
+        this.s++;
+      } else if(this.s > 0 && this.s <= 60 && this.y > yy) {
+        this.s--;
       }
       this.y = yy;
     },
@@ -282,7 +294,7 @@ input[type="text"],[type="number"] {
   text-align: center;
   box-shadow: none;
 }
-.setting input:active {
+.setting .neon:active {
   animation: neonline 0.3s ease;
 }
 @keyframes neonline {
@@ -299,26 +311,6 @@ input[type="text"],[type="number"] {
     border-right: solid 1px rgb(250, 100, 100);
   }
 }
-.new__timer {
-  position: absolute;
-  bottom: 8rem;
-  left: 0;
-  right: 0;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  gap: 5%;
-}
-.new__timer input:first-child {
-  width: 35%;
-  color: rgba(250, 250, 250, 1);
-  text-shadow: 1px 0px 2px rgba(0, 0, 0, 1);
-  background-color: rgba(240, 10, 10, 0.8);
-}
-.new__timer input:last-child {
-  width: 20%;
-  background-color: rgb(220, 220, 220);
-}
 /* Number */
 .number {
   margin: 1rem 0 0;
@@ -327,7 +319,7 @@ input[type="text"],[type="number"] {
   flex-direction: column;
   justify-content: center;
 }
-.number p {
+.number>p {
   font-size: 1.2rem;
   width: 100%;
   height: 50px;
@@ -355,24 +347,83 @@ input[type="text"],[type="number"] {
     opacity: 1;
   }
 }
-.calc input {
-  border: solid 1px rgba(0, 0, 0, 1);
+.calc__wrapper {
+  display: flex;
+  flex-direction: row;
   text-align: center;
-  margin-top: 5px;
-  width: 32%;
-  height: 60px;
+  font-size: 1rem;
+}
+.calc__wrapper input {
+  text-align: center;
+  margin: 0;
+  border: none;
   box-shadow: none;
+  font-size: 1.4rem;
 }
-.calc input:first-child {
-  border-radius: 0 0 0 20px;
-  margin-right: 2%;
+.calc__wrapper .text {
+  line-height: 20px;
+  width: 100%;
+  height: 20px;
+  border: none;
+  background-color: none;
+  color: rgba(50, 50, 50, 0.8);
 }
-.calc input:nth-child(2) {
-  border-radius: 0;
+.calc__tt {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0 0 0 40px;
+  color: rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(0, 0, 0, 1) 0px -2px 4px;
 }
-.calc input:last-child {
-  border-radius: 0 0 20px 0;
-  margin-left: 2%;
+.calc__mm {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin: 0.5rem 5% 0;
+  padding-bottom: 0.5rem;
+  color: rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(0, 0, 0, 1) 0px -2px 4px;
+}
+.calc__ss {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0 0 40px 0;
+  color: rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(0, 0, 0, 1) 0px -2px 4px;
+}
+.new__timer {
+  width: 60%;
+  position: absolute;
+  bottom: 5rem;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  /* gap: 5%; */
+}
+.new__timer input:first-child {
+  width: 65%;
+  color: rgba(250, 250, 250, 1);
+  text-shadow: 1px 0px 2px rgba(0, 0, 0, 1);
+  background-color: rgba(240, 10, 10, 0.8);
+}
+.new__timer input:last-child {
+  width: 30%;
+  margin-left: 5%;
+  background-color: rgb(220, 220, 220);
 }
 .footer {
   width: 100%;

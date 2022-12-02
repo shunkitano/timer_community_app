@@ -2,7 +2,7 @@
   <div class="community">
     <UserButton class="userBtn"></UserButton>
     <div class="header" :class="{to__use:toUse}">
-      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "Community" : "Use timer"}}</h2>
+      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "COMMUNITY" : "Measure time"}}</h2>
     </div>
     <ul id="timers">
       <li v-for="(timer, index) in communityTimers" :key="index">
