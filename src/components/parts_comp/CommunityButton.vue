@@ -31,7 +31,7 @@ export default {
   text-align: center;
 }
 .community button {
-  font-size: 1rem;
+  font-size: 1.2rem;
   width: 80%;
   color: #FFF;
   border: solid 1px rgba(250, 250, 250, 0.8);
@@ -41,7 +41,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .community button:active {
-  font-size: 1.6rem;
+  font-size: 0.6rem;
   margin-left: 100px;
   border-radius: 40px 0 0 40px;
   border-right: none;

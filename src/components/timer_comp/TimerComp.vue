@@ -6,7 +6,7 @@
         <TimerHeader @makeTimer="makeTimer" class="header"></TimerHeader>
         <DigitalTimer v-if="style === 'digital'" :isTms="isTms" class="timer__comp" :isUse="isUse"></DigitalTimer>
         <ChronographTimer v-if="style === 'chronograph'" :isTms="isTms" class="timer__comp" :isUse="isUse"></ChronographTimer>
-        <TimerCircle v-if="style === 'circle'" :isTms="isTms" class="timer__comp" :isUse="isUse"></TimerCircle>
+        <CircleTimer v-if="style === 'circle'" :isTms="isTms" class="timer__comp" :isUse="isUse"></CircleTimer>
         <TimerController class="controller" @select-tms="selectTms"></TimerController>
       </div><!--timer-->
     </transition>
@@ -18,7 +18,7 @@ import TimerSettingComp from '@/components/timer_comp/TimerSettingComp.vue';
 import TimerHeader from '@/components/timer_comp/TimerHeader.vue';
 import ChronographTimer from '@/components/timer_comp/ChronographTimer.vue';
 import DigitalTimer from '@/components/timer_comp/DigitalTimer.vue';
-import TimerCircle from '@/components/timer_comp/TimerCircle.vue';
+import CircleTimer from '@/components/timer_comp/CircleTimer.vue';
 import TimerController from '@/components/timer_comp/TimerController.vue';
 
 export default {
@@ -27,12 +27,13 @@ export default {
     TimerHeader,
     ChronographTimer,
     DigitalTimer,
-    TimerCircle,
+    CircleTimer,
     TimerController
   },
   data() {
     return {
       isMakeTimer: false, //タイマー作成ページに飛ぶ
+      isNoTimer:'',
       anim: '',
       isTms: '2', //初期はm（分）に配置
       reset: false,
@@ -51,7 +52,14 @@ export default {
     await this.$store.dispatch('fetchDatas');
     if(!this.isMakeTimer) {
       this.id = this.$store.state.currentTimerId;
-      this.style = this.$store.state.fetchTimers[this.id].style;
+      this.isNoTimer = this.$store.state.fetchTimers[this.id];
+      console.log(this.isNoTimer);
+      if(this.isNoTimer === undefined) {
+        console.log("isNoTimer");
+        this.$router.push("/user");
+      } else {
+        this.style = this.$store.state.fetchTimers[this.id].style;
+      }
     }
   },
   methods: {

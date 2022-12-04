@@ -1,8 +1,8 @@
 <template>
   <div class="outer">
     <div class="setting">
-      <input type="text" placeholder="Timer Name" v-model="text" @touchstart="selectName" class="neon" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
-      <input type="button" :value="selects[0].name" @touchstart="selectStyle" class="neon" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph'}">
+      <input type="text" placeholder="Timer Name" v-model="text" @touchstart="selectName" class="neon" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph', quick:selects[0].name === 'circle'}">
+      <input type="button" :value="selects[0].name" @touchstart="selectStyle" class="neon" :class="{nico:selects[0].name === 'digital', merriweather:selects[0].name === 'chronograph', quick:selects[0].name === 'circle'}">
       <StyleChange @styleChange="changeHere" v-show="isActive === '1'"></StyleChange>
       <input type="button" :value="selects[1].name" @touchstart="selectThemeColor" :style="styleObject1" class="neon">
       <ThemeColorChange @colorChange="changeHere" v-show="isActive === '2'"></ThemeColorChange>
@@ -15,17 +15,17 @@
         <div class="calc__wrapper" v-show="isActive === '5'">
           <div class="calc__tt neon">
             <p class="text">{{ ttPlus > 10 ? null : ttPlus }}</p>
-            <input type="number" min="0" max="59" v-model="t" @touchstart="startCalcT" @touchmove="moveCalcT">
+            <input type="number" min="0" max="59" v-model="tt" @touchstart="startCalcT" @touchmove="moveCalcT">
             <p class="text">{{ ttMinus > -1 ? ttMinus : null }}</p>
           </div>
           <div class="calc__mm neon">
-            <p class="text">{{ mmPlus > 60 ? null : mmPlus }}</p>
-            <input type="number" min="0" max="59" v-model="m" @touchstart="startCalcM" @touchmove="moveCalcM">
+            <p class="text">{{ mmPlus > 59 ? null : mmPlus }}</p>
+            <input type="number" min="0" max="59" v-model="mm" @touchstart="startCalcM" @touchmove="moveCalcM">
             <p class="text">{{ mmMinus > -1 ? mmMinus : null }}</p>
           </div>
           <div class="calc__ss neon">
-            <p class="text">{{ ssPlus > 60 ? null : ssPlus }}</p>
-            <input type="number" min="0" max="59" v-model="s" @touchstart="startCalcS" @touchmove="moveCalcS">
+            <p class="text">{{ ssPlus > 59 ? null : ssPlus }}</p>
+            <input type="number" min="0" max="59" v-model="ss" @touchstart="startCalcS" @touchmove="moveCalcS">
             <p class="text">{{ ssMinus > -1 ? ssMinus : null }}</p>
           </div>
         </div><!--calc__wrapper-->
@@ -36,7 +36,7 @@
       <input type="button" @touchstart="clear" value="Clear?">
     </div>
     <div class="footer">
-      <button @touchend="mainPage" class="nico">Main</button>
+      <button @touchend="mainPage" class="nico">MEASURE</button>
     </div>
     <transition name="empty">
       <div v-show="isEmpty" class="empty">
@@ -181,9 +181,9 @@ export default {
     },
     moveCalcM(e) {
       let yy = e.changedTouches[0].clientY;
-      if(this.m >= 0 && this.m < 60 && this.y < yy) {
+      if(this.m >= 0 && this.m < 59 && this.y < yy) {
         this.m++;
-      } else if(this.m > 0 && this.m <= 60 && this.y > yy) {
+      } else if(this.m > 0 && this.m <= 59 && this.y > yy) {
         this.m--;
       }
       this.y = yy;
@@ -194,9 +194,9 @@ export default {
     },
     moveCalcS(e) {
       let yy = e.changedTouches[0].clientY;
-      if(this.s >= 0 && this.s < 60 && this.y < yy) {
+      if(this.s >= 0 && this.s < 59 && this.y < yy) {
         this.s++;
-      } else if(this.s > 0 && this.s <= 60 && this.y > yy) {
+      } else if(this.s > 0 && this.s <= 59 && this.y > yy) {
         this.s--;
       }
       this.y = yy;
@@ -444,6 +444,7 @@ input[type="text"],[type="number"] {
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .footer button:active {
+  font-size: 0.6rem;
   width: 20%;
   height: 30px;
   border-radius: 40px 40px 0 0;

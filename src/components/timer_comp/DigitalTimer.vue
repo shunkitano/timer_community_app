@@ -1,15 +1,15 @@
 <template>
   <div class="wrapper">
-    <div class="digital" :style="{'background-color': themeColor}">
+    <div class="digital" :style="{'background-color': themeColor, 'box-shadow': styleObject}">
       <p class="nico">{{name}}</p>
         <div class="watch">
           <p class="text" :style="{'color': accentColor}">{{ t }}</p>
           <p class="text" :style="{'color': accentColor}">{{ m }}</p>
           <p class="text" :style="{'color': accentColor}">{{ s }}</p>
           <div class="light__wrapper">
-            <p :class="{light:isTms === '1'}"></p>
-            <p :class="{light:isTms === '2'}"></p>
-            <p :class="{light:isTms === '3'}"></p>
+            <p :class="{light:isTms === '1'}" :style="{'background-color': accentColor}"></p>
+            <p :class="{light:isTms === '2'}" :style="{'background-color': accentColor}"></p>
+            <p :class="{light:isTms === '3'}" :style="{'background-color': accentColor}"></p>
           </div>
         </div>
       <p :style="{'color': accentColor}">{{ message }}</p>
@@ -59,6 +59,9 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       let s = Math.floor(this.count/100 % 60);
       return ("0" + s).slice(-2);
     },
+    x() {
+      return Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/5);
+    },
     count() {
       let tms = this.time + this.getTime;
       return tms;
@@ -74,6 +77,9 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
     },
     checkStop() {
       return this.$store.state.isStop;
+    },
+    styleObject() {
+      return this.$store.state.fetchTimers[this.id].accentColor +' inset 0px 0px '+ this.x + 'px , inset rgba(250, 250, 250, 0.8) 0px 4px 8px, inset rgba(0, 0, 0, 0.7) 0px -4px 8px, rgba(0, 0, 0, 0.5) 0px 30px 90px, rgba(0, 0, 0, 0.5) 0px 30px 90px';
     }
   },
   methods: {
@@ -179,7 +185,6 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   border-radius: 2px;
   width: 50px;
   height: 4px;
-  background-color: rgba(0, 255, 4, 0.9);
   margin-bottom: 0.5rem;
 }
 </style>

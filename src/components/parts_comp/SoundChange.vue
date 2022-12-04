@@ -245,26 +245,30 @@ export default {
     },
     playSound(index) {
       if(index === 0) {
-        // const synth = new Tone.Synth().toDestination();
-        // synth.triggerAttackRelease("A4", "8n");
-        const freeverb = new Tone.Freeverb().toDestination();
-        freeverb.dampening = 3000;
-        const plucky = new Tone.PluckSynth().connect(freeverb);
+        const plucky = new Tone.PluckSynth().toDestination();
         plucky.triggerAttack("G4", "+0.2");
         plucky.triggerAttack("E5", "+0.4");
         plucky.triggerAttack("D3", "+0.6");
         plucky.triggerAttack("A2", "+0.8");
+        plucky.triggerAttack("G4", "+1.0");
+        plucky.triggerAttack("E5", "+1.2");
+        plucky.triggerAttack("D3", "+1.4");
+        plucky.triggerAttack("A2", "+1.6");
+        plucky.triggerAttack("G4", "+1.8");
+        plucky.triggerAttack("E5", "+2.0");
+        plucky.triggerAttack("D3", "+2.2");
+        plucky.triggerAttack("A2", "+2.4");
       }
       if(index === 1) {
         const synth2 = new Tone.PolySynth().toDestination();
         synth2.set({ detune: -800 });
-        synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
+        synth2.triggerAttackRelease(["A5", "D5","E5"], 1);
       }
       if(index === 2) {
         const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
         const synth3 = new Tone.PolySynth().connect(pingPong);
         synth3.set({ detune: -800 });
-        synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
+        synth3.triggerAttackRelease(["A5", "D5","E5"], "40n");
       }
     }
   }

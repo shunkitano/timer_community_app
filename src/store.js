@@ -19,23 +19,27 @@ const store = new Vuex.Store({
     uid: null, //ログインしているユーザーのuid
     empty: '', //ログインしておりかつ、タイマーが空の場合に、作成画面に飛ぶ
     themeColors: [
-      {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
-      {id: 2, name: 'green', color: 'rgba(0, 255, 4, 0.9)'},
-      {id: 3, name: 'blue', color: 'rgba(50, 70, 200, 0.8)'},
-      {id: 4, name: 'red', color: 'rgba(240, 10, 10, 0.8)'},
-      {id: 1, name: 'darkgrey', color: 'rgba(100, 100, 100, 0.8)'},
-      {id: 5, name: 'brack', color: 'rgba(20, 20, 20, 0.8)'}
-    ],
+      {id: 1, name: 'tomato', color: 'rgba(220, 10, 5, 0.8)'},
+      {id: 2, name: 'orange', color: 'rgba(255, 100, 0, 0.8)'},
+      {id: 3, name: 'grass', color: 'rgba(0, 255, 4, 0.8)'},
+      {id: 4, name: 'sky', color: 'rgba(190, 255, 255, 0.8)'},
+      {id: 5, name: 'ocean', color: 'rgba(0, 50, 200, 0.7)'},
+      {id: 6, name: 'snow', color: 'rgba(200, 200, 200, 0.3)'},
+      {id: 7, name: 'darkgrey', color: 'rgba(100, 100, 100, 0.8)'},
+      {id: 8, name: 'brack', color: 'rgba(20, 20, 20, 0.8)'}
+    ], 
     accentColors: [
-      {id: 1, name: 'grey', color: 'rgba(200, 200, 200, 0.3)'},
-      {id: 2, name: 'green', color: 'rgba(0, 255, 4, 0.9)'},
-      {id: 3, name: 'blue', color: 'rgba(50, 70, 200, 0.8)'},
-      {id: 4, name: 'red', color: 'rgba(240, 10, 10, 0.8)'},
-      {id: 1, name: 'darkgrey', color: 'rgba(100, 100, 100, 0.8)'},
-      {id: 5, name: 'brack', color: 'rgba(20, 20, 20, 0.8)'}
+      {id: 1, name: 'pink', color: 'rgba(255, 0, 200, 0.9)'},
+      {id: 2, name: 'red', color: 'rgba(240, 0, 0, 0.9)'},
+      {id: 3, name: 'orange', color: 'rgba(255, 100, 0, 0.9)'},
+      {id: 4, name: 'yellow', color: 'rgba(255, 255, 0, 0.9)'},
+      {id: 5, name: 'green', color: 'rgba(0, 255, 4, 0.9)'},
+      {id: 6, name: 'blue', color: 'rgba(0, 0, 255, 0.9)'},
+      {id: 7, name: 'darkgrey', color: 'rgba(100, 100, 100, 0.9)'},
+      {id: 8, name: 'brack', color: 'rgba(20, 20, 20, 0.9)'}
     ],
     sounds: [
-      {id: 1, name: 'single'},
+      {id: 1, name: 'flick'},
       {id: 2, name: 'poly'},
       {id: 3, name: 'delay'}
     ],
@@ -129,32 +133,37 @@ const store = new Vuex.Store({
     },
     countTime(state) {
       state.isStop = false;
-      console.log(state.getTime, state.fetchTimers[state.currentTimerId].time);
       state.setTime = setInterval(() => {
         if(state.getTime > - state.fetchTimers[state.currentTimerId].time) {
           state.getTime--;
         } else if (state.getTime === - state.fetchTimers[state.currentTimerId].time) {
           clearInterval(state.setTime);
           const sound = state.fetchTimers[state.currentTimerId].sound;
-          if(sound === 'single') {
-            const freeverb = new Tone.Freeverb().toDestination();
-            freeverb.dampening = 3000;
-            const plucky = new Tone.PluckSynth().connect(freeverb);
+          if(sound === 'flick') {
+            const plucky = new Tone.PluckSynth().toDestination();
             plucky.triggerAttack("G4", "+0.2");
             plucky.triggerAttack("E5", "+0.4");
             plucky.triggerAttack("D3", "+0.6");
             plucky.triggerAttack("A2", "+0.8");
+            plucky.triggerAttack("G4", "+1.0");
+            plucky.triggerAttack("E5", "+1.2");
+            plucky.triggerAttack("D3", "+1.4");
+            plucky.triggerAttack("A2", "+1.6");
+            plucky.triggerAttack("G4", "+1.8");
+            plucky.triggerAttack("E5", "+2.0");
+            plucky.triggerAttack("D3", "+2.2");
+            plucky.triggerAttack("A2", "+2.4");
           }
           if(sound === 'poly') {
             const synth2 = new Tone.PolySynth().toDestination();
             synth2.set({ detune: -800 });
-            synth2.triggerAttackRelease(["C5", "E5","G5"], 0.5);
+            synth2.triggerAttackRelease(["A5", "D5","E5"], 1);
           }
           if(sound === 'delay') {
             const pingPong = new Tone.PingPongDelay("4n", 0.6).toDestination();
             const synth3 = new Tone.PolySynth().connect(pingPong);
             synth3.set({ detune: -800 });
-            synth3.triggerAttackRelease(["C5", "E5","G5"], "40n");
+            synth3.triggerAttackRelease(["A5", "D5","E5"], "40n");
           }
           state.isStop = true;
         }

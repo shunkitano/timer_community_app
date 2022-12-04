@@ -2,12 +2,12 @@
   <div class="user__room">
     <div class="header" :class="{to__use:toUse}">
       <input type="button" class="logout nico" value="Logout" @touchstart="beforeLogOut" @touchend="logOut" :class="{before__logout:isLogOut}">
-      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "user :" + userName : "Measure time"}}</h2>
+      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "user:" + userName : "MEASURE"}}</h2>
       <CommunityButton class="comBtn"></CommunityButton>
     </div>
     <ul id="timers">
       <li v-for="(timer, index) in lineUpTimers" :key="index">
-        <div class="timer nico" :class="{deleted:isCut && isId === index}">
+        <div class="timer" :class="{deleted:isCut && isId === index, nico:timer.style === 'digital', merriweather:timer.style === 'chronograph', quick:timer.style === 'circle'}">
           <div :style="{'background-color': timer.themeColor}" :class="timer.style" class="timer__time"  @touchstart="selectTimer(index)">
             <p :style="{'color': timer.accentColor}">{{ ((timer.time - timer.time%360000) / 360000) >= 10 ? (timer.time - timer.time%360000) / 360000 : "0" + ((timer.time - timer.time%360000) / 360000) }}</p>
             <p :style="{'color': timer.accentColor}">:</p>
@@ -196,15 +196,15 @@ export default {
   background: linear-gradient(rgba(230, 230, 230, 1) 40%, rgba(230, 230, 230, 0));
 }
 .header h2 {
-  font-size: 1rem;
+  font-size: 1.2rem;
   height: 60px;
   line-height: 60px;
   text-align: center;
   width: 160px;
   background-color: rgba(240, 240, 240, 0.8);
-  border: solid 1px rgba(125, 125, 125, 0.8);
+  border: solid 1px rgba(0, 0, 0, 0.8);
   border-radius: 40px;
-  box-shadow: inset rgba(125, 125, 125, 0.8) 0px 2px 4px, inset rgba(125, 125, 125, 0.8) 0px -2px 4px;
+  box-shadow: 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .to__use h2 {
   animation: vanish 0.5s ease;
@@ -214,7 +214,7 @@ export default {
     scale: 1;
   }
   100% {
-    color: rgba(240, 10, 10, 0.8);
+    font-size: 0.6rem;
     scale: 0.5;
   }
 }
@@ -253,7 +253,7 @@ export default {
   width: 80px;
   height: 80px;
   margin-right: 0.5rem;
-  padding: 0.5rem;
+  padding: 1rem;
   border: solid 0.5px rgba(20, 20, 20, 0.8);
 }
 .timer__time p {
@@ -261,7 +261,7 @@ export default {
   font-size: 14px;
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
-  -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
+  -webkit-text-stroke: 0.1px rgba(250, 250, 250, 1);
   text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 3px;
 }
 .timer__name {

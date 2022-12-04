@@ -39,7 +39,7 @@ export default {
   box-shadow: 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .user button:active {
-  font-size: 1.6rem;
+  font-size: 0.6rem;
   margin-right: 200px;
   border-radius: 0 40px 40px 0;
   border-left: none;

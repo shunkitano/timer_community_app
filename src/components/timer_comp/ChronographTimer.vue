@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
     <p class="text merriweather">{{ name }}</p>
-    <div class="circle__wrapper1">
-      <div class="circle__wrapper2" :style="{'background-color': themeColor}">
+    <div class="circle__wrapper1" :style="{'background': styleObject2}">
+      <div class="circle__wrapper2" :style="{'background': styleObject1}">
         <div class="circle1 sepia"></div><!--circle1-->
         <div class="needle1" :style="{'background-color': accentColor, transform:'rotateZ('+ rotation1 +'deg)'}"></div> 
           <div class="circle1__top" :style="{'background-color': accentColor}"></div> 
@@ -73,6 +73,9 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       let s = Math.floor(this.count);
       return ("0" + s).slice(-2);
     },
+    z() {
+      return Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/5);
+    },
     count() {
       let tms = this.time + this.getTime;
       return tms;
@@ -97,6 +100,13 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
     },
     rotation4() {
       return this.ss*3.6;
+    },
+    styleObject1() {
+      // return "radial-gradient(ellipse at "+this.z +"% ,"+ this.accentColor+", transparent), radial-gradient(ellipse at "+ (100 - this.z)+"%,"+ this.accentColor+", transparent)";
+      return "linear-gradient(" + this.z +"deg,"+ this.themeColor +" 70%,rgba(200, 200, 200, 0.8))";
+    },
+    styleObject2() {
+      return "linear-gradient(" + (100-this.z)/2 + "deg,rgba(100, 100, 100, 0.8), rgba(150, 150, 150, 0.8)20%, rgba(250, 250, 250, 0.8)33%, rgba(0, 0, 0, 0.4)85%, rgba(100, 100, 100, 0.8))";
     }
   },
   methods: {
@@ -108,11 +118,13 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
 .wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 60vh;
 }
 .wrapper .text {
   text-align: center;
   margin: 0 auto 1rem;
-  font-size: 1.6rem;
+  font-size: 2rem;
   background: linear-gradient(90deg,rgba(100, 100, 100, 0.8), rgba(150, 150, 150, 0.8)60%, rgba(250, 250, 250, 0.8)70%, rgba(0, 0, 0, 0.4)75%, rgba(100, 100, 100, 0.8));
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -128,14 +140,13 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: linear-gradient(90deg, rgba(100, 100, 100, 0.8), rgba(250, 250, 250, 0.8)10%, rgba(100, 100, 100, 0.8), rgba(150, 150, 150, 0.8)75%, rgba(250, 250, 250, 0.8)80%, rgba(0, 0, 0, 0.4)85%, rgba(150, 150, 150, 0.8));
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 10px;
 }
 .circle__wrapper2 {
   position: relative;
   width: 290px;
   height: 290px;
   border-radius: 50%;
-  /* background-color: rgba(150, 150, 150, 1); */
   box-shadow: inset  rgba(0, 0, 0, 0.3) 0px 2px 4px, inset rgba(100, 100, 100, 0.3) 0px -2px 4px;
 }
 .circle1 {
@@ -160,7 +171,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 2px;
   height: 5px;
   background-color: rgba(180, 180, 180, 1);
-  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px;
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 1px;
 }
 .circle1::after {
   content: '';
@@ -172,7 +183,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 2px;
   height: 5px;
   background-color: rgba(180, 180, 180, 1);
-  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px;
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 1px;
 }
 .needle1 {
   position: absolute;
@@ -207,7 +218,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 5px;
   height: 2px;
   background-color: rgba(180, 180, 180, 1);
-  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px; 
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 1px; 
 }
 .circle1__top::after {
   content: '';
@@ -219,7 +230,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   width: 5px;
   height: 2px;
   background-color: rgba(180, 180, 180, 1);
-  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 3px;
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 1px;
 }
 .circle2 {
   position: absolute;
@@ -394,9 +405,9 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   right: 0;
   bottom: 0;
   margin: auto;
-  width: 70px;
+  width: 80px;
   height: 15px;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 15px;
   text-align: center;
   color: rgba(0, 0, 0, 0.8);
@@ -412,7 +423,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
   margin: auto;
   width: 30px;
   height: 15px;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 15px;
   text-align: center;
   color: rgba(0, 0, 0, 0.8);

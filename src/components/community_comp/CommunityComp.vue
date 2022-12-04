@@ -2,12 +2,12 @@
   <div class="community">
     <UserButton class="userBtn"></UserButton>
     <div class="header" :class="{to__use:toUse}">
-      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "COMMUNITY" : "Measure time"}}</h2>
+      <h2 class="nico" @touchstart="useTimer" @touchend="toTop">{{!toUse? "COMMUNITY" : "MEASURE"}}</h2>
     </div>
     <ul id="timers">
       <li v-for="(timer, index) in communityTimers" :key="index">
-        <div class="nico" @touchstart="selectTimer(index)">
-          <div :style="{'background-color': timer.themeColor}" :class="timer.style" class="timer__box">
+        <div :class="{nico:timer.style === 'digital', merriweather:timer.style === 'chronograph', quick:timer.style === 'circle'}" @touchstart="selectTimer(index)">
+          <div :style="{'background-color': timer.themeColor}" class="timer__box">
             <p :style="{'color': timer.accentColor}">{{ ((timer.time - timer.time%360000) / 360000) >= 10 ? (timer.time - timer.time%360000) / 360000 : "0" + ((timer.time - timer.time%360000) / 360000) }}</p>
             <p :style="{'color': timer.accentColor}">:</p>
             <p :style="{'color': timer.accentColor}">{{ ((timer.time%360000 - timer.time%6000 ) / 6000) >= 10 ? (timer.time%360000 - timer.time%6000 ) / 6000 : "0" + ((timer.time%360000 - timer.time%6000 ) / 6000) }}</p>
@@ -27,7 +27,7 @@
         <div class="select__timer">
           <DigitalTimer v-if="selectStyle === 'digital'" class="sample" :isUse="isUse"></DigitalTimer>
           <ChronographTimer v-if="selectStyle === 'chronograph'" class="sample" :isUse="isUse"></ChronographTimer>
-          <TimerCircle v-if="selectStyle === 'circle'" class="sample" :isUse="isUse"></TimerCircle>
+          <CircleTimer v-if="selectStyle === 'circle'" class="sample" :isUse="isUse"></CircleTimer>
         </div>
         <div class="select__box">
           <svg @touchend="addCommunityTimer" width="58" height="52" viewBox="0 0 58 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,7 +68,7 @@ import UserButton from '@/components/parts_comp/UserButton.vue';
 import CloseBtn from '@/components/parts_comp/CloseBtn.vue';
 import DigitalTimer from '@/components/timer_comp/DigitalTimer.vue';
 import ChronographTimer from '@/components/timer_comp/ChronographTimer.vue';
-import TimerCircle from '@/components/timer_comp/TimerCircle.vue';
+import CircleTimer from '@/components/timer_comp/CircleTimer.vue';
 import NormalButton from '@/components/parts_comp/NormalButton.vue';
 
 export default {
@@ -77,7 +77,7 @@ export default {
     CloseBtn,
     DigitalTimer,
     ChronographTimer,
-    TimerCircle,
+    CircleTimer,
     NormalButton
   },
   data() {
@@ -168,15 +168,15 @@ export default {
 }
 .header h2 {
   line-height: 60px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   height: 60px;
   text-align: center;
   width: 160px;
   color: rgba(250, 250, 250, 1);
-  background-color: rgba(0, 0, 0, 0.8);
   border: solid 1px rgba(250, 250, 250, 0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   border-radius: 40px;
-  box-shadow: inset rgba(240, 240, 240, 0.8) 0px 2px 4px, inset rgba(240, 240, 240, 0.8) 0px -2px 4px;
+  box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .to__use h2 {
   animation: vanish1 0.5s ease;
@@ -186,7 +186,7 @@ export default {
     scale: 1;
   }
   100% {
-    color: rgba(240, 10, 10, 0.8);
+    font-size: 0.6rem;
     scale: 0.5;
   }
 }
@@ -234,7 +234,7 @@ export default {
   font-size: 14px;
   font-weight: bold;
   color: rgba(0, 0, 0, 1);
-  -webkit-text-stroke: 0.5px rgba(250, 250, 250, 1);
+  -webkit-text-stroke: 0.1px rgba(250, 250, 250, 1);
   text-shadow:rgba(0, 0, 0, 0.8) 1px 2px 3px;
 }
 .timer__name {
@@ -251,13 +251,13 @@ export default {
   background-color: rgba(250, 250, 250, 1);
   border-radius: 20px;
 }
-.digital {
+.nico .timer__box {
   border-radius: 10px;
 }
-.chronograph {
+.merriweather .timer__box {
   border-radius: 30px;
 }
-.circle {
+.quick .timer__box {
   position: relative;
   border-radius: 50%;
   z-index: 1;

@@ -76,6 +76,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 1) 0px 2px 4px, rgba(240, 240, 240, 0.8) 0px -2px 4px;
 }
 .page__info button:active {
+  font-size: 0.6rem;
   width: 20%;
   height: 30px;
   border-radius: 0 0 40px 40px;
