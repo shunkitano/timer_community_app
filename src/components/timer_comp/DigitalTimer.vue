@@ -27,6 +27,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       time: null,
       themeColor: '',
       accentColor: '',
+      move: '',
       isTempo: false
     }
   },
@@ -37,6 +38,12 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       this.time = this.$store.getters.time; 
       this.themeColor = this.$store.state.fetchTimers[this.id].themeColor;
       this.accentColor = this.$store.state.fetchTimers[this.id].accentColor;
+      this.move = this.$store.state.fetchTimers[this.id].move;
+      if(this.move === "tempo") {
+        this.isTempo = false;
+      } else if(this.move === "rubato") {
+        this.isTempo = true;
+      }
     } else if(!this.isUse) {
       this.name = this.$store.state.communityTimers[this.id].name; 
       this.time = this.$store.state.communityTimers[this.id].time; 

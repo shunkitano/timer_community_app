@@ -63,7 +63,7 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    async makeTimer(state, {text, style, themeColor, accentColor, sound, time}) { //firebaseにタイマーを追加する
+    async makeTimer(state, {text, style, themeColor, accentColor, sound, move, time}) { //firebaseにタイマーを追加する
       const q = query(collection(db, 'timers'));
       const timersDoc = await getDocs(q);
       let setid = 0;
@@ -86,6 +86,7 @@ const store = new Vuex.Store({
         themeColor: themeColor,
         accentColor: accentColor,
         sound: sound,
+        move: move,
         time: time,
         isCom: false,
         userOnly: false,
@@ -177,7 +178,7 @@ const store = new Vuex.Store({
       state.isStop = true;
       clearInterval(state.setTime);
     },
-    async addCommunityTimer(state, {name, style, themeColor, accentColor, sound, time}) {
+    async addCommunityTimer(state, {name, style, themeColor, accentColor, sound, move, time}) {
       const q = query(collection(db, 'timers'));
       const timersDoc = await getDocs(q);
       let setid = 0;
@@ -200,6 +201,7 @@ const store = new Vuex.Store({
         themeColor: themeColor,
         accentColor: accentColor,
         sound: sound,
+        move: move,
         time: time,
         isCom: false,
         useOnly: true

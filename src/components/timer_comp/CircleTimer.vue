@@ -24,7 +24,8 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       name: '',
       time: null,
       themeColor: '',
-      accentColor: ''
+      accentColor: '',
+      isTempo: false
     }
   },
   mounted() {
@@ -34,6 +35,12 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       this.time = this.$store.getters.time; 
       this.themeColor = this.$store.state.fetchTimers[this.id].themeColor;
       this.accentColor = this.$store.state.fetchTimers[this.id].accentColor;
+      this.move = this.$store.state.fetchTimers[this.id].move;
+      if(this.move === "tempo") {
+        this.isTempo = false;
+      } else if(this.move === "rubato") {
+        this.isTempo = true;
+      }
     } else if(!this.isUse) {
       this.name = this.$store.state.communityTimers[this.id].name; 
       this.time = this.$store.state.communityTimers[this.id].time; 
@@ -58,7 +65,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       return ("0" + s).slice(-2);
     },
     z() {
-      return Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/10);
+      return this.isTempo ? Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/5) : Math.floor((this.t + this.m + this.s*2)/5);
     },
     count() {
       let tms = this.time + this.getTime;
@@ -71,7 +78,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       return this.$store.getters.reset;
     },
     styleObject() {
-      return "radial-gradient("+ this.accentColor +(1 - this.z)+"%,"+ this.themeColor +")";
+      return this.isTempo ? "radial-gradient("+ this.accentColor +(1 - this.z)+"%,"+ this.themeColor +")" : "radial-gradient(circle at 50vw 50vh, " + this.accentColor +" 0% "+ (1 - this.z) + "%,"+ this.themeColor + this.z + "% 100%)";
     }
   },
   methods: {

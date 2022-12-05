@@ -56,7 +56,7 @@ export default {
       console.log(this.isNoTimer);
       if(this.isNoTimer === undefined) {
         console.log("isNoTimer");
-        this.$router.push("/user");
+        this.isMakeTimer = true;
       } else {
         this.style = this.$store.state.fetchTimers[this.id].style;
       }

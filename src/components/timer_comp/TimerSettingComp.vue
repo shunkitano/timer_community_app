@@ -19,7 +19,7 @@
             <p class="text">{{ ttPlus > 10 ? null : ttPlus }}</p>
             <input type="number" min="0" max="59" v-model="tt" @touchstart="startCalcT" @touchmove="moveCalcT">
             <p class="text">{{ ttMinus > -1 ? ttMinus : null }}</p>
-          </div>z
+          </div>
           <div class="calc__mm neon">
             <p class="text">{{ mmPlus > 59 ? null : mmPlus }}</p>
             <input type="number" min="0" max="59" v-model="mm" @touchstart="startCalcM" @touchmove="moveCalcM">
@@ -219,8 +219,9 @@ export default {
           const themeColor = this.styleObject1['background-color'];//themeColor
           const accentColor = this.styleObject2['background-color'];//themeColor
           const sound = this.selects[3].name;//sound
+          const move = this.selects[4].name;//move
           const time = this.t*360000 + this.m*6000 + this.s*100;//時間
-          this.$store.commit('makeTimer', {text, style, themeColor, accentColor, sound, time})
+          this.$store.commit('makeTimer', {text, style, themeColor, accentColor, sound, move, time})
           this.clear();
           this.$router.push('/user');
         } else if (this.$store.state.uid === null) {
@@ -284,13 +285,13 @@ input[type="text"],[type="number"] {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   width: 60%;
 }
 .setting input {
   font-size: 1.2rem;
   height: 50px;
-  margin: 1rem 0 0;
+  margin: 0.5rem 0 0;
   border-radius: 40px;
   color: rgba(0, 0, 0, 1);
   text-shadow: 1px 0px 2px rgba(250, 250, 250, 1);
@@ -322,7 +323,7 @@ input[type="text"],[type="number"] {
 }
 /* Number */
 .number {
-  margin: 1rem 0 0;
+  margin: 0.5rem 0 0;
   position: relative;
   display: flex;
   flex-direction: column;
