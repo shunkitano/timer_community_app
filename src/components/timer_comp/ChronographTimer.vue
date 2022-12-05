@@ -36,7 +36,8 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       accentColor: '',
       num: 0,
       x: 0,
-      y: 0
+      y: 0,
+      isTempo: false
     }
   },
   mounted() {
@@ -74,7 +75,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       return ("0" + s).slice(-2);
     },
     z() {
-      return Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/5);
+      return this.isTempo ? Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/5) : Math.floor((this.t%3 + this.m%3 + this.s*3));
     },
     count() {
       let tms = this.time + this.getTime;
@@ -103,7 +104,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
     },
     styleObject1() {
       // return "radial-gradient(ellipse at "+this.z +"% ,"+ this.accentColor+", transparent), radial-gradient(ellipse at "+ (100 - this.z)+"%,"+ this.accentColor+", transparent)";
-      return "linear-gradient(" + this.z +"deg,"+ this.themeColor +" 70%,rgba(200, 200, 200, 0.8))";
+      return "linear-gradient(" + this.z +"deg,rgba(200, 200, 200, 0.8),"+ this.themeColor +" 70%,rgba(200, 200, 200, 0.8))";
     },
     styleObject2() {
       return "linear-gradient(" + (100-this.z)/2 + "deg,rgba(100, 100, 100, 0.8), rgba(150, 150, 150, 0.8)20%, rgba(250, 250, 250, 0.8)33%, rgba(0, 0, 0, 0.4)85%, rgba(100, 100, 100, 0.8))";

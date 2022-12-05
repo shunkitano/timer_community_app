@@ -10,14 +10,16 @@
       <AccentColorChange @colorChange="changeHere" v-show="isActive === '3'"></AccentColorChange>
       <input type="button" :value="selects[3].name" @touchstart="selectSound" class="neon">
       <SoundChange @soundChange="changeHere" v-show="isActive === '4'"></SoundChange>
-      <div class="number" :class="{active:isActive === '5'}" @touchstart="selectCalc">
+      <input type="button" :value="selects[4].name" @touchstart="selectMove" class="neon">
+      <MoveChange @moveChange="changeHere" v-show="isActive === '5'"></MoveChange>
+      <div class="number" :class="{active:isActive === '6'}" @touchstart="selectCalc">
         <p class="neon">{{ tt }}:{{ mm }}:{{ ss }}</p>
-        <div class="calc__wrapper" v-show="isActive === '5'">
+        <div class="calc__wrapper" v-show="isActive === '6'">
           <div class="calc__tt neon">
             <p class="text">{{ ttPlus > 10 ? null : ttPlus }}</p>
             <input type="number" min="0" max="59" v-model="tt" @touchstart="startCalcT" @touchmove="moveCalcT">
             <p class="text">{{ ttMinus > -1 ? ttMinus : null }}</p>
-          </div>
+          </div>z
           <div class="calc__mm neon">
             <p class="text">{{ mmPlus > 59 ? null : mmPlus }}</p>
             <input type="number" min="0" max="59" v-model="mm" @touchstart="startCalcM" @touchmove="moveCalcM">
@@ -59,6 +61,7 @@ import ThemeColorChange from '@/components/parts_comp/ThemeColorChange.vue';
 import AccentColorChange from '@/components/parts_comp/AccentColorChange.vue';
 import SoundChange from '@/components/parts_comp/SoundChange.vue';
 import StyleChange from '@/components/parts_comp/StyleChange.vue';
+import MoveChange from '@/components/parts_comp/MoveChange.vue';
 import NormalButton from '@/components/parts_comp/NormalButton.vue';
 
 export default {
@@ -67,6 +70,7 @@ export default {
     AccentColorChange,
     SoundChange,
     StyleChange,
+    MoveChange,
     NormalButton
   },
   data() {
@@ -85,7 +89,8 @@ export default {
         {name: "Style"},
         {name: "ThemeColor"},
         {name: "AccentColor"},
-        {name: "Sound"}
+        {name: "Sound"},
+        {name: "Move"}
       ],
       styleObject1: {
         'background-color': ''
@@ -148,8 +153,11 @@ export default {
     selectSound() {
       this.isActive = "4";
     },
-    selectCalc() {
+    selectMove() {
       this.isActive = "5";
+    },
+    selectCalc() {
+      this.isActive = "6";
     },
     changeHere(reset ,item, style) {
       if(this.isActive === "2") {
@@ -202,7 +210,7 @@ export default {
       this.y = yy;
     },
     makeTimer() {
-      if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "ThemeColor" || this.selects[2].name === "AccentColor" || this.selects[3].name === "Sound" || !this.isCalc) {
+      if(this.text === '' || this.selects[0].name === "Style" || this.selects[1].name === "ThemeColor" || this.selects[2].name === "AccentColor" || this.selects[3].name === "Sound" || this.selects[4].name === "Move" || !this.isCalc) {
         this.isEmpty = true;
       } else {
         if(this.$store.state.uid !== null) {
@@ -228,6 +236,7 @@ export default {
       this.selects[1].name = "ThemeColor";
       this.selects[2].name = "AccentColor";
       this.selects[3].name = "Sound";
+      this.selects[4].name = "Move";
       this.styleObject1['background-color'] = '';
       this.styleObject2['background-color'] = '';
       this.t = 0;

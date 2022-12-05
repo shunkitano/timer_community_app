@@ -26,7 +26,8 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       name: '',
       time: null,
       themeColor: '',
-      accentColor: ''
+      accentColor: '',
+      isTempo: false
     }
   },
   mounted() {
@@ -60,7 +61,7 @@ export default { //タイマー自体はstoreから情報を受け取るのみ�
       return ("0" + s).slice(-2);
     },
     x() {
-      return Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/5);
+      return this.isTempo ? Math.floor(Math.random()*(this.t%3 + this.m%3 + this.s)/5) : Math.floor((this.t + this.m + this.s*2));
     },
     count() {
       let tms = this.time + this.getTime;

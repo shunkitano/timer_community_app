@@ -48,6 +48,10 @@ const store = new Vuex.Store({
       {id: 2, name: 'chronograph'},
       {id: 3, name: 'circle'}
     ],
+    moves: [
+      {id:1, name: 'tempo'},
+      {id:2, name: 'rubato'}
+    ],
     currentTimerId: 0, //TimerComp.vueに表示されるタイマーのIDが入る（ユーザーが使用するタイマー）
   },
   getters: {
