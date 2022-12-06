@@ -279,7 +279,7 @@ input[type="text"],[type="number"] {
 .outer {
   position: relative;
   width: 100%;
-  height: 100lvh;
+  height: 100%;
 }
 .setting {
   display: flex;
@@ -290,7 +290,7 @@ input[type="text"],[type="number"] {
 }
 .setting input {
   font-size: 1.2rem;
-  height: 50px;
+  height: 40px;
   margin: 0.5rem 0 0;
   border-radius: 40px;
   color: rgba(0, 0, 0, 1);

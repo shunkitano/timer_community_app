@@ -82,13 +82,14 @@ export default {
 <style scoped>
 .outer {
   position: relative;
+  height: 100vh;
 }
 .setting {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100lvh;
+  height: 100%;
   overflow: hidden;
   z-index: 100;
 } 
